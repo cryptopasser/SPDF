@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:bottom="@dimen/line_width"
+        android:left="@dimen/line_width"
+        android:right="@dimen/line_width"
+        android:top="@dimen/line_width">
+        <shape>
+            <stroke
+                android:dashGap="@dimen/view_pdf_text_remark_border_background_dash_gap"
+                android:dashWidth="@dimen/view_pdf_text_remark_border_background_dash_width"
+                android:width="@dimen/line_width"
+                android:color="@color/text_remark_theme" />
+        </shape>
+    </item>
+
+</layer-list>

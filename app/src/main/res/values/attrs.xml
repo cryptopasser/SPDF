@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="mainColorDeepen" format="color" />
+    <attr name="mainColorHelp" format="color" />
+    <attr name="mainColorText" format="color" />
+
+    <attr name="checked" format="boolean" />
+
+    <declare-styleable name="StatusView">
+        <attr name="checked" />
+        <attr name="checkImage" format="reference" />
+        <attr name="unCheckImage" format="reference" />
+        <attr name="checkImageColor" format="reference" />
+        <attr name="unCheckImageColor" format="reference" />
+        <attr name="checkTextColor" format="color|reference" />
+        <attr name="unCheckTextColor" format="color|reference" />
+        <attr name="checkText" format="string|reference" />
+        <attr name="unCheckText" format="string|reference" />
+        <attr name="textSize" format="dimension" />
+        <attr name="clickChange" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="CircleView">
+        <attr name="checked" />
+        <attr name="backgroundColor" format="color|reference" />
+        <attr name="innerCirclePercent" format="float" />
+        <attr name="borderColor" format="color|reference" />
+        <attr name="borderWidth" format="dimension" />
+    </declare-styleable>
+
+</resources>

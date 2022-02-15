@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relativeLayoutSearch"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/layout_search_cover">
+
+    <FrameLayout
+        android:id="@+id/frameLayoutBottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/mainColorHelp_default"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="@dimen/view_normal_margin_default"
+            android:layout_marginTop="@dimen/view_normal_margin_narrow"
+            android:layout_marginRight="@dimen/view_normal_margin_default"
+            android:layout_marginBottom="@dimen/view_normal_margin_narrow"
+            android:background="@drawable/normal_search_background"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/editTextSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/layout_search_editTextSearch_height"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:hint="@string/layout_search_appbar_default_search_hint"
+                android:maxLength="100"
+                android:background="@null"
+                android:paddingLeft="@dimen/view_normal_margin_narrow"
+                android:paddingRight="@dimen/view_normal_margin_narrow"
+                android:singleLine="true"
+                android:textColor="?attr/mainColorText"
+                android:textColorHint="@color/editText_normal_hint"
+                android:textCursorDrawable="@drawable/normal_cursor"
+                android:textSize="@dimen/textView_normal_textSize_narrow" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/imageViewSearchClear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:padding="@dimen/view_normal_margin_narrow"
+                    android:src="@mipmap/input_clear" />
+
+                <TextView
+                    android:id="@+id/textViewSearch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/layout_search_search_button"
+                    android:textColor="@color/mainColorText_default"
+                    android:padding="@dimen/view_normal_margin_narrow"
+                    android:layout_marginRight="@dimen/view_normal_margin_narrow"
+                    android:textSize="@dimen/textView_normal_textSize_narrow" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/frameLayoutCover"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/frameLayoutBottom" />
+
+</RelativeLayout>

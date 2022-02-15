@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="page_indicator">#C0202020</color>
+    <color name="toolbar">#C0202020</color>
+    <color name="action_bar_color">#233D88</color>
+
+    <color name="editText_hint_normal">#aaaaaa</color>
+    <color name="textView_normal">#222222</color>
+
+    <color name="divider_normal">#888888</color>
+
+
+</resources>

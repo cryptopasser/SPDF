@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ThumbnailActivity">
+
+    <include
+        android:id="@+id/layoutAppbar"
+        layout="@layout/layout_appbar_default" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/layoutAppbar">
+
+        <com.snakeway.pdfviewer.PDFView
+            android:id="@+id/pdfView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible"
+            android:background="@color/pdf_view_background" />
+
+        <GridView
+            android:id="@+id/gridView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/activity_thumbail_background"
+            android:horizontalSpacing="@dimen/view_normal_margin_default"
+            android:numColumns="3"
+            android:padding="@dimen/view_normal_margin_default"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="@dimen/view_normal_margin_default" />
+    </FrameLayout>
+
+
+</RelativeLayout>

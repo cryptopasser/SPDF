@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <include
+        android:id="@+id/layoutSearchAppbar"
+        layout="@layout/layout_search_appbar" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/layoutSearchAppbar">
+
+        <com.snakeway.pdfviewer.PDFView
+            android:id="@+id/pdfView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/pdf_view_background"
+            android:layout_marginBottom="@dimen/layout_pen_operating_height" />
+
+        <FrameLayout
+            android:id="@+id/frameLayoutPenOperating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_gravity="bottom|right">
+
+            <include
+                android:id="@+id/includeLayoutPenOperating"
+                layout="@layout/layout_pen_operating" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="bottom|right">
+
+            <FrameLayout
+                android:id="@+id/frameLayoutRemark"
+                android:layout_width="@dimen/layout_remark_operating_view_width"
+                android:layout_height="@dimen/layout_remark_operating_view_width"
+                android:layout_marginRight="@dimen/view_normal_margin_default"
+                android:layout_marginBottom="@dimen/view_normal_margin_default"
+                android:background="@drawable/circle_background">
+
+                <TextView
+                    android:id="@+id/textViewMark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/textView_normal_textSize_narrow"
+                    android:text="@string/activity_main_remark"
+                    android:textColor="@color/mainColorHelp_default" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/frameLayoutTextRemark"
+                android:layout_width="@dimen/layout_remark_operating_view_width"
+                android:layout_height="@dimen/layout_remark_operating_view_width"
+                android:layout_marginRight="@dimen/view_normal_margin_default"
+                android:layout_marginBottom="@dimen/view_normal_margin_default"
+                android:background="@drawable/circle_background">
+
+                <TextView
+                    android:id="@+id/textViewTextMark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/textView_normal_textSize_narrow"
+                    android:text="@string/activity_main_text_remark"
+                    android:textColor="@color/mainColorHelp_default" />
+
+            </FrameLayout>
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@+id/layoutSearchAppbar"
+        android:layout_marginTop="@dimen/activity_main_buttonOpenOther_margin_top">
+
+        <Button
+            android:id="@+id/buttonOpenOther"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/activity_file_viewer_button_open_other" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <include
+            android:id="@+id/layoutSearch"
+            layout="@layout/layout_search" />
+
+    </FrameLayout>
+
+    <com.snakeway.spdf.views.FloatBallControlView
+        android:id="@+id/floatBallControlView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+</RelativeLayout>

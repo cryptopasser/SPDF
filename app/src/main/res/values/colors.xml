@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="colorPrimary_default">#3c3c3c</color>
+    <color name="mainColorDeepen_default">#222222</color>
+    <color name="mainColorHelp_default">#ffffff</color>
+    <color name="mainColorText_default">#6d6d6d</color>
+    <color name="windowBackground_default">#ffffff</color>
+    <color name="windowBackgroundDeepen_default">#f2f2f2</color>
+    <color name="cursorColor_default">#6d6d6d</color>
+    <color name="darkColor_default">#000000</color>
+    <color name="background_transparent">#00ffffff</color>
+
+    <color name="unSelectColor_default">#dddddd</color>
+
+    <color name="pdf_view_background">#F0F4FA</color>
+
+    <color name="popupwindow_operating_background">#3c3c3c</color>
+
+    <color name="popupwindow_read_mode_background">#F0F4FA</color>
+
+    <color name="select_default">#3192f0</color>
+    <color name="unSelect_default">#f3f3f3</color>
+
+    <color name="areaPen_default">#553192f0</color>
+    <color name="areaPen_cursor_default">#bb3192f0</color>
+
+    <color name="searchAreaPen_default">#33ff0000</color>
+
+    <color name="deleteLinePen_default">#000000</color>
+    <color name="underLinePen_default">#ff0000</color>
+    <color name="wavesLinePen_default">#ff0000</color>
+    <color name="highLightPen_default">#55ff0000</color>
+    <color name="checkImageColor">#fae0ad</color>
+    <color name="checkTextColor">#fae0ad</color>
+
+    <color name="layout_pen_operating_background">#4396ff</color>
+    <color name="layout_pen_operating_circle_view_border_color">#dddddd</color>
+
+    <color name="pen_color_1">#f10700</color>
+    <color name="pen_color_2">#fa5900</color>
+    <color name="pen_color_3">#ffcd13</color>
+    <color name="pen_color_4">#02dc60</color>
+    <color name="pen_color_5">#008edd</color>
+    <color name="pen_color_6">#a000e1</color>
+    <color name="pen_color_7">#000000</color>
+
+    <color name="edit_text_remark_theme">#faa717</color>
+
+    <color name="circleViewBorder_default">#88ffffff</color>
+    <color name="editText_normal_hint">#bbbbbb</color>
+
+    <color name="layout_search_cover">#22000000</color>
+    <color name="normal_page_number_background">#33000000</color>
+    <color name="activity_thumbail_background">#808388</color>
+
+</resources>

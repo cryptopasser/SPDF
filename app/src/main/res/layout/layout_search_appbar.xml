@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/appBarLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:title="">
+
+        <RelativeLayout
+            android:id="@+id/relativeLayoutToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize">
+
+            <ImageView
+                android:id="@+id/imageViewBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/view_normal_margin_narrow"
+                android:padding="@dimen/view_normal_margin_default"
+                android:src="@mipmap/back" />
+
+            <ImageView
+                android:id="@+id/imageViewSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/view_normal_margin_narrow"
+                android:padding="@dimen/view_normal_margin_default"
+                android:src="@mipmap/search" />
+
+            <TextView
+                android:id="@+id/textViewSearchCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:visibility="gone"
+                android:text="@string/layout_search_appbar_search_cancel"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/view_normal_margin_narrow"
+                android:padding="@dimen/view_normal_margin_default" />
+
+            <TextView
+                android:id="@+id/textViewToolbarCenter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="@dimen/view_normal_margin_default"
+                android:layout_marginRight="@dimen/view_normal_margin_default"
+                android:singleLine="true"
+                android:textColor="?attr/mainColorText"
+                android:textSize="@dimen/textView_normal_textSize_broad"
+                android:textStyle="bold"
+                tools:text="标题" />
+
+            <EditText
+                android:id="@+id/editTextSearch"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/layout_search_appbar_default_search_margin_horizontal"
+                android:layout_marginRight="@dimen/layout_search_appbar_default_search_margin_horizontal"
+                android:layout_centerInParent="true"
+                android:visibility="gone"
+                android:background="@null"
+                android:hint="@string/layout_search_appbar_default_search_hint"
+                android:maxLength="99"
+                android:paddingBottom="@dimen/view_normal_margin_narrow"
+                android:paddingTop="@dimen/view_normal_margin_narrow"
+                android:singleLine="true"
+                android:textColor="?attr/mainColorText"
+                android:textColorHint="@color/editText_normal_hint"
+                android:textCursorDrawable="@drawable/normal_cursor"
+                android:textSize="@dimen/textView_normal_textSize_default" />
+
+        </RelativeLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+</FrameLayout>

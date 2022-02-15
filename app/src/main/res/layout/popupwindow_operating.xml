@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <HorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/triangle_height_leave"
+            android:layout_marginBottom="@dimen/triangle_height_leave"
+            android:background="@drawable/popupwindow_operating_background"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:id="@+id/linearLayoutContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/view_normal_margin_narrow"
+                android:paddingTop="@dimen/view_normal_margin_narrow"
+                android:paddingRight="@dimen/view_normal_margin_narrow"
+                android:paddingBottom="@dimen/view_normal_margin_narrow">
+
+                <com.snakeway.spdf.views.StatusView
+                    android:id="@+id/statusViewDeleteLine"
+                    android:layout_width="@dimen/statusView_width"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/view_normal_margin_narrow"
+                    android:layout_marginRight="@dimen/view_normal_margin_narrow"
+                    app:checkImage="@mipmap/mark_delete_line"
+                    app:checkText="@string/popupwindow_operating_delete_line"
+                    app:checkTextColor="@color/checkTextColor"
+                    app:clickChange="false"
+                    app:unCheckImage="@mipmap/mark_delete_line"
+                    app:unCheckText="@string/popupwindow_operating_delete_line"
+                    app:textSize="@dimen/textView_normal_textSize_super_narrow"
+                    app:checkImageColor="@color/checkImageColor"
+                    app:unCheckTextColor="@color/mainColorHelp_default" />
+
+                <com.snakeway.spdf.views.StatusView
+                    android:id="@+id/statusViewUnderLine"
+                    android:layout_width="@dimen/statusView_width"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/view_normal_margin_narrow"
+                    android:layout_marginRight="@dimen/view_normal_margin_narrow"
+                    app:checkImage="@mipmap/mark_under_line"
+                    app:checkText="@string/popupwindow_operating_under_line"
+                    app:checkTextColor="@color/checkTextColor"
+                    app:clickChange="false"
+                    app:unCheckImage="@mipmap/mark_under_line"
+                    app:unCheckText="@string/popupwindow_operating_under_line"
+                    app:textSize="@dimen/textView_normal_textSize_super_narrow"
+                    app:checkImageColor="@color/checkImageColor"
+                    app:unCheckTextColor="@color/mainColorHelp_default" />
+
+                <com.snakeway.spdf.views.StatusView
+                    android:id="@+id/statusViewUnderWaveLine"
+                    android:layout_width="@dimen/statusView_width"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/view_normal_margin_narrow"
+                    android:layout_marginRight="@dimen/view_normal_margin_narrow"
+                    app:checkImage="@mipmap/mark_wave_line"
+                    app:checkText="@string/popupwindow_operating_under_wave_line"
+                    app:checkTextColor="@color/checkTextColor"
+                    app:clickChange="false"
+                    app:unCheckImage="@mipmap/mark_wave_line"
+                    app:unCheckText="@string/popupwindow_operating_under_wave_line"
+                    app:textSize="@dimen/textView_normal_textSize_super_narrow"
+                    app:checkImageColor="@color/checkImageColor"
+                    app:unCheckTextColor="@color/mainColorHelp_default" />
+
+                <com.snakeway.spdf.views.StatusView
+                    android:id="@+id/statusViewHighLight"
+                    android:layout_width="@dimen/statusView_width"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/view_normal_margin_narrow"
+                    android:layout_marginRight="@dimen/view_normal_margin_narrow"
+                    app:checkImage="@mipmap/mark_high_light"
+                    app:checkText="@string/popupwindow_operating_high_light"
+                    app:checkTextColor="@color/checkTextColor"
+                    app:clickChange="false"
+                    app:unCheckImage="@mipmap/mark_high_light"
+                    app:unCheckText="@string/popupwindow_operating_high_light"
+                    app:textSize="@dimen/textView_normal_textSize_super_narrow"
+                    app:checkImageColor="@color/checkImageColor"
+                    app:unCheckTextColor="@color/mainColorHelp_default" />
+
+                <com.snakeway.spdf.views.StatusView
+                    android:id="@+id/statusViewClear"
+                    android:layout_width="@dimen/statusView_width"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/view_normal_margin_narrow"
+                    android:layout_marginRight="@dimen/view_normal_margin_narrow"
+                    app:checkImage="@mipmap/mark_clear_all"
+                    app:checkText="@string/popupwindow_operating_clear"
+                    app:checkTextColor="@color/checkTextColor"
+                    app:clickChange="false"
+                    app:unCheckImage="@mipmap/mark_clear_all"
+                    app:unCheckText="@string/popupwindow_operating_clear"
+                    app:textSize="@dimen/textView_normal_textSize_super_narrow"
+                    app:checkImageColor="@color/checkImageColor"
+                    app:unCheckTextColor="@color/mainColorHelp_default" />
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
+
+        <ImageView
+            android:id="@+id/imageViewTriangleUp"
+            android:layout_width="@dimen/triangle_width"
+            android:layout_height="@dimen/triangle_height"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginTop="@dimen/triangle_height_leave_desc"
+            app:srcCompat="@drawable/popupwindow_operating_triangle_up_background" />
+
+        <ImageView
+            android:id="@+id/imageViewTriangleDown"
+            android:layout_width="@dimen/triangle_width"
+            android:layout_height="@dimen/triangle_height"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="@dimen/triangle_height_leave_desc"
+            app:srcCompat="@drawable/popupwindow_operating_triangle_down_background" />
+
+    </FrameLayout>
+
+</RelativeLayout>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relativeLayoutTextRemarkView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/frameLayoutTextRemarkBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:background="@color/edit_text_remark_view_background_color" />
+
+    <RelativeLayout
+        android:id="@+id/relativeLayoutTextRemarkContentView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/view_pdf_text_remark_border_background">
+
+        <EditText
+            android:id="@+id/editTextTextRemark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:gravity="left|top"
+            android:hint="@string/view_pdf_text_remark_hint"
+            android:scrollHorizontally="true"
+            android:textColor="@color/text_normal_color"
+            android:textColorHint="@color/text_hint_color"
+            android:textCursorDrawable="@drawable/normal_cursor"
+            android:textSize="@dimen/normal_textSize" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutOperating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relativeLayoutTextRemarkContentView"
+        android:layout_alignLeft="@+id/relativeLayoutTextRemarkContentView"
+        android:layout_alignRight="@+id/relativeLayoutTextRemarkContentView"
+        android:gravity="right"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textViewTextRemarkCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingVertical="@dimen/operating_view_padding"
+            android:text="@string/view_text_remark_operating_cancel"
+            android:textColor="@color/text_remark_theme"
+            android:textSize="@dimen/normal_textSize" />
+
+        <TextView
+            android:id="@+id/textViewTextRemarkDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:layout_marginLeft="@dimen/operating_view_margin"
+            android:paddingVertical="@dimen/operating_view_padding"
+            android:text="@string/view_text_remark_operating_delete"
+            android:textColor="@color/text_remark_theme"
+            android:textSize="@dimen/normal_textSize" />
+
+        <TextView
+            android:id="@+id/textViewTextRemarkSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/operating_view_margin"
+            android:paddingVertical="@dimen/operating_view_padding"
+            android:text="@string/view_text_remark_operating_save"
+            android:textColor="@color/text_remark_theme"
+            android:textSize="@dimen/normal_textSize" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>
+
+

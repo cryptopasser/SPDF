@@ -1,0 +1,8 @@
+<resources>
+
+    <string name="view_pdf_text_remark_hint">请添加批注内容</string>
+    <string name="view_text_remark_operating_cancel">取消</string>
+    <string name="view_text_remark_operating_delete">刪除</string>
+    <string name="view_text_remark_operating_save">保存</string>
+    <string name="view_text_remark_operating_edit">保存</string>
+</resources>

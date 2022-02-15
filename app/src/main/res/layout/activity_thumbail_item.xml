@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pdf_view_background">
+
+    <FrameLayout
+        android:id="@+id/frameLayoutRoot"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/textViewPageNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="@dimen/view_normal_margin_default"
+            android:background="@drawable/normal_page_number_background"
+            android:paddingHorizontal="@dimen/view_normal_margin_broad"
+            android:paddingVertical="@dimen/line_normal_widthOrHeight_broad"
+            android:textColor="@color/mainColorHelp_default"
+            android:textSize="@dimen/textView_normal_textSize_narrow" />
+
+    </FrameLayout>
+
+</FrameLayout>

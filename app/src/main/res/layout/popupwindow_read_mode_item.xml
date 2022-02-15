@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/view_normal_margin_broad"
+        android:layout_marginVertical="@dimen/view_normal_margin_narrow"
+        android:paddingVertical="@dimen/view_normal_margin_default"
+        android:background="@drawable/layout_read_mode_item_background"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/imageViewIcon"
+            android:layout_marginLeft="@dimen/view_normal_margin_default"
+            android:layout_width="@dimen/layout_read_mode_menu_item_icon_width"
+            android:layout_height="@dimen/layout_read_mode_menu_item_icon_width"
+            android:src="@mipmap/read_mode_single" />
+
+        <TextView
+            android:id="@+id/textViewTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/view_normal_margin_default"
+            android:text=""
+            android:textColor="@color/darkColor_default"
+            android:textSize="@dimen/textView_normal_textSize_default" />
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/imageViewCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:layout_marginHorizontal="@dimen/view_normal_margin_default"
+            android:src="@mipmap/read_mode_check" />
+
+
+    </LinearLayout>
+
+
+</FrameLayout>

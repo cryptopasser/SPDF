@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppThemeNoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary_default</item>
+        <item name="colorPrimaryDark">@color/colorPrimary_default</item>
+        <item name="colorAccent">@color/colorPrimary_default</item>
+        <item name="android:windowBackground">@color/windowBackground_default
+        </item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="mainColorDeepen">@color/mainColorDeepen_default</item>
+        <item name="mainColorHelp">@color/mainColorHelp_default</item>
+        <item name="mainColorText">@color/mainColorText_default</item>
+        <item name="android:windowAnimationStyle">@style/default_animation</item>
+        <item name="toolbarStyle">@style/removeSpacesToolbar</item>
+    </style>
+</resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="line_width">1dp</dimen>
+
+    <dimen name="exitText_padding">6dp</dimen>
+    <dimen name="normal_cursor_width">1dp</dimen>
+    <dimen name="normal_textSize">16sp</dimen>
+
+    <dimen name="view_pdf_text_remark_border_background_dash_gap">6dp</dimen>
+    <dimen name="view_pdf_text_remark_border_background_dash_width">4dp</dimen>
+
+    <dimen name="operating_view_padding">3dp</dimen>
+    <dimen name="operating_view_margin">3dp</dimen>
+
+</resources>
