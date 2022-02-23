@@ -1226,7 +1226,7 @@ public class PDFView extends RelativeLayout {
                     }
                     if (cancelPenAnnotation != null) {
                         penAnnotations.remove(cancelPenAnnotation);
-                        invalidate();
+                        redraw();
                         return;
                     }
                     if (!isInPenDrawArea) {
@@ -1234,7 +1234,7 @@ public class PDFView extends RelativeLayout {
                             penAnnotation.setAreaRect(null);
                         }
                         penAnnotations.clear();
-                        invalidate();
+                        redraw();
                     }
                 }
 
@@ -1250,7 +1250,7 @@ public class PDFView extends RelativeLayout {
                         penAnnotations.clear();
                         penAnnotations.addAll(thePenAnnotations);
                         annotationManager.drawingPenAnnotation = null;
-                        invalidate();
+                        redraw();
                     }
 
                 }
@@ -1770,7 +1770,7 @@ public class PDFView extends RelativeLayout {
         // store reference, because callbacks will be cleared in recycle() method
         OnErrorListener onErrorListener = callbacks.getOnError();
         recycle();
-        invalidate();
+        redraw();
         if (onErrorListener != null) {
             onErrorListener.onError(t);
         } else {
@@ -2689,7 +2689,7 @@ public class PDFView extends RelativeLayout {
                 penAnnotation.setAreaRect(null);
             }
             penAnnotations.clear();
-            invalidate();
+            redraw();
         }
         resetEditTextAnnotation();
         if (relativeLayoutTextRemarkView != null && relativeLayoutTextRemarkView.getVisibility() == VISIBLE) {
