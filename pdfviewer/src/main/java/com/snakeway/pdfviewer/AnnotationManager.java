@@ -45,7 +45,7 @@ import java.util.List;
 
 final class AnnotationManager {
     private static final String TAG = AnnotationManager.class.getName();
-
+    private final float TOUCH_TOLERANCE = 4;
     private PDFView pdfView;
     //注释缓存
     SparseArray<List<BaseAnnotation>> annotations = new SparseArray<>();
@@ -91,6 +91,9 @@ final class AnnotationManager {
 
     RectF startTargetRect;
     RectF endTargetRect;
+
+    float penTouchX=0;
+    float penTouchY=0;
 
     AnnotationManager(PDFView pdfView) {
         this.pdfView = pdfView;
@@ -822,17 +825,23 @@ final class AnnotationManager {
             }
             ((PenAnnotation) drawingPenAnnotation).data.add(CoordinateUtils.toPdfPointCoordinate(pdfView, coord[0], coord[1], coord[2]));
         } else if (action == MotionEvent.ACTION_MOVE) {
-            if (drawingPenAnnotation != null) {
-                PenAnnotation penAnnotation = (PenAnnotation) drawingPenAnnotation;
-                if (drawingPenAnnotation.page == coord[0] && inPage) {
-                    penAnnotation.data.add(CoordinateUtils.toPdfPointCoordinate(pdfView, coord[0], coord[1], coord[2]));
-                } else {
-                    if (penAnnotation.data.size() > 1) {
-                        addToDrawingPenAnnotations(drawingPenAnnotation);
+            float dx = Math.abs(x - penTouchX);
+            float dy = Math.abs(penTouchY - y);
+            if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
+                if (drawingPenAnnotation != null) {
+                    PenAnnotation penAnnotation = (PenAnnotation) drawingPenAnnotation;
+                    if (drawingPenAnnotation.page == coord[0] && inPage) {
+                        penAnnotation.data.add(CoordinateUtils.toPdfPointCoordinate(pdfView, coord[0], coord[1], coord[2]));
+                    } else {
+                        if (penAnnotation.data.size() > 1) {
+                            addToDrawingPenAnnotations(drawingPenAnnotation);
+                        }
+                        drawingPenAnnotation = null;
                     }
-                    drawingPenAnnotation = null;
+                    pdfView.redrawRenderingView();
                 }
-                pdfView.redrawRenderingView();
+                penTouchX=x;
+                penTouchY=y;
             }
         } else if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_POINTER_UP) {
             if (drawingPenAnnotation != null) {

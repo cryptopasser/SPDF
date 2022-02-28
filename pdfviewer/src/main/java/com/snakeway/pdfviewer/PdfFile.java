@@ -318,7 +318,7 @@ class PdfFile {
         return pdfiumCore.getDocumentMeta(pdfDocument);
     }
 
-    public List<PdfDocument.Bookmark> getBookmarks() {
+    public List<PdfDocument.Bookmark>  getBookmarks() {
         if (pdfDocument == null) {
             return new ArrayList<>();
         }

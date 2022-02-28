@@ -60,6 +60,7 @@ public class PdfDocument {
         String title;
         long pageIdx;
         long mNativePtr;
+        boolean isRemark;
 
         public List<Bookmark> getChildren() {
             return children;
@@ -75,6 +76,14 @@ public class PdfDocument {
 
         public long getPageIdx() {
             return pageIdx;
+        }
+
+        public boolean isRemark() {
+            return isRemark;
+        }
+
+        public void setRemark(boolean remark) {
+            isRemark = remark;
         }
     }
 

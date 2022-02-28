@@ -42,6 +42,7 @@ public class BookMarkBean extends BaseBookMarkBean {
             List<PdfDocument.Bookmark> childBookmarks = theBookmark.getChildren();
             bookMarkBean.title = theBookmark.getTitle();
             bookMarkBean.pageIndex = theBookmark.getPageIdx();
+            bookMarkBean.isRemark = theBookmark.isRemark();
             if (childBookmarks.size() > 0) {
                 bookMarkBean.childs = convertSecond(theBookmark, onBookMarkListener);
             } else {

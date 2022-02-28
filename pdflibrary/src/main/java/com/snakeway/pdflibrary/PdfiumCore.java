@@ -431,6 +431,10 @@ public class PdfiumCore {
             bookmark.mNativePtr = bookmarkPtr;
             bookmark.title = nativeGetBookmarkTitle(bookmarkPtr);
             bookmark.pageIdx = nativeGetBookmarkDestIndex(doc.mNativeDocPtr, bookmarkPtr);
+
+            bookmark.isRemark=
+
+
             tree.add(bookmark);
 
             Long child = nativeGetFirstChildBookmark(doc.mNativeDocPtr, bookmarkPtr);

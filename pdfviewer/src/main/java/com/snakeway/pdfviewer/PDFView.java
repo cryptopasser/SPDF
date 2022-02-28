@@ -47,6 +47,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -459,15 +460,22 @@ public class PDFView extends RelativeLayout {
 
     public FrameLayout frameLayoutTextRemarkBackground;
 
-    public RelativeLayout relativeLayoutTextRemarkContentView;
+    public LinearLayout linearLayoutTextRemarkContentView;
+
+    public LinearLayout linearLayoutOperatingTop;
+
+    public LinearLayout linearLayoutOperatingBottom;
 
     public EditText editTextTextRemark;
 
-    public TextView textViewTextRemarkCancel;
+    public TextView textViewTextRemarkCancelTop;
+    public TextView textViewTextRemarkCancelBottom;
 
-    public TextView textViewTextRemarkDelete;
+    public TextView textViewTextRemarkDeleteTop;
+    public TextView textViewTextRemarkDeleteBottom;
 
-    public TextView textViewTextRemarkSave;
+    public TextView textViewTextRemarkSaveTop;
+    public TextView textViewTextRemarkSaveBottom;
 
     public List<PenAnnotation> penAnnotations = new ArrayList<>();
 
@@ -480,6 +488,8 @@ public class PDFView extends RelativeLayout {
     private float pdfFontUnit = 1;
 
     private HashMap<String,Runnable> animationEndRunnables=new HashMap<String,Runnable>();
+
+    private boolean singleZoom = true;
 
     /**
      * Construct the initial view
@@ -548,11 +558,19 @@ public class PDFView extends RelativeLayout {
         View textRemarkView = LayoutInflater.from(getContext()).inflate(R.layout.view_edittext_remark, this, true);
         relativeLayoutTextRemarkView = (RelativeLayout) textRemarkView.findViewById(R.id.relativeLayoutTextRemarkView);
         frameLayoutTextRemarkBackground = (FrameLayout) textRemarkView.findViewById(R.id.frameLayoutTextRemarkBackground);
-        relativeLayoutTextRemarkContentView = (RelativeLayout) textRemarkView.findViewById(R.id.relativeLayoutTextRemarkContentView);
+        linearLayoutTextRemarkContentView = (LinearLayout) textRemarkView.findViewById(R.id.linearLayoutTextRemarkContentView);
+        linearLayoutOperatingTop = (LinearLayout) textRemarkView.findViewById(R.id.linearLayoutOperatingTop);
+        linearLayoutOperatingBottom = (LinearLayout) textRemarkView.findViewById(R.id.linearLayoutOperatingBottom);
         editTextTextRemark = (EditText) textRemarkView.findViewById(R.id.editTextTextRemark);
-        textViewTextRemarkCancel = (TextView) textRemarkView.findViewById(R.id.textViewTextRemarkCancel);
-        textViewTextRemarkDelete = (TextView) textRemarkView.findViewById(R.id.textViewTextRemarkDelete);
-        textViewTextRemarkSave = (TextView) textRemarkView.findViewById(R.id.textViewTextRemarkSave);
+
+        textViewTextRemarkCancelTop = (TextView) textRemarkView.findViewById(R.id.textViewTextRemarkCancelTop);
+        textViewTextRemarkDeleteTop = (TextView) textRemarkView.findViewById(R.id.textViewTextRemarkDeleteTop);
+        textViewTextRemarkSaveTop = (TextView) textRemarkView.findViewById(R.id.textViewTextRemarkSaveTop);
+
+        textViewTextRemarkCancelBottom = (TextView) textRemarkView.findViewById(R.id.textViewTextRemarkCancelBottom);
+        textViewTextRemarkDeleteBottom  = (TextView) textRemarkView.findViewById(R.id.textViewTextRemarkDeleteBottom);
+        textViewTextRemarkSaveBottom = (TextView) textRemarkView.findViewById(R.id.textViewTextRemarkSaveBottom);
+
         relativeLayoutTextRemarkView.setVisibility(GONE);
         frameLayoutTextRemarkBackground.setOnClickListener(new OnClickListener() {
             @Override
@@ -568,7 +586,7 @@ public class PDFView extends RelativeLayout {
                 }
             }
         });
-        textViewTextRemarkCancel.setOnClickListener(new OnClickListener() {
+        View.OnClickListener onClickListenerCancel=new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (editTextAnnotation != null) {
@@ -580,8 +598,11 @@ public class PDFView extends RelativeLayout {
                     onTextRemarkListener.onCancel(editTextTextRemark, false);
                 }
             }
-        });
-        textViewTextRemarkDelete.setOnClickListener(new OnClickListener() {
+        };
+        textViewTextRemarkCancelTop.setOnClickListener(onClickListenerCancel);
+        textViewTextRemarkCancelBottom.setOnClickListener(onClickListenerCancel);
+
+        View.OnClickListener onClickListenerDelete=new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (editTextAnnotation == null) {
@@ -598,14 +619,21 @@ public class PDFView extends RelativeLayout {
                     onTextRemarkListener.onDelete(editTextTextRemark, editTextAnnotation);
                 }
             }
-        });
-        textViewTextRemarkSave.setOnClickListener(new OnClickListener() {
+        };
+        textViewTextRemarkDeleteTop.setOnClickListener(onClickListenerDelete);
+        textViewTextRemarkDeleteBottom.setOnClickListener(onClickListenerDelete);
+
+        View.OnClickListener onClickListenerSave=new OnClickListener() {
             @Override
             public void onClick(View v) {
                 String data = editTextTextRemark.getText().toString();
-                RelativeLayout.MarginLayoutParams layoutParams = (RelativeLayout.MarginLayoutParams) relativeLayoutTextRemarkContentView.getLayoutParams();
-                int x = (int) (layoutParams.leftMargin);
-                int y = (int) (layoutParams.topMargin);
+                float[] position=new float[3];
+                if(linearLayoutTextRemarkContentView.getTag()!=null){
+                    position=(float[])linearLayoutTextRemarkContentView.getTag();
+                }
+//                RelativeLayout.MarginLayoutParams layoutParams = (RelativeLayout.MarginLayoutParams) linearLayoutTextRemarkContentView.getLayoutParams();
+                int x = (int) (position[0]);
+                int y = (int) (position[1]);
                 TextRemarkInfo textRemarkInfo = new TextRemarkInfo(UUID.randomUUID().toString(), data, x, y, zoom, getCurrentPage());
 
                 if (editTextAnnotation != null) {
@@ -623,7 +651,10 @@ public class PDFView extends RelativeLayout {
                     onTextRemarkListener.onSave(editTextTextRemark, textRemarkInfo);
                 }
             }
-        });
+        };
+        textViewTextRemarkSaveTop.setOnClickListener(onClickListenerSave);
+        textViewTextRemarkSaveBottom.setOnClickListener(onClickListenerSave);
+
         editTextTextRemark.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -658,8 +689,10 @@ public class PDFView extends RelativeLayout {
             editTextTextRemark.setHintTextColor(editTextHintColor);
         }
         if (editTextRemarkThemeColor != 0) {
-            textViewTextRemarkCancel.setTextColor(editTextRemarkThemeColor);
-            textViewTextRemarkSave.setTextColor(editTextRemarkThemeColor);
+            textViewTextRemarkCancelTop.setTextColor(editTextRemarkThemeColor);
+            textViewTextRemarkSaveTop.setTextColor(editTextRemarkThemeColor);
+            textViewTextRemarkCancelBottom.setTextColor(editTextRemarkThemeColor);
+            textViewTextRemarkSaveBottom.setTextColor(editTextRemarkThemeColor);
         }
     }
 
@@ -700,6 +733,7 @@ public class PDFView extends RelativeLayout {
         return childViews;
     }
 
+
     private void moveTextRemarkView(float x, float y) {
         if (relativeLayoutTextRemarkView.getVisibility() != VISIBLE) {
             relativeLayoutTextRemarkView.setVisibility(VISIBLE);
@@ -707,31 +741,46 @@ public class PDFView extends RelativeLayout {
                 onTextRemarkListener.onShow(editTextTextRemark);
             }
         }
-        RelativeLayout.MarginLayoutParams layoutParams = (RelativeLayout.MarginLayoutParams) relativeLayoutTextRemarkContentView.getLayoutParams();
-        float[] position = new float[2];
+        RelativeLayout.MarginLayoutParams layoutParams = (RelativeLayout.MarginLayoutParams) linearLayoutTextRemarkContentView.getLayoutParams();
+        float[] position = new float[3];
         position[0] = x;
         position[1] = y;
-
+        if((getWidth()>getHeight()&&y>(float)(getHeight()/3))){
+            linearLayoutOperatingTop.setVisibility(VISIBLE);
+            linearLayoutOperatingBottom.setVisibility(GONE);
+            position[2] = linearLayoutOperatingBottom.getHeight();
+            y=y-position[2];
+        }else{
+            linearLayoutOperatingTop.setVisibility(GONE);
+            linearLayoutOperatingBottom.setVisibility(VISIBLE);
+            position[2] = 0;
+        }
         if (editTextAnnotation != null) {
-            textViewTextRemarkCancel.setVisibility(GONE);
-            textViewTextRemarkDelete.setVisibility(VISIBLE);
+            textViewTextRemarkCancelTop.setVisibility(GONE);
+            textViewTextRemarkCancelBottom.setVisibility(GONE);
+            textViewTextRemarkDeleteTop.setVisibility(VISIBLE);
+            textViewTextRemarkDeleteBottom.setVisibility(VISIBLE);
             frameLayoutTextRemarkBackground.setVisibility(VISIBLE);
-            textViewTextRemarkSave.setText(getResources().getString(R.string.view_text_remark_operating_edit));
+            textViewTextRemarkSaveTop.setText(getResources().getString(R.string.view_text_remark_operating_edit));
+            textViewTextRemarkSaveBottom.setText(getResources().getString(R.string.view_text_remark_operating_edit));
             TextRemarkInfo textRemarkInfo = editTextAnnotation.data;
             if (textRemarkInfo != null) {
                 editTextTextRemark.setText(textRemarkInfo.getData());
                 EditTextUtil.setCursorToLast(editTextTextRemark);
             }
         } else {
-            textViewTextRemarkCancel.setVisibility(VISIBLE);
-            textViewTextRemarkDelete.setVisibility(GONE);
+            textViewTextRemarkCancelTop.setVisibility(VISIBLE);
+            textViewTextRemarkCancelBottom.setVisibility(VISIBLE);
+            textViewTextRemarkDeleteTop.setVisibility(GONE);
+            textViewTextRemarkDeleteBottom.setVisibility(GONE);
             frameLayoutTextRemarkBackground.setVisibility(GONE);
-            textViewTextRemarkSave.setText(getResources().getString(R.string.view_text_remark_operating_save));
+            textViewTextRemarkSaveTop.setText(getResources().getString(R.string.view_text_remark_operating_save));
+            textViewTextRemarkSaveBottom.setText(getResources().getString(R.string.view_text_remark_operating_save));
         }
         //  int[] res=  annotationManager.getTargetPdfXY((int)x,(int)y);
-        relativeLayoutTextRemarkContentView.setTag(position);
+        linearLayoutTextRemarkContentView.setTag(position);
         layoutParams.setMargins((int) x, (int) y, 0, 0);
-        relativeLayoutTextRemarkContentView.requestLayout();
+        linearLayoutTextRemarkContentView.requestLayout();
     }
 
     /**
@@ -1398,9 +1447,12 @@ public class PDFView extends RelativeLayout {
 
     private void zoomTextRemarkTextSize() {
         editTextTextRemark.setTextSize(TypedValue.COMPLEX_UNIT_PX, editTextRemarkFontSize * pdfFontUnit * zoom);
-        textViewTextRemarkCancel.setTextSize(TypedValue.COMPLEX_UNIT_PX, editTextRemarkFontSize * pdfFontUnit * zoom);
-        textViewTextRemarkDelete.setTextSize(TypedValue.COMPLEX_UNIT_PX, editTextRemarkFontSize * pdfFontUnit * zoom);
-        textViewTextRemarkSave.setTextSize(TypedValue.COMPLEX_UNIT_PX, editTextRemarkFontSize * pdfFontUnit * zoom);
+        textViewTextRemarkCancelTop.setTextSize(TypedValue.COMPLEX_UNIT_PX, editTextRemarkFontSize * pdfFontUnit * zoom);
+        textViewTextRemarkCancelBottom.setTextSize(TypedValue.COMPLEX_UNIT_PX, editTextRemarkFontSize * pdfFontUnit * zoom);
+        textViewTextRemarkDeleteTop.setTextSize(TypedValue.COMPLEX_UNIT_PX, editTextRemarkFontSize * pdfFontUnit * zoom);
+        textViewTextRemarkDeleteBottom.setTextSize(TypedValue.COMPLEX_UNIT_PX, editTextRemarkFontSize * pdfFontUnit * zoom);
+        textViewTextRemarkSaveTop.setTextSize(TypedValue.COMPLEX_UNIT_PX, editTextRemarkFontSize * pdfFontUnit * zoom);
+        textViewTextRemarkSaveBottom.setTextSize(TypedValue.COMPLEX_UNIT_PX, editTextRemarkFontSize * pdfFontUnit * zoom);
         int margin = (int) (editTextRemarkFontSize * pdfFontUnit * zoom / 2);
         editTextTextRemark.setPadding(margin, margin, margin, margin);
     }
@@ -1520,6 +1572,11 @@ public class PDFView extends RelativeLayout {
 
     public boolean isReadOnlyMode() {
         return readOnlyMode;
+    }
+
+    public boolean isHaveAnnotation(int page) {
+        List<BaseAnnotation> annotations= annotationManager.getCurrentPageAllPenAnnotation(page);
+        return annotations.size()>0;
     }
 
     public void setReadOnlyMode(boolean readOnlyMode) {
@@ -2542,6 +2599,10 @@ public class PDFView extends RelativeLayout {
         this.function = function;
     }
 
+    public void setPen(@NonNull Pen.WritePen pen) {
+        annotationManager.setPen(pen);
+    }
+
     public void setPenMode(@NonNull Pen.WritePen pen) {
         setFunction(Function.PEN);
         annotationManager.setPen(pen);
@@ -3114,6 +3175,8 @@ public class PDFView extends RelativeLayout {
         private boolean readOnlyMode;
 
         private int annotationRenderingArea;
+
+        private boolean singleZoom;
 
         private Configurator(DocumentSource documentSource) {
             this.documentSource = documentSource;
