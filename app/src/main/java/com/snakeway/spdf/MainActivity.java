@@ -759,6 +759,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
                 .setShowLoadingWhenWhiteSpaceRender(true)
                 .setEditTextNormalColor(getResources().getColor(R.color.edit_text_remark_theme))
                 .setEditTextRemarkThemeColor(getResources().getColor(R.color.edit_text_remark_theme))
+                .setSingleZoom(true)
                 .setReadOnlyMode(false)
                 .load();
     }

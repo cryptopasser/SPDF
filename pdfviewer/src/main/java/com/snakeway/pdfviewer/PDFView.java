@@ -489,7 +489,7 @@ public class PDFView extends RelativeLayout {
 
     private HashMap<String,Runnable> animationEndRunnables=new HashMap<String,Runnable>();
 
-    private boolean singleZoom = true;
+    private boolean singleZoom = false;
 
     /**
      * Construct the initial view
@@ -2858,6 +2858,14 @@ public class PDFView extends RelativeLayout {
         return UnicodeUtil.unicodeToString(UnicodeUtil.convertUnicode(result));
     }
 
+    public boolean isSingleZoom() {
+        return singleZoom;
+    }
+
+    public void setSingleZoom(boolean singleZoom) {
+        this.singleZoom = singleZoom;
+    }
+
     /**
      * searchType==1 表示搜索当前页
      * searchType==2 表示搜索所有页,返回匹配的第一页数据
@@ -3412,12 +3420,13 @@ public class PDFView extends RelativeLayout {
             return this;
         }
 
-        public String getPassword() {
-            return password;
-        }
-
         public Configurator disableLongPress() {
             PDFView.this.dragPinchManager.disableLongpress();
+            return this;
+        }
+
+        public Configurator setSingleZoom(boolean singleZoom) {
+            this.singleZoom = singleZoom;
             return this;
         }
 
@@ -3469,7 +3478,7 @@ public class PDFView extends RelativeLayout {
             PDFView.this.setEditTextHintColor(editTextHintColor);
             PDFView.this.setReadOnlyMode(readOnlyMode);
             PDFView.this.setAnnotationRenderingArea(annotationRenderingArea);
-
+            PDFView.this.setSingleZoom(singleZoom);
             if (cancelBitmap == null && getCancelBitmap() == null) {
                 Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.close);
                 PDFView.this.setCancelBitmap(bitmap);
