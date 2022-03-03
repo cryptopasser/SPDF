@@ -10,6 +10,7 @@ import android.graphics.PathEffect;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.util.Log;
 import android.util.SparseArray;
 
 import com.snakeway.pdflibrary.util.Size;
@@ -19,6 +20,7 @@ import com.snakeway.pdfviewer.annotation.PenAnnotation;
 import com.snakeway.pdfviewer.annotation.TextAnnotation;
 import com.snakeway.pdfviewer.annotation.base.BaseAnnotation;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,9 +70,6 @@ final class AnnotationDrawManager {
         paint.setDither(true);
     }
 
-    /**
-     * 绘制
-     */
     public void draw(Canvas canvas, int page) {
         //绘制需要的一些参数
         SizeF size = pdfView.pdfFile.getPageSize(page);
@@ -103,6 +102,29 @@ final class AnnotationDrawManager {
         //画 搜索区域
         drawSearchAreaAnnotation(canvas, page, rect, rectF, scale);
         // 移动到原来的位置
+        canvas.translate(-localTranslationX, -localTranslationY);
+    }
+
+    public void drawPen(Canvas canvas, int page) {
+        SizeF size = pdfView.pdfFile.getPageSize(page);
+        float zoom = pdfView.getZoom();
+        Rect rect = new Rect(0, 0, (int) size.getWidth(), (int) size.getHeight());
+        RectF rectF = new RectF(0, 0, size.getWidth() * zoom, size.getHeight() * zoom);
+        Size pdfSize = pdfView.pdfFile.originalPageSizes.get(page);
+        float scale = pdfSize.getWidth() / size.getWidth();
+        float localTranslationX;
+        float localTranslationY;
+        if (pdfView.isSwipeVertical()) {
+            localTranslationY = pdfView.pdfFile.getPageOffset(page, zoom);
+            float maxWidth = pdfView.pdfFile.getMaxPageWidth();
+            localTranslationX = (maxWidth - size.getWidth()) * zoom / 2;
+        } else {
+            localTranslationX = pdfView.pdfFile.getPageOffset(page, zoom);
+            float maxHeight = pdfView.pdfFile.getMaxPageHeight();
+            localTranslationY = (maxHeight - size.getHeight()) * zoom / 2;
+        }
+        canvas.translate(localTranslationX, localTranslationY);
+        drawPenAnnotation(canvas, page, rect, rectF, scale);
         canvas.translate(-localTranslationX, -localTranslationY);
     }
 
@@ -188,6 +210,7 @@ final class AnnotationDrawManager {
                 drawingPenBitmap = Bitmap.createBitmap(pageSize.width(), pageSize.height(), Bitmap.Config.ARGB_8888);
             }
         }
+
         Canvas penCanvas = new Canvas(drawingPenBitmap);
         penCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
         Size pdfSize = pdfView.pdfFile.originalPageSizes.get(page);
@@ -196,12 +219,13 @@ final class AnnotationDrawManager {
 
         for (PenAnnotation penAnnotation : annotationManager.drawingPenAnnotations) {
             penAnnotation.draw(penCanvas, scale, basePenWidth, pdfView);
-            canvas.drawBitmap(drawingPenBitmap, pageSize, drawRegion, paint);
         }
         if (annotationManager.drawingPenAnnotation != null) {
             annotationManager.drawingPenAnnotation.draw(penCanvas, scale, basePenWidth, pdfView);
-            canvas.drawBitmap(drawingPenBitmap, pageSize, drawRegion, paint);
+           // canvas.drawBitmap(drawingPenBitmap, pageSize, drawRegion, paint);
         }
+        canvas.drawBitmap(drawingPenBitmap, pageSize, drawRegion, paint);
+
     }
 
     /**

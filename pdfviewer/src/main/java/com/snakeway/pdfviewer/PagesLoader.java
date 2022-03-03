@@ -142,6 +142,7 @@ class PagesLoader {
                     }
                 }
             } else if (page == lastPage) {
+
                 float pageOffset = pdfView.pdfFile.getPageOffset(page, pdfView.getZoom());
 
                 if (pdfView.isSwipeVertical()) {

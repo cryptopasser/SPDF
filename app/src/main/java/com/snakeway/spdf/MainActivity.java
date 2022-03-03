@@ -92,7 +92,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
     public static final String FILE_PATH_KEY = "file_path_key";
     public static final String FILE_PASSWORD_KEY = "file_password_key";
 
-    private final String PDF_NAME = "docx.pdf";
+    private final String PDF_NAME = "demo.pdf";
     private final String PDF_PASSWORD = "123456";
 
     public static final String SAVE_ANNOTATION_KEY = "save_annotation_key";
@@ -615,7 +615,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
             }
             circleViews.add(circleView);
         }
-
         pen = PenBuilder.colorPenBuilder().setColor(getResources().getColor(R.color.pen_color_1)).setPenWidthScale(0.5f).build();
         textPen = PenBuilder.textPenBuilder().setColor(getResources().getColor(R.color.pen_color_1)).build();
     }
@@ -749,7 +748,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
 //                .scrollHandle(new DefaultScrollHandle(this))
 //                .spacing(10) // in dp
                 .onPageError(this)
-                .pageFitPolicy(FitPolicy.WIDTH)
+                .pageFitPolicy(FitPolicy.BOTH)
                 .setAutoFillWhiteSpace(true)
                 .setLoadAfterCheckWhiteSpace(true)
                 .setUseMinWhiteSpaceZoom(false)
@@ -899,9 +898,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
     }
 
     private void saveAnnotationData() {
-        String result = GsonUtils.toJson(viewBinding.pdfView.getAllOptimizationAnnotation());
-        Log.e("result", result);
-        CacheDiskUtils.getInstance().put(PDF_NAME, result);
+         String result = GsonUtils.toJson(viewBinding.pdfView.getAllOptimizationAnnotation());
+         CacheDiskUtils.getInstance().put(PDF_NAME, result);
     }
 
     @Override

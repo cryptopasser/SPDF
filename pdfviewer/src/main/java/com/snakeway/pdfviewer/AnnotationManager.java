@@ -45,7 +45,7 @@ import java.util.List;
 
 final class AnnotationManager {
     private static final String TAG = AnnotationManager.class.getName();
-    private final float TOUCH_TOLERANCE = 4;
+    private final float TOUCH_TOLERANCE = 3;
     private PDFView pdfView;
     //注释缓存
     SparseArray<List<BaseAnnotation>> annotations = new SparseArray<>();
@@ -804,6 +804,8 @@ final class AnnotationManager {
         if (event.getPointerId(event.getActionIndex()) != 0) {
             return false;
         }
+        long time1=System.currentTimeMillis();
+
         int action = event.getActionMasked();
         float x = event.getX();
         float y = event.getY();

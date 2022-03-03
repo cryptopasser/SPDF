@@ -19,7 +19,8 @@ public class BookMarkThirdItem extends TreeItem<BookMarkBean.BookMarkSecondBean.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder) {
-        viewHolder.setText(R.id.textViewTag, "      " + data.title);
+        String remark=data.isRemark?"(√)":"";
+        viewHolder.setText(R.id.textViewTag, "      " + data.title+remark);
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
