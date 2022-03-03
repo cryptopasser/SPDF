@@ -799,7 +799,6 @@ public class PDFView extends RelativeLayout {
         if (recycled || pdfFile == null) {
             return;
         }
-
         page = pdfFile.determineValidPageNumberFrom(page);
         SnapEdge edge = isAutoFillWhiteSpace() ? SnapEdge.CENTER : findSnapEdge(page);
         float offset = snapOffsetForPage(page, edge);

@@ -749,7 +749,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
 //                .spacing(10) // in dp
                 .onPageError(this)
                 .pageFitPolicy(FitPolicy.BOTH)
-                .setAutoFillWhiteSpace(true)
+                .setAutoFillWhiteSpace(false)
                 .setLoadAfterCheckWhiteSpace(true)
                 .setUseMinWhiteSpaceZoom(false)
                 .setWhiteSpaceRenderBestQuality(true)

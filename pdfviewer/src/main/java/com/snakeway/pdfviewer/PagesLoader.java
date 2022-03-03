@@ -124,39 +124,39 @@ class PagesLoader {
             range.page = page;
 
             float pageFirstXOffset, pageFirstYOffset, pageLastXOffset, pageLastYOffset;
-//            if (page == firstPage) {
-//                pageFirstXOffset = fixedFirstXOffset;
-//                pageFirstYOffset = fixedFirstYOffset;
-//                if (pageCount == 1) {
-//                    pageLastXOffset = fixedLastXOffset;
-//                    pageLastYOffset = fixedLastYOffset;
-//                } else {
-//                    float pageOffset = pdfView.pdfFile.getPageOffset(page, pdfView.getZoom());
-//                    SizeF pageSize = pdfView.pdfFile.getScaledPageSize(page, pdfView.getZoom());
-//                    if (pdfView.isSwipeVertical()) {
-//                        pageLastXOffset = fixedLastXOffset;
-//                        pageLastYOffset = pageOffset + pageSize.getHeight();
-//                    } else {
-//                        pageLastYOffset = fixedLastYOffset;
-//                        pageLastXOffset = pageOffset + pageSize.getWidth();
-//                    }
-//                }
-//            } else if (page == lastPage) {
-//
-//                float pageOffset = pdfView.pdfFile.getPageOffset(page, pdfView.getZoom());
-//
-//                if (pdfView.isSwipeVertical()) {
-//                    pageFirstXOffset = fixedFirstXOffset;
-//                    pageFirstYOffset = pageOffset;
-//                } else {
-//                    pageFirstYOffset = fixedFirstYOffset;
-//                    pageFirstXOffset = pageOffset;
-//                }
-//
-//                pageLastXOffset = fixedLastXOffset;
-//                pageLastYOffset = fixedLastYOffset;
-//
-//            } else {
+            if (page == firstPage) {
+                pageFirstXOffset = fixedFirstXOffset;
+                pageFirstYOffset = fixedFirstYOffset;
+                if (pageCount == 1) {
+                    pageLastXOffset = fixedLastXOffset;
+                    pageLastYOffset = fixedLastYOffset;
+                } else {
+                    float pageOffset = pdfView.pdfFile.getPageOffset(page, pdfView.getZoom());
+                    SizeF pageSize = pdfView.pdfFile.getScaledPageSize(page, pdfView.getZoom());
+                    if (pdfView.isSwipeVertical()) {
+                        pageLastXOffset = fixedLastXOffset;
+                        pageLastYOffset = pageOffset + pageSize.getHeight();
+                    } else {
+                        pageLastYOffset = fixedLastYOffset;
+                        pageLastXOffset = pageOffset + pageSize.getWidth();
+                    }
+                }
+            } else if (page == lastPage) {
+
+                float pageOffset = pdfView.pdfFile.getPageOffset(page, pdfView.getZoom());
+
+                if (pdfView.isSwipeVertical()) {
+                    pageFirstXOffset = fixedFirstXOffset;
+                    pageFirstYOffset = pageOffset;
+                } else {
+                    pageFirstYOffset = fixedFirstYOffset;
+                    pageFirstXOffset = pageOffset;
+                }
+
+                pageLastXOffset = fixedLastXOffset;
+                pageLastYOffset = fixedLastYOffset;
+
+            } else {
                 float pageOffset = pdfView.pdfFile.getPageOffset(page, pdfView.getZoom());
                 SizeF pageSize = pdfView.pdfFile.getScaledPageSize(page, pdfView.getZoom());
                 if (pdfView.isSwipeVertical()) {
@@ -172,7 +172,7 @@ class PagesLoader {
                     pageLastXOffset = pageOffset + pageSize.getWidth();
                     pageLastYOffset = fixedLastYOffset;
                 }
-//            }
+            }
 
             getPageColsRows(range.gridSize, range.page); // get the page's grid size that rows and cols
             SizeF scaledPageSize = pdfView.pdfFile.getScaledPageSize(range.page, pdfView.getZoom());
