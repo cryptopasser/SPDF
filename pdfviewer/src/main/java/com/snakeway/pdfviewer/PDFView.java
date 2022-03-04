@@ -2618,10 +2618,18 @@ public class PDFView extends RelativeLayout {
         setFunction(Function.TEXT);
         annotationManager.setTextPen(textPen);
         setEditTextNormalColor(textPen.getColor());
+        updateEditTextRemarkView();
         if(textPen.getFontSize()!=0) {
             setEditTextRemarkFontSize(textPen.getFontSize());
+            zoomTextRemarkTextSize();
+            float[] position=new float[3];
+            if(linearLayoutTextRemarkContentView.getTag()!=null){
+                position=(float[])linearLayoutTextRemarkContentView.getTag();
+                if(position[0]!=0&&position[1]!=0) {
+                    moveTextRemarkView((int) (position[0]), (int) (position[1]));
+                }
+            }
         }
-        updateEditTextRemarkView();
     }
 
     public boolean isAutoFillWhiteSpace() {
@@ -3181,7 +3189,7 @@ public class PDFView extends RelativeLayout {
 
         private float cancelBitmapSize = 50;
 
-        private float editTextRemarkFontSize = 16;
+        private float editTextRemarkFontSize = 12;
 
         private int editTextRemarkThemeColor;
 
