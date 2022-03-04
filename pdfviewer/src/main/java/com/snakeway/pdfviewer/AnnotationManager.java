@@ -505,7 +505,7 @@ final class AnnotationManager {
 
     void saveTextPenAnnotation(TextRemarkInfo textRemarkInfo,boolean outSideCrop) {
         if (textPen == null) {
-            textPen = PenBuilder.textPenBuilder().setColor(Color.parseColor("#66666666"),pdfView.getEditTextRemarkFontSize()).build();
+            textPen = PenBuilder.textPenBuilder().setColor(Color.parseColor("#66666666")).setFontSize(pdfView.getEditTextRemarkFontSize()).build();
         }
         if(outSideCrop){
            String text= textOutSideCropCheck(textRemarkInfo.getX(),textRemarkInfo.getY(),textRemarkInfo.getData(),textRemarkInfo.getZoom());

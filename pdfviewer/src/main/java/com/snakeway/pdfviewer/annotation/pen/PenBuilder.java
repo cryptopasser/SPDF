@@ -241,8 +241,12 @@ public final class PenBuilder {
         }
 
 
-        public TextPenBuilder setColor(int color,float fontSize) {
+        public TextPenBuilder setColor(int color) {
             this.color = color;
+            return this;
+        }
+
+        public TextPenBuilder setFontSize(float fontSize) {
             this.fontSize=fontSize;
             return this;
         }
