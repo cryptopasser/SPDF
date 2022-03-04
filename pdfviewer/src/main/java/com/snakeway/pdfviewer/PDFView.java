@@ -438,7 +438,7 @@ public class PDFView extends RelativeLayout {
 
     private float cancelBitmapSize = 50;
 
-    private float editTextRemarkFontSize = 16;
+    private float editTextRemarkFontSize = 12;
 
     private int editTextRemarkThemeColor;
 
