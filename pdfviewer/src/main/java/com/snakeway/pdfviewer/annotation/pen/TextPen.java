@@ -18,9 +18,11 @@ import com.snakeway.pdfviewer.model.TextRemarkInfo;
 public class TextPen implements Pen.TextPen {
     private transient Paint paint;
     private int color;
+    private float fontSize;
 
-    public TextPen(int color) {
+    public TextPen(int color,float fontSize) {
         this.color = color;
+        this.fontSize=fontSize;
         init();
     }
 
@@ -30,6 +32,14 @@ public class TextPen implements Pen.TextPen {
 
     public void setColor(int color) {
         this.color = color;
+    }
+
+    public float getFontSize() {
+        return fontSize;
+    }
+
+    public void setFontSize(float fontSize) {
+        this.fontSize = fontSize;
     }
 
     @Override

@@ -616,7 +616,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
             circleViews.add(circleView);
         }
         pen = PenBuilder.colorPenBuilder().setColor(getResources().getColor(R.color.pen_color_1)).setPenWidthScale(0.5f).build();
-        textPen = PenBuilder.textPenBuilder().setColor(getResources().getColor(R.color.pen_color_1)).build();
+        textPen = PenBuilder.textPenBuilder().setColor(getResources().getColor(R.color.pen_color_1),10).build();
     }
 
     private void updatePenColor(List<CircleView> circleViews, int index, boolean isTextRemark) {
@@ -638,7 +638,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
             viewBinding.pdfView.setPenMode(pen);
             selectPenIndex = index;
         } else {
-            textPen = PenBuilder.textPenBuilder().setColor(color).build();
+            textPen = PenBuilder.textPenBuilder().setColor(color,10).build();
             viewBinding.pdfView.setTextMode(textPen);
             selectTextPenIndex = index;
         }

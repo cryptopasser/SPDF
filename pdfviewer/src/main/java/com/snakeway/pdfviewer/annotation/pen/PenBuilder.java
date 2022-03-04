@@ -235,19 +235,21 @@ public final class PenBuilder {
 
     public static final class TextPenBuilder extends Builder {
         int color;
+        float fontSize;
 
         TextPenBuilder() {
         }
 
 
-        public TextPenBuilder setColor(int color) {
+        public TextPenBuilder setColor(int color,float fontSize) {
             this.color = color;
+            this.fontSize=fontSize;
             return this;
         }
 
         @Override
         public TextPen build() {
-            return new TextPen(color);
+            return new TextPen(color,fontSize);
         }
     }
 }

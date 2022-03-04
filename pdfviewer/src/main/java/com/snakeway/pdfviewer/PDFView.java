@@ -2618,6 +2618,9 @@ public class PDFView extends RelativeLayout {
         setFunction(Function.TEXT);
         annotationManager.setTextPen(textPen);
         setEditTextNormalColor(textPen.getColor());
+        if(textPen.getFontSize()!=0) {
+            setEditTextRemarkFontSize(textPen.getFontSize());
+        }
         updateEditTextRemarkView();
     }
 
