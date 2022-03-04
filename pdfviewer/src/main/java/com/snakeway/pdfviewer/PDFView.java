@@ -491,6 +491,8 @@ public class PDFView extends RelativeLayout {
 
     private boolean singleZoom = false;
 
+    private boolean easyLoader = false;
+
     /**
      * Construct the initial view
      */
@@ -1581,8 +1583,13 @@ public class PDFView extends RelativeLayout {
     }
 
     public boolean isHaveAnnotation(int page) {
-        List<BaseAnnotation> annotations= annotationManager.getCurrentPageAllPenAnnotation(page);
-        return annotations.size()>0;
+        List<BaseAnnotation> annotations= annotationManager.getAllAnnotation();
+        for(int i=0;i<annotations.size();i++){
+            if(annotations.get(i).page==page){
+               return true;
+            }
+        }
+        return false;
     }
 
     public void setReadOnlyMode(boolean readOnlyMode) {
