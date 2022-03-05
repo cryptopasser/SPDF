@@ -747,7 +747,7 @@ public class PDFView extends RelativeLayout {
         float[] position = new float[3];
         position[0] = x;
         position[1] = y;
-        if((getWidth()>getHeight()&&y>(float)(getHeight()/3))){
+        if((getWidth()>getHeight()&&y>(float)(getHeight()/3))||(getWidth()<getHeight()&&y>(float)(getHeight()*2/5))){
             linearLayoutOperatingTop.setVisibility(VISIBLE);
             linearLayoutOperatingBottom.setVisibility(GONE);
 
