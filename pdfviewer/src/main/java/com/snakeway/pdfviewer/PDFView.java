@@ -777,7 +777,7 @@ public class PDFView extends RelativeLayout {
                 editTextTextRemark.setText(textRemarkInfo.getData());
                 EditTextUtil.setCursorToLast(editTextTextRemark);
             }
-        } else {
+        } else{
             textViewTextRemarkCancelTop.setVisibility(VISIBLE);
             textViewTextRemarkCancelBottom.setVisibility(VISIBLE);
             textViewTextRemarkDeleteTop.setVisibility(GONE);
@@ -1241,6 +1241,8 @@ public class PDFView extends RelativeLayout {
         canvas.translate(-currentXOffset, -currentYOffset);
     }
 
+    boolean isSelectPen=false;
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (isAutoFillWhiteSpaceZooming) {
@@ -1309,12 +1311,68 @@ public class PDFView extends RelativeLayout {
                         annotationManager.drawingPenAnnotation = null;
                         redraw();
                     }
+                }
+            });
+        }else if(function == Function.VIEWER){
+            pdfViewPenAreaClickCheck(event, new OnPdfViewPenAreaClickListener() {
+                @Override
+                public void onClick(MotionEvent event, int x, int y) {
+                    if(isSelectPen){
+                        if (penAnnotations.size() == 0) {
+                            return;
+                        }
+                        boolean isInPenDrawArea = false;
+                        PenAnnotation cancelPenAnnotation = null;
+                        for (PenAnnotation penAnnotation : penAnnotations) {
+                            if (annotationManager.isInCancelArea(penAnnotation, x, y)) {
+                                List<BaseAnnotation> thePenAnnotations = new ArrayList<>();
+                                thePenAnnotations.add(penAnnotation);
+                                annotationManager.removeAnnotations(thePenAnnotations, true);
+                                penAnnotation.setAreaRect(null);
+                                cancelPenAnnotation = penAnnotation;
+                                isSelectPen = false;
+                                break;
+                            }
+                            if (annotationManager.isInPenDrawArea(penAnnotation, x, y)) {
+                                isInPenDrawArea = true;
+                            }
+                        }
+                        if (cancelPenAnnotation != null) {
+                            penAnnotations.remove(cancelPenAnnotation);
+                            redraw();
+                            return;
+                        }
+                        if (!isInPenDrawArea) {
+                            for (PenAnnotation penAnnotation : penAnnotations) {
+                                penAnnotation.setAreaRect(null);
+                            }
+                            isSelectPen = false;
+                            penAnnotations.clear();
+                            redraw();
+                        }
+                    }else {
+                        List<PenAnnotation> thePenAnnotations = annotationManager.getSelectPenAnnotations(x, y, true);
+                        if (thePenAnnotations.size() > 0) {//如果选择了新的旧清除旧的
+                            for (PenAnnotation penAnnotation : penAnnotations) {
+                                if (!thePenAnnotations.contains(penAnnotation)) {
+                                    penAnnotation.setAreaRect(null);
+                                }
+                            }
+                            penAnnotations.clear();
+                            penAnnotations.addAll(thePenAnnotations);
+                            annotationManager.drawingPenAnnotation = null;
+                            isSelectPen = true;
+                            redraw();
+                        }
+                    }
+                }
+
+                @Override
+                public void onLongClick(MotionEvent event, int x, int y) {
 
                 }
             });
-            if (penAnnotations.size() > 0) {
-                return true;
-            }
+            processTextModeViewer(event);
         }
         switch (function) {
             case VIEWER:
@@ -1324,6 +1382,33 @@ public class PDFView extends RelativeLayout {
             default:
                 return annotationManager.onTouch(event);
         }
+    }
+
+    private boolean processTextModeViewer(MotionEvent event) {
+        pdfViewTextPenAreaClickCheck(event, new OnPdfViewTextPenAreaClickListener() {
+            @Override
+            public void onClick(MotionEvent event, int x, int y) {
+                if (pdfFile == null) {
+                    return;
+                }
+                List<TextAnnotation> thePenAnnotations = annotationManager.getSelectTextPenAnnotations(x, y, true);
+                if (thePenAnnotations.size() > 0) {
+                    editTextAnnotation = thePenAnnotations.get(0);
+                    RectF rectF = annotationManager.convertPdfPositionToScreenPosition(editTextAnnotation.page, editTextAnnotation.getAreaRect());
+                    if (rectF != null) {
+                        annotationManager.resetAnnotationDraw(editTextAnnotation);
+                        editTextAnnotation.setNeedHidden(true);
+                        moveTextRemarkView(rectF.left, rectF.top);
+                    }
+                }
+            }
+
+            @Override
+            public void onLongClick(MotionEvent event, int x, int y) {
+
+            }
+        });
+        return true;
     }
 
     private boolean processTextModeTouch(MotionEvent event) {

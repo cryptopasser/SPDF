@@ -92,7 +92,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
     public static final String FILE_PATH_KEY = "file_path_key";
     public static final String FILE_PASSWORD_KEY = "file_password_key";
 
-    private final String PDF_NAME = "test.pdf";
+    private final String PDF_NAME = "tt.pdf";
     private final String PDF_PASSWORD = "123456";
 
     public static final String SAVE_ANNOTATION_KEY = "save_annotation_key";
@@ -748,7 +748,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
 //                .scrollHandle(new DefaultScrollHandle(this))
 //                .spacing(10) // in dp
                 .onPageError(this)
-                .pageFitPolicy(FitPolicy.BOTH)
+                .pageFitPolicy(FitPolicy.WIDTH)
                 .setAutoFillWhiteSpace(false)
                 .setLoadAfterCheckWhiteSpace(true)
                 .setUseMinWhiteSpaceZoom(false)
