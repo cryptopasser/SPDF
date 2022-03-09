@@ -185,7 +185,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
         viewBinding.pdfView.setDrawAreaPen(MarkAreaType.UNDERWAVELINE, underWaveLinePen);
         viewBinding.pdfView.setDrawAreaPen(MarkAreaType.HIGHLIGHT, highLightPen);
         viewBinding.pdfView.setSearchAreaPen(PenBuilder.searchAreaPenBuilder().setColor(getResources().getColor(R.color.searchAreaPen_default)).build());
-
+        viewBinding.pdfView.setTextPen(textPen);
         viewBinding.pdfView.addAnnotations(getAnnotationData(), false);
         viewBinding.pdfView.setProgressViewBackground(getResources().getColor(R.color.pdf_view_background));
         viewBinding.pdfView.setAnnotationListener(new AnnotationListener() {

@@ -2724,6 +2724,22 @@ public class PDFView extends RelativeLayout {
         }
     }
 
+    public void setTextPen(@NonNull TextPen textPen){
+        setEditTextNormalColor(textPen.getColor());
+        updateEditTextRemarkView();
+        if(textPen.getFontSize()!=0) {
+            setEditTextRemarkFontSize(textPen.getFontSize());
+            zoomTextRemarkTextSize();
+            float[] position=new float[3];
+            if(linearLayoutTextRemarkContentView.getTag()!=null){
+                position=(float[])linearLayoutTextRemarkContentView.getTag();
+                if(position[0]!=0&&position[1]!=0) {
+                    moveTextRemarkView((int) (position[0]), (int) (position[1]));
+                }
+            }
+        }
+    }
+
     public boolean isAutoFillWhiteSpace() {
         return autoFillWhiteSpace;
     }
