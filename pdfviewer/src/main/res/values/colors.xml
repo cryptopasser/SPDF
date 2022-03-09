@@ -5,6 +5,6 @@
     <color name="text_normal_color">#000000</color>
     <color name="text_hint_color">#aaaaaa</color>
 
-    <color name="edit_text_remark_view_background_color">#3192f0</color>
+    <color name="edit_text_remark_view_background_color">#66000000</color>
 
 </resources>
