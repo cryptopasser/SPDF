@@ -185,7 +185,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
         viewBinding.pdfView.setDrawAreaPen(MarkAreaType.UNDERWAVELINE, underWaveLinePen);
         viewBinding.pdfView.setDrawAreaPen(MarkAreaType.HIGHLIGHT, highLightPen);
         viewBinding.pdfView.setSearchAreaPen(PenBuilder.searchAreaPenBuilder().setColor(getResources().getColor(R.color.searchAreaPen_default)).build());
-        viewBinding.pdfView.setTextPen(textPen);
         viewBinding.pdfView.addAnnotations(getAnnotationData(), false);
         viewBinding.pdfView.setProgressViewBackground(getResources().getColor(R.color.pdf_view_background));
         viewBinding.pdfView.setAnnotationListener(new AnnotationListener() {
@@ -265,6 +264,13 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
             }
         });
         hideBottomUIMenu();
+        viewBinding.pdfView.post(new Runnable() {
+            @Override
+            public void run() {
+                viewBinding.pdfView.setTextPen(textPen);
+            }
+        });
+
     }
 
     @Override
@@ -390,6 +396,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
         viewBinding.layoutSearch.frameLayoutCover.setOnClickListener(onClickListener);
         viewBinding.layoutSearch.imageViewSearchClear.setOnClickListener(onClickListener);
         viewBinding.layoutSearch.textViewSearch.setOnClickListener(onClickListener);
+        viewBinding.pdfView.setOnPdfViewClickListener(onClickListener);
     }
 
     private void addSearchKeyListener() {
@@ -593,7 +600,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
         colors.add(getResources().getColor(R.color.pen_color_5));
         colors.add(getResources().getColor(R.color.pen_color_6));
         colors.add(getResources().getColor(R.color.pen_color_7));
-
         circleViews.clear();
         int borderColor = getResources().getColor(R.color.circleViewBorder_default);
         for (int i = 0; i < colors.size(); i++) {

@@ -396,6 +396,8 @@ public class PDFView extends RelativeLayout {
 
     private OnTextRemarkListener onTextRemarkListener;
 
+    private OnClickListener onPdfViewClickListener;
+
     boolean startTargetSelect = false;
 
     boolean endTargetSelect = false;
@@ -1376,12 +1378,53 @@ public class PDFView extends RelativeLayout {
         }
         switch (function) {
             case VIEWER:
+                processClickTouch(event);
                 return dragPinchManager.onTouch(this, event);
             case TEXT:
                 return processTextModeTouch(event);
             default:
                 return annotationManager.onTouch(event);
         }
+    }
+
+    private boolean processClickTouch(MotionEvent event) {
+        int x = (int) event.getX();
+        int y = (int) event.getY();
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                break;
+            case MotionEvent.ACTION_MOVE:
+                break;
+            case MotionEvent.ACTION_CANCEL:
+            case MotionEvent.ACTION_UP:
+                boolean isInDrawArea = false;
+                for (PenAnnotation penAnnotation : penAnnotations) {
+                    if (annotationManager.isInCancelArea(penAnnotation, x, y)) {
+                        List<BaseAnnotation> thePenAnnotations = new ArrayList<>();
+                        thePenAnnotations.add(penAnnotation);
+                        annotationManager.removeAnnotations(thePenAnnotations, true);
+                        penAnnotation.setAreaRect(null);
+                        isSelectPen = false;
+                        break;
+                    }
+                    if (annotationManager.isInPenDrawArea(penAnnotation, x, y)) {
+                        isInDrawArea = true;
+                    }
+                }
+                List<TextAnnotation> theTextAnnotations = annotationManager.getSelectTextPenAnnotations(x, y, true);
+                if (theTextAnnotations.size() > 0) {
+                    editTextAnnotation = theTextAnnotations.get(0);
+                    RectF rectF = annotationManager.convertPdfPositionToScreenPosition(editTextAnnotation.page, editTextAnnotation.getAreaRect());
+                    if (rectF != null) {
+                        isInDrawArea=true;
+                    }
+                }
+                if(!isInDrawArea&&onPdfViewClickListener!=null){
+                    onPdfViewClickListener.onClick(this);
+                }
+                break;
+        }
+        return true;
     }
 
     private boolean processTextModeViewer(MotionEvent event) {
@@ -2725,6 +2768,7 @@ public class PDFView extends RelativeLayout {
     }
 
     public void setTextPen(@NonNull TextPen textPen){
+        annotationManager.setTextPen(textPen);
         setEditTextNormalColor(textPen.getColor());
         updateEditTextRemarkView();
         if(textPen.getFontSize()!=0) {
@@ -3191,6 +3235,10 @@ public class PDFView extends RelativeLayout {
 
     public void setOnTextRemarkListener(OnTextRemarkListener onTextRemarkListener) {
         this.onTextRemarkListener = onTextRemarkListener;
+    }
+
+    public void setOnPdfViewClickListener(OnClickListener onClickListener) {
+        this.onPdfViewClickListener = onPdfViewClickListener;
     }
 
     public State getState() {
