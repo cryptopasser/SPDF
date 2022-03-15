@@ -150,7 +150,7 @@ public class PDFView extends RelativeLayout {
     private float midZoom = DEFAULT_MID_SCALE;
     private float maxZoom = DEFAULT_MAX_SCALE;
 
-    private final String START_ZOOM_ANIMATION="startZoomAnimation";
+    private final String START_ZOOM_ANIMATION = "startZoomAnimation";
 
     /**
      * START - scrolling in first page direction
@@ -408,7 +408,7 @@ public class PDFView extends RelativeLayout {
 
     private boolean readOnlyMode = false;
 
-    private int annotationRenderingArea= 0;
+    private int annotationRenderingArea = 0;
 
     private boolean autoFillWhiteSpace = false;
 
@@ -489,7 +489,7 @@ public class PDFView extends RelativeLayout {
 
     private float pdfFontUnit = 1;
 
-    private HashMap<String,Runnable> animationEndRunnables=new HashMap<String,Runnable>();
+    private HashMap<String, Runnable> animationEndRunnables = new HashMap<String, Runnable>();
 
     private boolean singleZoom = false;
 
@@ -572,7 +572,7 @@ public class PDFView extends RelativeLayout {
         textViewTextRemarkSaveTop = (TextView) textRemarkView.findViewById(R.id.textViewTextRemarkSaveTop);
 
         textViewTextRemarkCancelBottom = (TextView) textRemarkView.findViewById(R.id.textViewTextRemarkCancelBottom);
-        textViewTextRemarkDeleteBottom  = (TextView) textRemarkView.findViewById(R.id.textViewTextRemarkDeleteBottom);
+        textViewTextRemarkDeleteBottom = (TextView) textRemarkView.findViewById(R.id.textViewTextRemarkDeleteBottom);
         textViewTextRemarkSaveBottom = (TextView) textRemarkView.findViewById(R.id.textViewTextRemarkSaveBottom);
 
         relativeLayoutTextRemarkView.setVisibility(GONE);
@@ -590,7 +590,7 @@ public class PDFView extends RelativeLayout {
                 }
             }
         });
-        OnClickListener onClickListenerCancel=new OnClickListener() {
+        OnClickListener onClickListenerCancel = new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (editTextAnnotation != null) {
@@ -606,7 +606,7 @@ public class PDFView extends RelativeLayout {
         textViewTextRemarkCancelTop.setOnClickListener(onClickListenerCancel);
         textViewTextRemarkCancelBottom.setOnClickListener(onClickListenerCancel);
 
-        OnClickListener onClickListenerDelete=new OnClickListener() {
+        OnClickListener onClickListenerDelete = new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (editTextAnnotation == null) {
@@ -627,13 +627,13 @@ public class PDFView extends RelativeLayout {
         textViewTextRemarkDeleteTop.setOnClickListener(onClickListenerDelete);
         textViewTextRemarkDeleteBottom.setOnClickListener(onClickListenerDelete);
 
-        OnClickListener onClickListenerSave=new OnClickListener() {
+        OnClickListener onClickListenerSave = new OnClickListener() {
             @Override
             public void onClick(View v) {
                 String data = editTextTextRemark.getText().toString();
-                float[] position=new float[3];
-                if(linearLayoutTextRemarkContentView.getTag()!=null){
-                    position=(float[])linearLayoutTextRemarkContentView.getTag();
+                float[] position = new float[3];
+                if (linearLayoutTextRemarkContentView.getTag() != null) {
+                    position = (float[]) linearLayoutTextRemarkContentView.getTag();
                 }
 //                RelativeLayout.MarginLayoutParams layoutParams = (RelativeLayout.MarginLayoutParams) linearLayoutTextRemarkContentView.getLayoutParams();
                 int x = (int) (position[0]);
@@ -644,10 +644,10 @@ public class PDFView extends RelativeLayout {
                     List<BaseAnnotation> annotations = new ArrayList<>();
                     annotations.add(editTextAnnotation);
                     annotationManager.removeAnnotations(annotations, true);
-                    annotationManager.saveTextPenAnnotation(textRemarkInfo,true);
+                    annotationManager.saveTextPenAnnotation(textRemarkInfo, true);
                     resetEditTextAnnotation();
                 } else {
-                    annotationManager.saveTextPenAnnotation(textRemarkInfo,true);
+                    annotationManager.saveTextPenAnnotation(textRemarkInfo, true);
                 }
                 editTextTextRemark.setText("");
                 relativeLayoutTextRemarkView.setVisibility(GONE);
@@ -677,10 +677,10 @@ public class PDFView extends RelativeLayout {
         });
     }
 
-    private void resetEditTextAnnotation(){
-        if(editTextAnnotation!=null){
+    private void resetEditTextAnnotation() {
+        if (editTextAnnotation != null) {
             editTextAnnotation.setNeedHidden(false);
-            editTextAnnotation=null;
+            editTextAnnotation = null;
             redraw();
         }
     }
@@ -700,8 +700,8 @@ public class PDFView extends RelativeLayout {
         }
     }
 
-    public Bitmap getTextRemarkBitmapCache(String key,String data, int color, float zoom,boolean needCache) {
-        if(needCache) {
+    public Bitmap getTextRemarkBitmapCache(String key, String data, int color, float zoom, boolean needCache) {
+        if (needCache) {
             Bitmap bitmap = bitmapMemoryCacheHelper.getBitmap(key);
             if (bitmap != null) {
                 return bitmap;
@@ -722,7 +722,7 @@ public class PDFView extends RelativeLayout {
         if (viewBitmap == null) {
             return null;
         }
-        if(needCache) {
+        if (needCache) {
             bitmapMemoryCacheHelper.putBitmap(key, viewBitmap);
         }
         return viewBitmap;
@@ -749,7 +749,7 @@ public class PDFView extends RelativeLayout {
         float[] position = new float[3];
         position[0] = x;
         position[1] = y;
-        if((getWidth()>getHeight()&&y>(float)(getHeight()/3))||(getWidth()<getHeight()&&y>(float)(getHeight()*2/5))){
+        if ((getWidth() > getHeight() && y > (float) (getHeight() / 3)) || (getWidth() < getHeight() && y > (float) (getHeight() * 2 / 5))) {
             linearLayoutOperatingTop.setVisibility(VISIBLE);
             linearLayoutOperatingBottom.setVisibility(GONE);
 
@@ -760,8 +760,8 @@ public class PDFView extends RelativeLayout {
             int height = linearLayoutOperatingTop.getMeasuredHeight();
 
             position[2] = height;
-            y=y-position[2];
-        }else{
+            y = y - position[2];
+        } else {
             linearLayoutOperatingTop.setVisibility(GONE);
             linearLayoutOperatingBottom.setVisibility(VISIBLE);
             position[2] = 0;
@@ -779,7 +779,7 @@ public class PDFView extends RelativeLayout {
                 editTextTextRemark.setText(textRemarkInfo.getData());
                 EditTextUtil.setCursorToLast(editTextTextRemark);
             }
-        } else{
+        } else {
             textViewTextRemarkCancelTop.setVisibility(VISIBLE);
             textViewTextRemarkCancelBottom.setVisibility(VISIBLE);
             textViewTextRemarkDeleteTop.setVisibility(GONE);
@@ -806,17 +806,17 @@ public class PDFView extends RelativeLayout {
         page = pdfFile.determineValidPageNumberFrom(page);
         SnapEdge edge = isAutoFillWhiteSpace() ? SnapEdge.CENTER : findSnapEdge(page);
         float offset = snapOffsetForPage(page, edge);
-        if(withAnimation) {
+        if (withAnimation) {
             if (swipeVertical) {
                 animationManager.startYAnimation(currentYOffset, -offset);
             } else {
                 animationManager.startXAnimation(currentXOffset, -offset);
             }
-        }else{
+        } else {
             if (swipeVertical) {
                 moveTo(currentXOffset, -offset);
             } else {
-                moveTo( -offset, currentYOffset);
+                moveTo(-offset, currentYOffset);
             }
         }
         showPage(page, withAnimation);
@@ -1243,7 +1243,7 @@ public class PDFView extends RelativeLayout {
         canvas.translate(-currentXOffset, -currentYOffset);
     }
 
-    boolean isSelectPen=false;
+    boolean isSelectPen = false;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -1315,70 +1315,33 @@ public class PDFView extends RelativeLayout {
                     }
                 }
             });
-        }else if(function == Function.VIEWER){
-            pdfViewPenAreaClickCheck(event, new OnPdfViewPenAreaClickListener() {
-                @Override
-                public void onClick(MotionEvent event, int x, int y) {
-                    if(isSelectPen){
-                        if (penAnnotations.size() == 0) {
-                            return;
-                        }
-                        boolean isInPenDrawArea = false;
-                        PenAnnotation cancelPenAnnotation = null;
-                        for (PenAnnotation penAnnotation : penAnnotations) {
-                            if (annotationManager.isInCancelArea(penAnnotation, x, y)) {
-                                List<BaseAnnotation> thePenAnnotations = new ArrayList<>();
-                                thePenAnnotations.add(penAnnotation);
-                                annotationManager.removeAnnotations(thePenAnnotations, true);
-                                penAnnotation.setAreaRect(null);
-                                cancelPenAnnotation = penAnnotation;
-                                isSelectPen = false;
-                                break;
-                            }
-                            if (annotationManager.isInPenDrawArea(penAnnotation, x, y)) {
-                                isInPenDrawArea = true;
-                            }
-                        }
-                        if (cancelPenAnnotation != null) {
-                            penAnnotations.remove(cancelPenAnnotation);
-                            redraw();
-                            return;
-                        }
-                        if (!isInPenDrawArea) {
-                            for (PenAnnotation penAnnotation : penAnnotations) {
-                                penAnnotation.setAreaRect(null);
-                            }
-                            isSelectPen = false;
-                            penAnnotations.clear();
-                            redraw();
-                        }
-                    }else {
-                        List<PenAnnotation> thePenAnnotations = annotationManager.getSelectPenAnnotations(x, y, true);
-                        if (thePenAnnotations.size() > 0) {//如果选择了新的旧清除旧的
-                            for (PenAnnotation penAnnotation : penAnnotations) {
-                                if (!thePenAnnotations.contains(penAnnotation)) {
-                                    penAnnotation.setAreaRect(null);
+        } else if (function == Function.VIEWER) {
+            if (isSelectPen) {
+                processPenModeViewer(event, new OnPdfViewProcessClickListener() {
+                    @Override
+                    public void processClick(MotionEvent event, boolean haveProcess2) {
+                    }
+                });
+            } else {
+                processTextModeViewer(event, new OnPdfViewProcessClickListener() {
+                    @Override
+                    public void processClick(MotionEvent event, boolean haveProcess1) {
+                        if (!haveProcess1) {
+                            processPenModeViewer(event, new OnPdfViewProcessClickListener() {
+                                @Override
+                                public void processClick(MotionEvent event, boolean haveProcess2) {
+                                    if (!haveProcess2) {
+                                        processClickTouch(event);
+                                    }
                                 }
-                            }
-                            penAnnotations.clear();
-                            penAnnotations.addAll(thePenAnnotations);
-                            annotationManager.drawingPenAnnotation = null;
-                            isSelectPen = true;
-                            redraw();
+                            });
                         }
                     }
-                }
-
-                @Override
-                public void onLongClick(MotionEvent event, int x, int y) {
-
-                }
-            });
-            processTextModeViewer(event);
+                });
+            }
         }
         switch (function) {
             case VIEWER:
-                processClickTouch(event);
                 return dragPinchManager.onTouch(this, event);
             case TEXT:
                 return processTextModeTouch(event);
@@ -1388,8 +1351,6 @@ public class PDFView extends RelativeLayout {
     }
 
     private boolean processClickTouch(MotionEvent event) {
-        int x = (int) event.getX();
-        int y = (int) event.getY();
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 break;
@@ -1397,29 +1358,7 @@ public class PDFView extends RelativeLayout {
                 break;
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
-                boolean isInDrawArea = false;
-                for (PenAnnotation penAnnotation : penAnnotations) {
-                    if (annotationManager.isInCancelArea(penAnnotation, x, y)) {
-                        List<BaseAnnotation> thePenAnnotations = new ArrayList<>();
-                        thePenAnnotations.add(penAnnotation);
-                        annotationManager.removeAnnotations(thePenAnnotations, true);
-                        penAnnotation.setAreaRect(null);
-                        isSelectPen = false;
-                        break;
-                    }
-                    if (annotationManager.isInPenDrawArea(penAnnotation, x, y)) {
-                        isInDrawArea = true;
-                    }
-                }
-                List<TextAnnotation> theTextAnnotations = annotationManager.getSelectTextPenAnnotations(x, y, true);
-                if (theTextAnnotations.size() > 0) {
-                    editTextAnnotation = theTextAnnotations.get(0);
-                    RectF rectF = annotationManager.convertPdfPositionToScreenPosition(editTextAnnotation.page, editTextAnnotation.getAreaRect());
-                    if (rectF != null) {
-                        isInDrawArea=true;
-                    }
-                }
-                if(!isInDrawArea&&onPdfViewClickListener!=null){
+                if (onPdfViewClickListener != null) {
                     onPdfViewClickListener.onClick(this);
                 }
                 break;
@@ -1427,7 +1366,72 @@ public class PDFView extends RelativeLayout {
         return true;
     }
 
-    private boolean processTextModeViewer(MotionEvent event) {
+    private boolean processPenModeViewer(MotionEvent event, OnPdfViewProcessClickListener onPdfViewProcessClickListener) {
+        pdfViewTextPenAreaClickCheck(event, new OnPdfViewTextPenAreaClickListener() {
+            @Override
+            public void onClick(MotionEvent event, int x, int y) {
+                if (isSelectPen) {
+                    if (penAnnotations.size() == 0) {
+                        return;
+                    }
+                    boolean isInPenDrawArea = false;
+                    PenAnnotation cancelPenAnnotation = null;
+                    for (PenAnnotation penAnnotation : penAnnotations) {
+                        if (annotationManager.isInCancelArea(penAnnotation, x, y)) {
+                            List<BaseAnnotation> thePenAnnotations = new ArrayList<>();
+                            thePenAnnotations.add(penAnnotation);
+                            annotationManager.removeAnnotations(thePenAnnotations, true);
+                            penAnnotation.setAreaRect(null);
+                            cancelPenAnnotation = penAnnotation;
+                            isSelectPen = false;
+                            break;
+                        }
+                        if (annotationManager.isInPenDrawArea(penAnnotation, x, y)) {
+                            isInPenDrawArea = true;
+                        }
+                    }
+                    if (cancelPenAnnotation != null) {
+                        penAnnotations.remove(cancelPenAnnotation);
+                        redraw();
+                        onPdfViewProcessClickListener.processClick(event, true);
+                        return;
+                    }
+                    if (!isInPenDrawArea) {
+                        for (PenAnnotation penAnnotation : penAnnotations) {
+                            penAnnotation.setAreaRect(null);
+                        }
+                        isSelectPen = false;
+                        penAnnotations.clear();
+                        redraw();
+                    }
+                }
+                List<PenAnnotation> thePenAnnotations = annotationManager.getSelectPenAnnotations(x, y, true);
+                if (thePenAnnotations.size() > 0) {//如果选择了新的旧清除旧的
+                    onPdfViewProcessClickListener.processClick(event, true);
+                    for (PenAnnotation penAnnotation : penAnnotations) {
+                        if (!thePenAnnotations.contains(penAnnotation)) {
+                            penAnnotation.setAreaRect(null);
+                        }
+                    }
+                    penAnnotations.clear();
+                    penAnnotations.addAll(thePenAnnotations);
+                    annotationManager.drawingPenAnnotation = null;
+                    isSelectPen = true;
+                    redraw();
+                }else{
+                    onPdfViewProcessClickListener.processClick(event, false);
+                }
+            }
+
+            @Override
+            public void onLongClick(MotionEvent event, int x, int y) {
+
+            }
+        });
+        return true;
+    }
+
+    private boolean processTextModeViewer(MotionEvent event, OnPdfViewProcessClickListener onPdfViewProcessClickListener) {
         pdfViewTextPenAreaClickCheck(event, new OnPdfViewTextPenAreaClickListener() {
             @Override
             public void onClick(MotionEvent event, int x, int y) {
@@ -1442,8 +1446,11 @@ public class PDFView extends RelativeLayout {
                         annotationManager.resetAnnotationDraw(editTextAnnotation);
                         editTextAnnotation.setNeedHidden(true);
                         moveTextRemarkView(rectF.left, rectF.top);
+                        onPdfViewProcessClickListener.processClick(event, true);
+                        return;
                     }
                 }
+                onPdfViewProcessClickListener.processClick(event, false);
             }
 
             @Override
@@ -1638,7 +1645,7 @@ public class PDFView extends RelativeLayout {
     }
 
 
-    private void pdfViewTextPenAreaClickCheck(MotionEvent event, OnPdfViewTextPenAreaClickListener onPdfViewTextPenAreaClickListener) {
+    private boolean pdfViewTextPenAreaClickCheck(MotionEvent event, OnPdfViewTextPenAreaClickListener onPdfViewTextPenAreaClickListener) {
         int touchSlop = getTouchSlop();
         int x = (int) event.getX();
         int y = (int) event.getY();//x,y一定要在longclick之前执行,因为longclik执行回调时候手指已经离开了瞄点的view了,计算的x,y变成了相对于屏幕的,而不是某个view了
@@ -1663,9 +1670,11 @@ public class PDFView extends RelativeLayout {
                 textPenDrawCheckIsReleased = true;
                 if (!textPenDrawCheckIsMoved && !textPenDrawLongClickActive) {
                     onPdfViewTextPenAreaClickListener.onClick(event, x, y);
+                    return true;
                 }
                 break;
         }
+        return false;
     }
 
 
@@ -1711,10 +1720,10 @@ public class PDFView extends RelativeLayout {
     }
 
     public boolean isHaveAnnotation(int page) {
-        List<BaseAnnotation> annotations= annotationManager.getAllAnnotation();
-        for(int i=0;i<annotations.size();i++){
-            if(annotations.get(i).page==page){
-               return true;
+        List<BaseAnnotation> annotations = annotationManager.getAllAnnotation();
+        for (int i = 0; i < annotations.size(); i++) {
+            if (annotations.get(i).page == page) {
+                return true;
             }
         }
         return false;
@@ -2206,12 +2215,12 @@ public class PDFView extends RelativeLayout {
         }
     }
 
-    public void addAnimationEndRunnable(String key,Runnable runnable) {
-        if(!isDoZooming()&&!isDoMoving()&&!isDoFlinging()){
+    public void addAnimationEndRunnable(String key, Runnable runnable) {
+        if (!isDoZooming() && !isDoMoving() && !isDoFlinging()) {
             runnable.run();
             return;
         }
-        animationEndRunnables.put(key,runnable);
+        animationEndRunnables.put(key, runnable);
     }
 
     public void jumpToPageWithAutoFillCheck(int page) {
@@ -2347,8 +2356,8 @@ public class PDFView extends RelativeLayout {
         moveTo(currentXOffset + dx, currentYOffset + dy);
     }
 
-    private boolean isZoomNear(WhiteSpaceInfo whiteSpaceInfo){
-      return   whiteSpaceInfo.getScale()<zoom*1.01&&whiteSpaceInfo.getScale()>zoom*0.99;
+    private boolean isZoomNear(WhiteSpaceInfo whiteSpaceInfo) {
+        return whiteSpaceInfo.getScale() < zoom * 1.01 && whiteSpaceInfo.getScale() > zoom * 0.99;
     }
 
     public boolean checkWhiteSpaceTouchLimit() {
@@ -2357,7 +2366,7 @@ public class PDFView extends RelativeLayout {
         }
         int centerPage = findFocusPage(currentXOffset, currentYOffset);
         WhiteSpaceInfo whiteSpaceInfo = getWhiteSpaceInfo(centerPage);
-        if ((autoFillWhiteSpace && isZoomNear(whiteSpaceInfo)) ||isDoZooming()||isDoMoving()||isDoFlinging()) {
+        if ((autoFillWhiteSpace && isZoomNear(whiteSpaceInfo)) || isDoZooming() || isDoMoving() || isDoFlinging()) {
             return true;
         }
         return false;
@@ -2369,7 +2378,7 @@ public class PDFView extends RelativeLayout {
         }
         int centerPage = findFocusPage(currentXOffset, currentYOffset);
         WhiteSpaceInfo whiteSpaceInfo = getWhiteSpaceInfo(centerPage);
-        if ((autoFillWhiteSpace&& isZoomNear(whiteSpaceInfo))  ||isDoZooming()||isDoMoving()||isDoFlinging()) {
+        if ((autoFillWhiteSpace && isZoomNear(whiteSpaceInfo)) || isDoZooming() || isDoMoving() || isDoFlinging()) {
             if (swipeVertical) {
                 moveTo(currentXOffset + dx, currentYOffset);
             } else {
@@ -2435,25 +2444,25 @@ public class PDFView extends RelativeLayout {
         checkAllAnimationEnd();
     }
 
-    private void checkAllAnimationEnd(){
-        if(isDoZooming()||isDoMoving()||isDoFlinging()){
+    private void checkAllAnimationEnd() {
+        if (isDoZooming() || isDoMoving() || isDoFlinging()) {
             return;
         }
-        if(animationEndRunnables.size()==0){
+        if (animationEndRunnables.size() == 0) {
             return;
         }
-        if(animationEndRunnables.containsKey(START_ZOOM_ANIMATION)){
-            Runnable runnable=animationEndRunnables.get(START_ZOOM_ANIMATION);
+        if (animationEndRunnables.containsKey(START_ZOOM_ANIMATION)) {
+            Runnable runnable = animationEndRunnables.get(START_ZOOM_ANIMATION);
             animationEndRunnables.remove(START_ZOOM_ANIMATION);
-            if(runnable!=null){
+            if (runnable != null) {
                 runnable.run();
             }
             return;
         }
-        List<Runnable> runnables=new ArrayList<>();
+        List<Runnable> runnables = new ArrayList<>();
         for (Map.Entry<String, Runnable> entry : animationEndRunnables.entrySet()) {
-            Runnable runnable=entry.getValue();
-            if(runnable!=null){
+            Runnable runnable = entry.getValue();
+            if (runnable != null) {
                 runnables.add(runnable);
             }
         }
@@ -2570,7 +2579,7 @@ public class PDFView extends RelativeLayout {
     }
 
     public void zoomWithAnimation(float centerX, float centerY, float scale) {
-        addAnimationEndRunnable(START_ZOOM_ANIMATION,new Runnable() {
+        addAnimationEndRunnable(START_ZOOM_ANIMATION, new Runnable() {
             @Override
             public void run() {
                 animationManager.startZoomAnimation(centerX, centerY, zoom, scale);
@@ -2579,7 +2588,7 @@ public class PDFView extends RelativeLayout {
     }
 
     public void zoomWithAnimation(float scale) {
-        addAnimationEndRunnable(START_ZOOM_ANIMATION,new Runnable() {
+        addAnimationEndRunnable(START_ZOOM_ANIMATION, new Runnable() {
             @Override
             public void run() {
                 animationManager.startZoomAnimation(getWidth() / 2, getHeight() / 2, zoom, scale);
@@ -2754,30 +2763,30 @@ public class PDFView extends RelativeLayout {
         annotationManager.setTextPen(textPen);
         setEditTextNormalColor(textPen.getColor());
         updateEditTextRemarkView();
-        if(textPen.getFontSize()!=0) {
+        if (textPen.getFontSize() != 0) {
             setEditTextRemarkFontSize(textPen.getFontSize());
             zoomTextRemarkTextSize();
-            float[] position=new float[3];
-            if(linearLayoutTextRemarkContentView.getTag()!=null){
-                position=(float[])linearLayoutTextRemarkContentView.getTag();
-                if(position[0]!=0&&position[1]!=0) {
+            float[] position = new float[3];
+            if (linearLayoutTextRemarkContentView.getTag() != null) {
+                position = (float[]) linearLayoutTextRemarkContentView.getTag();
+                if (position[0] != 0 && position[1] != 0) {
                     moveTextRemarkView((int) (position[0]), (int) (position[1]));
                 }
             }
         }
     }
 
-    public void setTextPen(@NonNull TextPen textPen){
+    public void setTextPen(@NonNull TextPen textPen) {
         annotationManager.setTextPen(textPen);
         setEditTextNormalColor(textPen.getColor());
         updateEditTextRemarkView();
-        if(textPen.getFontSize()!=0) {
+        if (textPen.getFontSize() != 0) {
             setEditTextRemarkFontSize(textPen.getFontSize());
             zoomTextRemarkTextSize();
-            float[] position=new float[3];
-            if(linearLayoutTextRemarkContentView.getTag()!=null){
-                position=(float[])linearLayoutTextRemarkContentView.getTag();
-                if(position[0]!=0&&position[1]!=0) {
+            float[] position = new float[3];
+            if (linearLayoutTextRemarkContentView.getTag() != null) {
+                position = (float[]) linearLayoutTextRemarkContentView.getTag();
+                if (position[0] != 0 && position[1] != 0) {
                     moveTextRemarkView((int) (position[0]), (int) (position[1]));
                 }
             }
@@ -3677,6 +3686,13 @@ public class PDFView extends RelativeLayout {
         void onClick(MotionEvent event, int x, int y);
 
         void onLongClick(MotionEvent event, int x, int y);
+    }
+
+
+    public interface OnPdfViewProcessClickListener {
+
+        void processClick(MotionEvent event, boolean haveProcess);
+
     }
 }
 

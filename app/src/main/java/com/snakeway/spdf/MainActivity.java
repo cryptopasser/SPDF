@@ -251,6 +251,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
             @Override
             public void onSave(EditText editText, TextRemarkInfo textRemarkInfo) {
                 ScreenTool.showSoftInput(MainActivity.this, false, editText);
+                showRemarkView(false, true);
             }
 
             @Override
