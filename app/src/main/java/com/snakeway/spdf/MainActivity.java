@@ -396,7 +396,12 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
         viewBinding.layoutSearch.frameLayoutCover.setOnClickListener(onClickListener);
         viewBinding.layoutSearch.imageViewSearchClear.setOnClickListener(onClickListener);
         viewBinding.layoutSearch.textViewSearch.setOnClickListener(onClickListener);
-        viewBinding.pdfView.setOnPdfViewClickListener(onClickListener);
+        viewBinding.pdfView.setOnPdfViewClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("setOnPdfView", "annotation");
+            }
+        });
     }
 
     private void addSearchKeyListener() {

@@ -590,7 +590,7 @@ public class PDFView extends RelativeLayout {
                 }
             }
         });
-        View.OnClickListener onClickListenerCancel=new OnClickListener() {
+        OnClickListener onClickListenerCancel=new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (editTextAnnotation != null) {
@@ -606,7 +606,7 @@ public class PDFView extends RelativeLayout {
         textViewTextRemarkCancelTop.setOnClickListener(onClickListenerCancel);
         textViewTextRemarkCancelBottom.setOnClickListener(onClickListenerCancel);
 
-        View.OnClickListener onClickListenerDelete=new OnClickListener() {
+        OnClickListener onClickListenerDelete=new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (editTextAnnotation == null) {
@@ -627,7 +627,7 @@ public class PDFView extends RelativeLayout {
         textViewTextRemarkDeleteTop.setOnClickListener(onClickListenerDelete);
         textViewTextRemarkDeleteBottom.setOnClickListener(onClickListenerDelete);
 
-        View.OnClickListener onClickListenerSave=new OnClickListener() {
+        OnClickListener onClickListenerSave=new OnClickListener() {
             @Override
             public void onClick(View v) {
                 String data = editTextTextRemark.getText().toString();
@@ -745,7 +745,7 @@ public class PDFView extends RelativeLayout {
                 onTextRemarkListener.onShow(editTextTextRemark);
             }
         }
-        RelativeLayout.MarginLayoutParams layoutParams = (RelativeLayout.MarginLayoutParams) linearLayoutTextRemarkContentView.getLayoutParams();
+        MarginLayoutParams layoutParams = (MarginLayoutParams) linearLayoutTextRemarkContentView.getLayoutParams();
         float[] position = new float[3];
         position[0] = x;
         position[1] = y;
@@ -753,9 +753,9 @@ public class PDFView extends RelativeLayout {
             linearLayoutOperatingTop.setVisibility(VISIBLE);
             linearLayoutOperatingBottom.setVisibility(GONE);
 
-            int widthSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-            int heightSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+            int widthSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
+            int heightSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
+            MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
             linearLayoutOperatingTop.measure(widthSpec, heightSpec);
             int height = linearLayoutOperatingTop.getMeasuredHeight();
 
@@ -3238,7 +3238,7 @@ public class PDFView extends RelativeLayout {
     }
 
     public void setOnPdfViewClickListener(OnClickListener onClickListener) {
-        this.onPdfViewClickListener = onPdfViewClickListener;
+        this.onPdfViewClickListener = onClickListener;
     }
 
     public State getState() {
