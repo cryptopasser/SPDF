@@ -2756,11 +2756,22 @@ public class PDFView extends RelativeLayout {
     public void setPenMode(@NonNull Pen.WritePen pen) {
         setFunction(Function.PEN);
         annotationManager.setPen(pen);
+        resetPenArea();
+    }
+
+    public void resetPenArea(){
+        for (PenAnnotation penAnnotation : penAnnotations) {
+            penAnnotation.setAreaRect(null);
+        }
+        isSelectPen = false;
+        redraw();
     }
 
     public void setTextMode(@NonNull TextPen textPen) {
         setFunction(Function.TEXT);
         annotationManager.setTextPen(textPen);
+        resetPenArea();
+
         setEditTextNormalColor(textPen.getColor());
         updateEditTextRemarkView();
         if (textPen.getFontSize() != 0) {
