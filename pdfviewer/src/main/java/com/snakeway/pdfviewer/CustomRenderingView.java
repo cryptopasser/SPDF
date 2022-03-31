@@ -75,7 +75,9 @@ public class CustomRenderingView extends RelativeLayout {
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         canvas.drawColor(Color.TRANSPARENT);
-        pdfView.annotationDrawManager.drawAnnotation(canvas, page);
+        if(!pdfView.annotationDrawManager.drawAnnotation(canvas, page)) {
+            return null;
+        }
         return bitmap;
     }
 
