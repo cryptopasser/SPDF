@@ -804,7 +804,6 @@ final class AnnotationManager {
         if (event.getPointerId(event.getActionIndex()) != 0) {
             return false;
         }
-        long time1=System.currentTimeMillis();
 
         int action = event.getActionMasked();
         float x = event.getX();

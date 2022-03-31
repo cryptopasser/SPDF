@@ -34,6 +34,10 @@ public abstract class BaseAnnotation<T, Pen extends com.snakeway.pdfviewer.annot
         this.pageSize = pageSize;
     }
 
+    public void singleDraw(Canvas canvas, float scale, int basePenWidth, PDFView pdfView) {
+        pen.draw(data, canvas, scale, basePenWidth, pdfView, page);
+    }
+
     public void draw(Canvas canvas, float scale, int basePenWidth, PDFView pdfView) {
         pen.draw(data, canvas, scale, basePenWidth, pdfView, page);
         drawed = true;

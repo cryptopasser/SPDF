@@ -1,6 +1,7 @@
 package com.snakeway.pdfviewer;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -17,6 +18,8 @@ public class CustomRenderingView extends RelativeLayout {
     public final List<Integer> onDrawAnnotationPagesNums = new ArrayList<>(10);
 
     PDFView pdfView;
+
+    Bitmap bitmap;
 
     public CustomRenderingView(Context context, AttributeSet set) {
         super(context, set);
@@ -64,6 +67,16 @@ public class CustomRenderingView extends RelativeLayout {
         }
         onDrawAnnotationPagesNums.clear();
         canvas.translate(-currentXOffset, -currentYOffset);
+    }
+
+    public Bitmap getRenderingBitmap(int page){
+        int width = getWidth();
+        int height = getHeight();
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        canvas.drawColor(Color.TRANSPARENT);
+        pdfView.annotationDrawManager.drawAnnotation(canvas, page);
+        return bitmap;
     }
 
 }

@@ -105,6 +105,18 @@ final class AnnotationDrawManager {
         canvas.translate(-localTranslationX, -localTranslationY);
     }
 
+    public void drawAnnotation(Canvas canvas, int page) {
+        SizeF size = pdfView.pdfFile.getPageSize(page);
+        Size pdfSize = pdfView.pdfFile.originalPageSizes.get(page);
+        float scale = pdfSize.getWidth() / size.getWidth();
+        int basePenWidth = Math.min(pdfSize.getHeight(), pdfSize.getWidth());
+        basePenWidth /= BASE_PEN_WIDTH_COEFFICIENT;
+        for (BaseAnnotation annotation : annotationManager.annotations.get(page)) {
+            annotation.singleDraw(canvas, scale, basePenWidth, pdfView);
+        }
+    }
+
+
     public void drawPen(Canvas canvas, int page) {
         SizeF size = pdfView.pdfFile.getPageSize(page);
         float zoom = pdfView.getZoom();

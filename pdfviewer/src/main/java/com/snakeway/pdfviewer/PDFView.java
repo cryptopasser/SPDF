@@ -38,6 +38,7 @@ import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
@@ -97,6 +98,7 @@ import com.snakeway.pdfviewer.source.DocumentSource;
 import com.snakeway.pdfviewer.source.FileSource;
 import com.snakeway.pdfviewer.source.InputStreamSource;
 import com.snakeway.pdfviewer.source.UriSource;
+import com.snakeway.pdfviewer.util.Base64Util;
 import com.snakeway.pdfviewer.util.BitmapMemoryCacheHelper;
 import com.snakeway.pdfviewer.util.BitmapUtil;
 import com.snakeway.pdfviewer.util.Constants;
@@ -107,7 +109,9 @@ import com.snakeway.pdfviewer.util.SnapEdge;
 import com.snakeway.pdfviewer.util.UnicodeUtil;
 import com.snakeway.pdfviewer.util.Util;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -2244,6 +2248,14 @@ public class PDFView extends RelativeLayout {
         } else {
             animationManager.startXAnimation(currentXOffset, -offset);
         }
+    }
+
+    public Bitmap getRenderingBitmap(int page){
+         return customRenderingView.getRenderingBitmap(page);
+    }
+
+    public String getRenderingBitmapWithBase64(int page,int targetWidth){
+       return Base64Util.bitmapToBase64(getRenderingBitmap(page),true,targetWidth);
     }
 
     /**
