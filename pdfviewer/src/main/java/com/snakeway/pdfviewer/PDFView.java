@@ -2260,7 +2260,8 @@ public class PDFView extends RelativeLayout {
         if (bitmap == null) {
             return null;
         }
-        RenderedBitmap renderedBitmap = new RenderedBitmap(bitmap.getWidth(), bitmap.getHeight(), Base64Util.bitmapToBase64(bitmap, true, targetWidth));
+        Size pdfSize = pdfFile.originalPageSizes.get(page);
+        RenderedBitmap renderedBitmap = new RenderedBitmap(bitmap.getWidth(), bitmap.getHeight(),pdfSize.getWidth(),pdfSize.getHeight(), Base64Util.bitmapToBase64(bitmap, true, targetWidth));
         return renderedBitmap;
     }
 
