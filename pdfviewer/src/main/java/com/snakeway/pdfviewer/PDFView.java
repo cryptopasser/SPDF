@@ -88,6 +88,7 @@ import com.snakeway.pdfviewer.listener.OnSearchTextListener;
 import com.snakeway.pdfviewer.listener.OnTapListener;
 import com.snakeway.pdfviewer.listener.OnTextRemarkListener;
 import com.snakeway.pdfviewer.model.PagePart;
+import com.snakeway.pdfviewer.model.RenderedBitmap;
 import com.snakeway.pdfviewer.model.SearchTextInfo;
 import com.snakeway.pdfviewer.model.TextRemarkInfo;
 import com.snakeway.pdfviewer.model.WhiteSpaceInfo;
@@ -1422,7 +1423,7 @@ public class PDFView extends RelativeLayout {
                     annotationManager.drawingPenAnnotation = null;
                     isSelectPen = true;
                     redraw();
-                }else{
+                } else {
                     onPdfViewProcessClickListener.processClick(event, false);
                 }
             }
@@ -2250,12 +2251,17 @@ public class PDFView extends RelativeLayout {
         }
     }
 
-    public Bitmap getRenderingBitmap(int page){
-         return customRenderingView.getRenderingBitmap(page);
+    public Bitmap getRenderingBitmap(int page) {
+        return customRenderingView.getRenderingBitmap(page);
     }
 
-    public String getRenderingBitmapWithBase64(int page,int targetWidth){
-       return Base64Util.bitmapToBase64(getRenderingBitmap(page),true,targetWidth);
+    public RenderedBitmap getRenderingBitmapWithBase64(int page, int targetWidth) {
+        Bitmap bitmap = getRenderingBitmap(page);
+        if (bitmap == null) {
+            return null;
+        }
+        RenderedBitmap renderedBitmap = new RenderedBitmap(bitmap.getWidth(), bitmap.getHeight(), Base64Util.bitmapToBase64(bitmap, true, targetWidth));
+        return renderedBitmap;
     }
 
     /**
@@ -2771,7 +2777,7 @@ public class PDFView extends RelativeLayout {
         resetPenArea();
     }
 
-    public void resetPenArea(){
+    public void resetPenArea() {
         for (PenAnnotation penAnnotation : penAnnotations) {
             penAnnotation.setAreaRect(null);
         }
@@ -3191,7 +3197,7 @@ public class PDFView extends RelativeLayout {
         List<BaseAnnotation> annotations = new ArrayList<>();
         for (AnnotationBean annotationBean : data) {
             try {
-                if(annotationBean.type==AnnotationBean.TYPE_NORMAL) {
+                if (annotationBean.type == AnnotationBean.TYPE_NORMAL) {
                     annotations.add(annotationBean.getAnnotation());
                 }
             } catch (Exception e) {
@@ -3205,7 +3211,7 @@ public class PDFView extends RelativeLayout {
         List<BaseAnnotation> annotations = new ArrayList<>();
         for (AnnotationBean annotationBean : data) {
             try {
-                if(annotationBean.type==AnnotationBean.TYPE_NORMAL) {
+                if (annotationBean.type == AnnotationBean.TYPE_NORMAL) {
                     annotations.add(annotationBean.getAnnotation());
                 }
             } catch (Exception e) {
