@@ -37,10 +37,10 @@ public class AnnotationBean {
         penType = baseAnnotation.pen.getPenType();
         Gson gson = new Gson();
         JsonObject jsonObject = gson.toJsonTree(baseAnnotation).getAsJsonObject();
-        String penString = jsonObject.get("pen").getAsString();
+        String penString = jsonObject.get("pen").toString();
         jsonObject.remove("pen");
         jsonObject.addProperty("pen", penString);
-        id = jsonObject.get("id").getAsString();
+        id = jsonObject.get("id").toString();
         page = jsonObject.get("page") != null ? jsonObject.get("page").getAsInt() : 0;
         if (needOptimization) {
             jsonObject.remove("data");
@@ -57,7 +57,7 @@ public class AnnotationBean {
         }
         Gson gson = new Gson();
         JsonObject jsonObject = gson.fromJson(data, JsonObject.class);
-        String penString = jsonObject.get("pen").getAsString();
+        String penString = jsonObject.get("pen").toString();
         jsonObject.remove("pen");
         BaseAnnotation annotation = null;
         switch (penType) {
