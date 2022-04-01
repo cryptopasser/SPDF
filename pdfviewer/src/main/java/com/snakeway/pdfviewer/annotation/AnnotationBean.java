@@ -11,6 +11,9 @@ import com.snakeway.pdfviewer.annotation.pen.PenType;
  * @author snakeway
  */
 public class AnnotationBean {
+    public static final int TYPE_NORMAL=0;
+    public static final int TYPE_IMAGE=1;
+
     @SerializedName("penType")
     public PenType penType;
     @SerializedName("data")
@@ -19,19 +22,22 @@ public class AnnotationBean {
     public int page;
     @SerializedName("id")
     public String id;
+    @SerializedName("type")
+    public int type;
 
-    public AnnotationBean(PenType penType, String data, int page, String id) {
+    public AnnotationBean(PenType penType, String data, int page, String id, int type) {
         this.penType = penType;
         this.data = data;
         this.page = page;
         this.id = id;
+        this.type=type;
     }
 
     public AnnotationBean(BaseAnnotation baseAnnotation, boolean needOptimization) {
         penType = baseAnnotation.pen.getPenType();
         Gson gson = new Gson();
         JsonObject jsonObject = gson.toJsonTree(baseAnnotation).getAsJsonObject();
-        String penString = jsonObject.get("pen").toString();
+        String penString = jsonObject.get("pen").getAsString();
         jsonObject.remove("pen");
         jsonObject.addProperty("pen", penString);
         id = jsonObject.get("id").getAsString();
@@ -42,9 +48,13 @@ public class AnnotationBean {
         } else {
             data = jsonObject.toString();
         }
+        type=TYPE_NORMAL;
     }
 
     public BaseAnnotation getAnnotation() throws Exception {
+        if(type==TYPE_IMAGE){
+            return null;
+        }
         Gson gson = new Gson();
         JsonObject jsonObject = gson.fromJson(data, JsonObject.class);
         String penString = jsonObject.get("pen").getAsString();

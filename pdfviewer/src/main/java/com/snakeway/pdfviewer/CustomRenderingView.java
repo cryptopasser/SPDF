@@ -19,8 +19,6 @@ public class CustomRenderingView extends RelativeLayout {
 
     PDFView pdfView;
 
-    Bitmap bitmap;
-
     public CustomRenderingView(Context context, AttributeSet set) {
         super(context, set);
         setWillNotDraw(false);

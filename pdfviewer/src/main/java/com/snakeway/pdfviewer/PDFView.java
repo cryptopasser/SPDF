@@ -3191,7 +3191,9 @@ public class PDFView extends RelativeLayout {
         List<BaseAnnotation> annotations = new ArrayList<>();
         for (AnnotationBean annotationBean : data) {
             try {
-                annotations.add(annotationBean.getAnnotation());
+                if(annotationBean.type==AnnotationBean.TYPE_NORMAL) {
+                    annotations.add(annotationBean.getAnnotation());
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -3203,7 +3205,9 @@ public class PDFView extends RelativeLayout {
         List<BaseAnnotation> annotations = new ArrayList<>();
         for (AnnotationBean annotationBean : data) {
             try {
-                annotations.add(annotationBean.getAnnotation());
+                if(annotationBean.type==AnnotationBean.TYPE_NORMAL) {
+                    annotations.add(annotationBean.getAnnotation());
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
