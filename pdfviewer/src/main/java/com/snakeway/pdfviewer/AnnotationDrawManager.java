@@ -107,7 +107,7 @@ final class AnnotationDrawManager {
 
     public boolean drawAnnotation(Canvas canvas,int targetWidth, int page) {
         Size pdfSize = pdfView.pdfFile.originalPageSizes.get(page);
-        float scale = pdfSize.getWidth() /targetWidth;
+        float scale = (float)pdfSize.getWidth() /targetWidth;
         int basePenWidth = Math.min(pdfSize.getHeight(), pdfSize.getWidth());
         basePenWidth /= BASE_PEN_WIDTH_COEFFICIENT;
         List<BaseAnnotation> baseAnnotations=annotationManager.annotations.get(page);

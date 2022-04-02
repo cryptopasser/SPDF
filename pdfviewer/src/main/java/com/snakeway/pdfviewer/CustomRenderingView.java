@@ -70,13 +70,12 @@ public class CustomRenderingView extends RelativeLayout {
 
     public Bitmap getRenderingBitmap(int page,int targetWidth){
         Size pdfSize = pdfView.pdfFile.originalPageSizes.get(page);
-        int width =targetWidth;
-        float ratio=(float)pdfSize.getWidth()/width;
+        float ratio=(float)pdfSize.getWidth()/ targetWidth;
         int height = (int) ((float)pdfSize.getHeight()/ratio);
-        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(targetWidth, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         canvas.drawColor(Color.TRANSPARENT);
-        if(!pdfView.annotationDrawManager.drawAnnotation(canvas,width, page)) {
+        if(!pdfView.annotationDrawManager.drawAnnotation(canvas, targetWidth, page)) {
             return null;
         }
         return bitmap;
