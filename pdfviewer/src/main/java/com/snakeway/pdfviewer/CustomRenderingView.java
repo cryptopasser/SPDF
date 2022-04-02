@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.RelativeLayout;
 
+import com.snakeway.pdflibrary.util.Size;
 import com.snakeway.pdfviewer.model.PagePart;
 
 import java.util.ArrayList;
@@ -67,13 +68,15 @@ public class CustomRenderingView extends RelativeLayout {
         canvas.translate(-currentXOffset, -currentYOffset);
     }
 
-    public Bitmap getRenderingBitmap(int page){
-        int width = getWidth();
-        int height = getHeight();
+    public Bitmap getRenderingBitmap(int page,int targetWidth){
+        Size pdfSize = pdfView.pdfFile.originalPageSizes.get(page);
+        int width =targetWidth;
+        float ratio=(float)pdfSize.getWidth()/width;
+        int height = (int) ((float)pdfSize.getHeight()/ratio);
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         canvas.drawColor(Color.TRANSPARENT);
-        if(!pdfView.annotationDrawManager.drawAnnotation(canvas, page)) {
+        if(!pdfView.annotationDrawManager.drawAnnotation(canvas,width, page)) {
             return null;
         }
         return bitmap;

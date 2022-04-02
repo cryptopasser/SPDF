@@ -2251,12 +2251,12 @@ public class PDFView extends RelativeLayout {
         }
     }
 
-    public Bitmap getRenderingBitmap(int page) {
-        return customRenderingView.getRenderingBitmap(page);
+    public Bitmap getRenderingBitmap(int page, int targetWidth) {
+        return customRenderingView.getRenderingBitmap(page,targetWidth);
     }
 
     public RenderedBitmap getRenderingBitmapWithBase64(int page, int targetWidth) {
-        Bitmap bitmap = getRenderingBitmap(page);
+        Bitmap bitmap = getRenderingBitmap(page,targetWidth);
         if (bitmap == null) {
             return null;
         }

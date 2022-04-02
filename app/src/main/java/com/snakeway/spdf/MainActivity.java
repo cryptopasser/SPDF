@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Service;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Build;
@@ -406,8 +407,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
 //        viewBinding.buttonOpenOther.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
-//                String data=viewBinding.pdfView.getRenderingBitmapWithBase64(1,512);
-//                Log.e("setOnPdfView", "-----"+data.length());
+//                Bitmap data=viewBinding.pdfView.getRenderingBitmap(0);
+//                viewBinding.imageViewPreview.setImageBitmap(data);
 //            }
 //        });
     }
