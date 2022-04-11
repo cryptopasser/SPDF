@@ -404,13 +404,13 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
                 Log.e("setOnPdfView", "annotation");
             }
         });
-//        viewBinding.buttonOpenOther.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Bitmap data=viewBinding.pdfView.getRenderingBitmap(0);
-//                viewBinding.imageViewPreview.setImageBitmap(data);
-//            }
-//        });
+        viewBinding.buttonOpenOther.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bitmap data=viewBinding.pdfView.getRenderingBitmap(0,520);
+                viewBinding.imageViewPreview.setImageBitmap(data);
+            }
+        });
     }
 
     private void addSearchKeyListener() {

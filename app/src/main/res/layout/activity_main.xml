@@ -22,13 +22,13 @@
             android:background="@color/pdf_view_background"
             android:layout_marginBottom="@dimen/layout_pen_operating_height" />
 
-<!--        <ImageView-->
-<!--            android:id="@+id/imageViewPreview"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:scaleType="fitCenter"-->
-<!--            android:layout_marginBottom="@dimen/layout_pen_operating_height">-->
-<!--        </ImageView>-->
+        <ImageView
+            android:id="@+id/imageViewPreview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter"
+            android:layout_marginBottom="@dimen/layout_pen_operating_height">
+        </ImageView>
 
         <FrameLayout
             android:id="@+id/frameLayoutPenOperating"
