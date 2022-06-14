@@ -29,6 +29,28 @@ public class PageSizeCalculator {
         if (pageSize.getWidth() <= 0 || pageSize.getHeight() <= 0) {
             return new SizeF(0, 0);
         }
+        float widthRatio=0;
+        float heightRatio=0;
+
+        switch (fitPolicy) {
+            case HEIGHT:
+                SizeF optimalHeightPageSize = fitHeight(pageSize, viewSize.getHeight());
+                heightRatio = optimalHeightPageSize.getHeight() / pageSize.getHeight();
+                break;
+            case BOTH:
+                SizeF localOptimalWidth = fitBoth(pageSize, viewSize.getWidth(), viewSize.getHeight());
+                float localWidthRatio = localOptimalWidth.getWidth() / pageSize.getWidth();
+                SizeF optimalMaxHeightPageSize = fitBoth(pageSize, pageSize.getWidth() * localWidthRatio,
+                        viewSize.getHeight());
+                heightRatio = optimalMaxHeightPageSize.getHeight() / pageSize.getHeight();
+                SizeF optimalMaxWidthPageSize = fitBoth(pageSize, viewSize.getWidth(), pageSize.getHeight() * heightRatio);
+                widthRatio = optimalMaxWidthPageSize.getWidth() / pageSize.getWidth();
+                break;
+            default:
+                SizeF optimalWidthPageSize = fitWidth(pageSize, viewSize.getWidth());
+                widthRatio = optimalWidthPageSize.getWidth() / pageSize.getWidth();
+                break;
+        }
         float maxWidth = fitEachPage ? viewSize.getWidth() : pageSize.getWidth() * widthRatio;
         float maxHeight = fitEachPage ? viewSize.getHeight() : pageSize.getHeight() * heightRatio;
         switch (fitPolicy) {
