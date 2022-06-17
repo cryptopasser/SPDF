@@ -233,11 +233,11 @@ class DragPinchManager implements GestureDetector.OnGestureListener, GestureDete
             return false;
         }
         if (pdfView.isSwipeVertical()) {
-            minX = -(pdfView.toCurrentScale(pdfFile.getMaxPageWidth()) - pdfView.getWidth());
+            minX = -(pdfView.toCurrentScale(pdfFile.getMaxPageWidth(pdfView.getCurrentPage())) - pdfView.getWidth());
             minY = -(pdfFile.getDocLen(pdfView.getZoom()) - pdfView.getHeight());
         } else {
             minX = -(pdfFile.getDocLen(pdfView.getZoom()) - pdfView.getWidth());
-            minY = -(pdfView.toCurrentScale(pdfFile.getMaxPageHeight()) - pdfView.getHeight());
+            minY = -(pdfView.toCurrentScale(pdfFile.getMaxPageHeight(pdfView.getCurrentPage())) - pdfView.getHeight());
         }
         animationManager.startFlingAnimation(xOffset, yOffset, (int) (velocityX), (int) (velocityY),
                 (int) minX, 0, (int) minY, 0);
@@ -256,13 +256,13 @@ class DragPinchManager implements GestureDetector.OnGestureListener, GestureDete
         float pageEnd = pageStart - pdfFile.getPageLength(pdfView.getCurrentPage(), pdfView.getZoom());
         float minX, minY, maxX, maxY;
         if (pdfView.isSwipeVertical()) {
-            minX = -(pdfView.toCurrentScale(pdfFile.getMaxPageWidth()) - pdfView.getWidth());
+            minX = -(pdfView.toCurrentScale(pdfFile.getMaxPageWidth(pdfView.getCurrentPage())) - pdfView.getWidth());
             minY = pageEnd + pdfView.getHeight();
             maxX = 0;
             maxY = pageStart;
         } else {
             minX = pageEnd + pdfView.getWidth();
-            minY = -(pdfView.toCurrentScale(pdfFile.getMaxPageHeight()) - pdfView.getHeight());
+            minY = -(pdfView.toCurrentScale(pdfFile.getMaxPageHeight(pdfView.getCurrentPage())) - pdfView.getHeight());
             maxX = pageStart;
             maxY = 0;
         }

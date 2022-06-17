@@ -539,7 +539,7 @@ public class PdfiumCore {
 
     public int getPageTextCount(long pageTextPtr) {
         synchronized (lock) {
-           return nativePageTextCount(pageTextPtr);
+            return nativePageTextCount(pageTextPtr);
         }
     }
 

@@ -83,11 +83,11 @@ final class AnnotationDrawManager {
         float localTranslationY;
         if (pdfView.isSwipeVertical()) {
             localTranslationY = pdfView.pdfFile.getPageOffset(page, zoom);
-            float maxWidth = pdfView.pdfFile.getMaxPageWidth();
+            float maxWidth = pdfView.pdfFile.getMaxPageWidth(pdfView.getCurrentPage());
             localTranslationX = (maxWidth - size.getWidth()) * zoom / 2;
         } else {
             localTranslationX = pdfView.pdfFile.getPageOffset(page, zoom);
-            float maxHeight = pdfView.pdfFile.getMaxPageHeight();
+            float maxHeight = pdfView.pdfFile.getMaxPageHeight(pdfView.getCurrentPage());
             localTranslationY = (maxHeight - size.getHeight()) * zoom / 2;
         }
         canvas.translate(localTranslationX, localTranslationY);
@@ -132,11 +132,11 @@ final class AnnotationDrawManager {
         float localTranslationY;
         if (pdfView.isSwipeVertical()) {
             localTranslationY = pdfView.pdfFile.getPageOffset(page, zoom);
-            float maxWidth = pdfView.pdfFile.getMaxPageWidth();
+            float maxWidth = pdfView.pdfFile.getMaxPageWidth(pdfView.getCurrentPage());
             localTranslationX = (maxWidth - size.getWidth()) * zoom / 2;
         } else {
             localTranslationX = pdfView.pdfFile.getPageOffset(page, zoom);
-            float maxHeight = pdfView.pdfFile.getMaxPageHeight();
+            float maxHeight = pdfView.pdfFile.getMaxPageHeight(pdfView.getCurrentPage());
             localTranslationY = (maxHeight - size.getHeight()) * zoom / 2;
         }
         canvas.translate(localTranslationX, localTranslationY);

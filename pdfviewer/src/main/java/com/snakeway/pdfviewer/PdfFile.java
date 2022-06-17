@@ -168,13 +168,15 @@ class PdfFile {
         return isVertical ? maxWidthPageSize : maxHeightPageSize;
     }
 
-    public float getMaxPageWidth() {
-        return getMaxPageSize().getWidth();
+    //修复每页按自身最大宽度沾满时候导致的使用所有页面最大宽高的偏移问题,每页按自身沾满时候各页面
+    public float getMaxPageWidth(int pageIndex) {
+        return getPageSize(pageIndex).getWidth();
     }
 
-    public float getMaxPageHeight() {
-        return getMaxPageSize().getHeight();
+    public float getMaxPageHeight(int pageIndex) {
+        return getPageSize(pageIndex).getHeight();
     }
+
 
     private void prepareAutoSpacing(Size viewSize) {
         pageSpacing.clear();
@@ -259,10 +261,10 @@ class PdfFile {
     public float getSecondaryPageOffset(int pageIndex, float zoom) {
         SizeF pageSize = getPageSize(pageIndex);
         if (isVertical) {
-            float maxWidth = getMaxPageWidth();
+            float maxWidth = getMaxPageWidth(pageIndex);
             return zoom * (maxWidth - pageSize.getWidth()) / 2; //x
         } else {
-            float maxHeight = getMaxPageHeight();
+            float maxHeight = getMaxPageHeight(pageIndex);
             return zoom * (maxHeight - pageSize.getHeight()) / 2; //y
         }
     }

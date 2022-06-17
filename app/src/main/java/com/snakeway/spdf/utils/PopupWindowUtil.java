@@ -195,7 +195,7 @@ public class PopupWindowUtil {
         LayoutInflater layoutInflater = baseActivity.getLayoutInflater();
         View popupWindowView = layoutInflater.inflate(R.layout.popupwindow_book_market, null);
         final String popupWindowKey = key != null ? key : (POPUPWINDOWKEY + TimeUtil.getOnlyTimeWithoutSleep());
-        int popupWindowWidth = Math.min(BaseActivity.getScreenWidth(baseActivity) ,BaseActivity.getScreenHeight(baseActivity))*3/5;
+        int popupWindowWidth = Math.min(BaseActivity.getScreenWidth(baseActivity), BaseActivity.getScreenHeight(baseActivity)) * 3 / 5;
         final PopupWindow popupWindow = new PopupWindow(popupWindowView, popupWindowWidth, ViewGroup.LayoutParams.MATCH_PARENT);
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override

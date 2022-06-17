@@ -93,7 +93,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
     public static final String FILE_PATH_KEY = "file_path_key";
     public static final String FILE_PASSWORD_KEY = "file_password_key";
 
-    private final String PDF_NAME = "test.pdf";
+    private final String PDF_NAME = "docx.pdf";
     private final String PDF_PASSWORD = "123456";
 
     public static final String SAVE_ANNOTATION_KEY = "save_annotation_key";
@@ -407,7 +407,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
         viewBinding.buttonOpenOther.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bitmap data=viewBinding.pdfView.getRenderingBitmap(0,520);
+                Bitmap data = viewBinding.pdfView.getRenderingBitmap(0, 520);
                 viewBinding.imageViewPreview.setImageBitmap(data);
             }
         });
@@ -918,8 +918,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
     }
 
     private void saveAnnotationData() {
-         String result = GsonUtils.toJson(viewBinding.pdfView.getAllOptimizationAnnotation());
-         CacheDiskUtils.getInstance().put(PDF_NAME, result);
+        String result = GsonUtils.toJson(viewBinding.pdfView.getAllOptimizationAnnotation());
+        CacheDiskUtils.getInstance().put(PDF_NAME, result);
     }
 
     @Override
@@ -1053,8 +1053,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
         }
     }
 
-    private void jumpToPageWithAutoFillCheck(int page){
-        viewBinding.pdfView.addAnimationEndRunnable("jumpToPage",new Runnable() {
+    private void jumpToPageWithAutoFillCheck(int page) {
+        viewBinding.pdfView.addAnimationEndRunnable("jumpToPage", new Runnable() {
             @Override
             public void run() {
                 viewBinding.pdfView.jumpToPageWithAutoFillCheck(page);

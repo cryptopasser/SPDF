@@ -1091,22 +1091,22 @@ public class PDFView extends RelativeLayout {
         float relativeCenterPointInStripYOffset;
 
         if (swipeVertical) {
-            relativeCenterPointInStripXOffset = centerPointInStripXOffset / pdfFile.getMaxPageWidth();
+            relativeCenterPointInStripXOffset = centerPointInStripXOffset / pdfFile.getMaxPageWidth(getCurrentPage());
             relativeCenterPointInStripYOffset = centerPointInStripYOffset / pdfFile.getDocLen(zoom);
         } else {
             relativeCenterPointInStripXOffset = centerPointInStripXOffset / pdfFile.getDocLen(zoom);
-            relativeCenterPointInStripYOffset = centerPointInStripYOffset / pdfFile.getMaxPageHeight();
+            relativeCenterPointInStripYOffset = centerPointInStripYOffset / pdfFile.getMaxPageHeight(getCurrentPage());
         }
 
         animationManager.stopAll();
         pdfFile.recalculatePageSizes(new Size(w, h));
 
         if (swipeVertical) {
-            currentXOffset = -relativeCenterPointInStripXOffset * pdfFile.getMaxPageWidth() + w * 0.5f;
+            currentXOffset = -relativeCenterPointInStripXOffset * pdfFile.getMaxPageWidth(getCurrentPage()) + w * 0.5f;
             currentYOffset = -relativeCenterPointInStripYOffset * pdfFile.getDocLen(zoom) + h * 0.5f;
         } else {
             currentXOffset = -relativeCenterPointInStripXOffset * pdfFile.getDocLen(zoom) + w * 0.5f;
-            currentYOffset = -relativeCenterPointInStripYOffset * pdfFile.getMaxPageHeight() + h * 0.5f;
+            currentYOffset = -relativeCenterPointInStripYOffset * pdfFile.getMaxPageHeight(getCurrentPage()) + h * 0.5f;
         }
         moveTo(currentXOffset, currentYOffset);
         loadPageByOffset();
@@ -1120,7 +1120,7 @@ public class PDFView extends RelativeLayout {
         if (swipeVertical) {
             if (direction < 0 && currentXOffset < 0) {
                 return true;
-            } else if (direction > 0 && currentXOffset + toCurrentScale(pdfFile.getMaxPageWidth()) > getWidth()) {
+            } else if (direction > 0 && currentXOffset + toCurrentScale(pdfFile.getMaxPageWidth(getCurrentPage())) > getWidth()) {
                 return true;
             }
         } else {
@@ -1147,7 +1147,7 @@ public class PDFView extends RelativeLayout {
         } else {
             if (direction < 0 && currentYOffset < 0) {
                 return true;
-            } else if (direction > 0 && currentYOffset + toCurrentScale(pdfFile.getMaxPageHeight()) > getHeight()) {
+            } else if (direction > 0 && currentYOffset + toCurrentScale(pdfFile.getMaxPageHeight(getCurrentPage())) > getHeight()) {
                 return true;
             }
         }
@@ -1768,11 +1768,11 @@ public class PDFView extends RelativeLayout {
 
         if (swipeVertical) {
             localTranslationY = pdfFile.getPageOffset(part.getPage(), zoom);
-            float maxWidth = pdfFile.getMaxPageWidth();
+            float maxWidth = pdfFile.getMaxPageWidth(getCurrentPage());
             localTranslationX = toCurrentScale(maxWidth - size.getWidth()) / 2;
         } else {
             localTranslationX = pdfFile.getPageOffset(part.getPage(), zoom);
-            float maxHeight = pdfFile.getMaxPageHeight();
+            float maxHeight = pdfFile.getMaxPageHeight(getCurrentPage());
             localTranslationY = toCurrentScale(maxHeight - size.getHeight()) / 2;
         }
         canvas.translate(localTranslationX, localTranslationY);
@@ -2041,7 +2041,7 @@ public class PDFView extends RelativeLayout {
         }
         if (recycled || swipeVertical) {
             // Check X offset
-            float scaledPageWidth = toCurrentScale(pdfFile.getMaxPageWidth());
+            float scaledPageWidth = toCurrentScale(pdfFile.getMaxPageWidth(getCurrentPage()));
             if (scaledPageWidth < getWidth()) {
                 offsetX = getWidth() / 2 - scaledPageWidth / 2;
             } else {
@@ -2073,7 +2073,7 @@ public class PDFView extends RelativeLayout {
             }
         } else {
             // Check Y offset
-            float scaledPageHeight = toCurrentScale(pdfFile.getMaxPageHeight());
+            float scaledPageHeight = toCurrentScale(pdfFile.getMaxPageHeight(getCurrentPage()));
             if (scaledPageHeight < getHeight()) {
                 offsetY = getHeight() / 2 - scaledPageHeight / 2;
             } else {

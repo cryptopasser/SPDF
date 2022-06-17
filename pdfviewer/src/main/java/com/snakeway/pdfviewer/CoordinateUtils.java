@@ -73,12 +73,12 @@ public class CoordinateUtils {
         }
         //如果当前不是最大页面,减去页面大小带来的差距
         if (pdfView.isSwipeVertical()) {
-            if (pdfView.pdfFile.getMaxPageWidth() > pdfView.pdfFile.pageSizes.get(findPage).getWidth()) {
-                x += (pdfView.pdfFile.getMaxPageWidth() - pdfView.pdfFile.pageSizes.get(findPage).getWidth()) / 2;
+            if (pdfView.pdfFile.getMaxPageWidth(pdfView.getCurrentPage()) > pdfView.pdfFile.pageSizes.get(findPage).getWidth()) {
+                x += (pdfView.pdfFile.getMaxPageWidth(pdfView.getCurrentPage()) - pdfView.pdfFile.pageSizes.get(findPage).getWidth()) / 2;
             }
         } else {
-            if (pdfView.pdfFile.getMaxPageHeight() > pdfView.pdfFile.pageSizes.get(findPage).getHeight()) {
-                y += (pdfView.pdfFile.getMaxPageHeight() - pdfView.pdfFile.pageSizes.get(findPage).getHeight()) / 2;
+            if (pdfView.pdfFile.getMaxPageHeight(pdfView.getCurrentPage()) > pdfView.pdfFile.pageSizes.get(findPage).getHeight()) {
+                y += (pdfView.pdfFile.getMaxPageHeight(pdfView.getCurrentPage()) - pdfView.pdfFile.pageSizes.get(findPage).getHeight()) / 2;
             }
         }
         float xZoom = pdfView.pdfFile.pageSizes.get(findPage).getWidth() / pdfView.pdfFile.originalPageSizes.get(findPage).getWidth();
