@@ -1259,4 +1259,19 @@ final class AnnotationManager {
         }
     }
 
+    public BaseAnnotation removeLastAnnotation(int page, boolean needNotify) {
+        List<BaseAnnotation> list = annotations.get(page);
+        BaseAnnotation baseAnnotation = null;
+        if (list != null && list.size() > 0) {
+            baseAnnotation = list.get(list.size() - 1);
+            removeTheAnnotation(baseAnnotation, needNotify);
+        }
+        pdfView.redrawRenderingView();
+        return baseAnnotation;
+    }
+
+    public void addLastAnnotation(BaseAnnotation baseAnnotation, boolean needNotify) {
+        addTheAnnotation(baseAnnotation, needNotify);
+        pdfView.redrawRenderingView();
+    }
 }

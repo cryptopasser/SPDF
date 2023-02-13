@@ -2220,6 +2220,13 @@ public class PDFView extends RelativeLayout {
         }
     }
 
+    public void snapToTop() {
+        if (recycled || pdfFile == null) {
+            return;
+        }
+        moveTo(currentXOffset,0);
+    }
+
     public void addAnimationEndRunnable(String key, Runnable runnable) {
         if (!isDoZooming() && !isDoMoving() && !isDoFlinging()) {
             runnable.run();
@@ -3193,6 +3200,13 @@ public class PDFView extends RelativeLayout {
         return new Configurator(docSource);
     }
 
+    public BaseAnnotation removeLastAnnotation(int page, boolean needNotify) {
+        return annotationManager.removeLastAnnotation(page, needNotify);
+    }
+
+    public void addLastAnnotation(BaseAnnotation baseAnnotation, boolean needNotify) {
+        annotationManager.addLastAnnotation(baseAnnotation, needNotify);
+    }
 
     public void addAnnotations(@NonNull List<AnnotationBean> data, boolean needNotify) {
         List<BaseAnnotation> annotations = new ArrayList<>();

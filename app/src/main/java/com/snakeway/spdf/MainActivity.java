@@ -930,6 +930,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
             searchText(searchContent);
         }
         viewBinding.layoutSearchAppbar.textViewToolbarCenter.setText(String.format("%s %s / %s", getString(R.string.activity_main_page_tips), page + 1, pageCount));
+        //viewBinding.pdfView.snapToTop();
     }
 
     @Override
