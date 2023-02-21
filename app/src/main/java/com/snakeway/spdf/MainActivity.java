@@ -365,6 +365,9 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
                             showRemarkView(false, true);
                         }
                         break;
+                    case R.id.textViewBack:
+                        viewBinding.pdfView.removeLastDrawingPenAnnotation();
+                        break;
                     case R.id.textViewSave:
                         if (!isTextRemark) {
                             savePenDrawing();
@@ -394,6 +397,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
         viewBinding.frameLayoutRemark.setOnClickListener(onClickListener);
         viewBinding.frameLayoutTextRemark.setOnClickListener(onClickListener);
         viewBinding.includeLayoutPenOperating.textViewCancel.setOnClickListener(onClickListener);
+        viewBinding.includeLayoutPenOperating.textViewBack.setOnClickListener(onClickListener);
         viewBinding.includeLayoutPenOperating.textViewSave.setOnClickListener(onClickListener);
         viewBinding.layoutSearch.frameLayoutCover.setOnClickListener(onClickListener);
         viewBinding.layoutSearch.imageViewSearchClear.setOnClickListener(onClickListener);
@@ -671,9 +675,11 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
             viewBinding.frameLayoutPenOperating.setVisibility(View.VISIBLE);
             viewBinding.frameLayoutPenOperating.setAnimation(AnimationUtil.moveToViewLocation(null));
             if (isTextRemark) {
+                viewBinding.includeLayoutPenOperating.textViewBack.setVisibility(View.GONE);
                 viewBinding.includeLayoutPenOperating.textViewSave.setVisibility(View.GONE);
                 updatePenColor(circleViews, selectTextPenIndex == -1 ? 0 : selectTextPenIndex, true);
             } else {
+                viewBinding.includeLayoutPenOperating.textViewBack.setVisibility(View.VISIBLE);
                 viewBinding.includeLayoutPenOperating.textViewSave.setVisibility(View.VISIBLE);
                 updatePenColor(circleViews, selectPenIndex == -1 ? 0 : selectPenIndex, false);
             }

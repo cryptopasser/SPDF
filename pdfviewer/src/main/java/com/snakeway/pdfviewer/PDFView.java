@@ -3200,6 +3200,11 @@ public class PDFView extends RelativeLayout {
         return new Configurator(docSource);
     }
 
+
+    public BaseAnnotation removeLastDrawingPenAnnotation() {
+       return  annotationManager.removeLastDrawingPenAnnotations();
+    }
+
     public BaseAnnotation removeLastAnnotation(int page, boolean needNotify) {
         return annotationManager.removeLastAnnotation(page, needNotify);
     }

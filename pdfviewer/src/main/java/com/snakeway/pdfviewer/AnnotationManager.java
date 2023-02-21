@@ -50,7 +50,7 @@ final class AnnotationManager {
     //注释缓存
     SparseArray<List<BaseAnnotation>> annotations = new SparseArray<>();
 
-    List<PenAnnotation> drawingPenAnnotations = new ArrayList<>();
+    final List<PenAnnotation> drawingPenAnnotations = new ArrayList<>();
 
     //绘制中的注释
     BaseAnnotation drawingAnnotation;
@@ -1274,4 +1274,17 @@ final class AnnotationManager {
         addTheAnnotation(baseAnnotation, needNotify);
         pdfView.redrawRenderingView();
     }
+
+    /**
+     * 移除正在绘制的批注
+     */
+    public BaseAnnotation removeLastDrawingPenAnnotations() {
+        if(drawingPenAnnotations.size()==0){
+            return null;
+        }
+        BaseAnnotation baseAnnotation=drawingPenAnnotations.remove(drawingPenAnnotations.size() -1);
+        pdfView.redrawRenderingView();
+        return baseAnnotation;
+    }
+
 }

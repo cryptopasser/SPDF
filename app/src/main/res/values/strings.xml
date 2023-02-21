@@ -17,6 +17,7 @@
     <string name="activity_file_viewer_button_open_other">其他文件格式</string>
 
     <string name="layout_pen_operating_cancel">取消</string>
+    <string name="layout_pen_operating_back">撤回</string>
     <string name="layout_pen_operating_ok">保存</string>
 
     <string name="popupwindow_operating_delete_line">删除线</string>
