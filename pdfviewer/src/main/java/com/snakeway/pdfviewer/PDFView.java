@@ -1070,6 +1070,9 @@ public class PDFView extends RelativeLayout {
             }
             renderingCustomHandlerThread = null;
         }
+        if (searchTextAsyncTask != null) {
+            searchTextAsyncTask.cancel(true);
+        }
         super.onDetachedFromWindow();
     }
 
