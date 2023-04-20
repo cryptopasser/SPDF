@@ -16,8 +16,6 @@ import java.util.List;
 
 
 public class CustomRenderingView extends RelativeLayout {
-    public final static int RENDERING_AREA = 2;//渲染区间,当前页的前后页数
-
     PDFView pdfView;
 
     public CustomRenderingView(Context context, AttributeSet set) {
@@ -67,21 +65,19 @@ public class CustomRenderingView extends RelativeLayout {
 //        onDrawAnnotationPagesNums.clear();
 //        canvas.translate(-currentXOffset, -currentYOffset);
         List<Integer> onDrawAnnotationPages = new ArrayList<>();
-        int startPage = pdfView.getCurrentPage() - RENDERING_AREA;
-        int endPage = pdfView.getCurrentPage() + RENDERING_AREA;
+        int startPage = pdfView.getCurrentPage() - pdfView.getAnnotationRenderingArea();
+        int endPage = pdfView.getCurrentPage() + pdfView.getAnnotationRenderingArea();
         if (startPage < 0) {
             startPage = 0;
         }
         if (endPage > pdfView.getPageCount() - 1) {
             endPage = pdfView.getPageCount() - 1;
         }
-        for (int i = startPage; i < endPage; i++) {
+        for (int i = startPage; i <= endPage; i++) {
             onDrawAnnotationPages.add(i);
         }
         for (Integer page : onDrawAnnotationPages) {
-            if (Math.abs(page - pdfView.getCurrentPage()) <= pdfView.getAnnotationRenderingArea()) {
-                pdfView.annotationDrawManager.draw(canvas, page);
-            }
+            pdfView.annotationDrawManager.draw(canvas, page);
         }
         canvas.translate(-currentXOffset, -currentYOffset);
     }

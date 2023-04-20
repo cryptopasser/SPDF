@@ -419,7 +419,7 @@ public class PDFView extends RelativeLayout {
 
     private boolean readOnlyMode = false;
 
-    private int annotationRenderingArea = 0;
+    private int annotationRenderingArea = 1;
 
     private boolean autoFillWhiteSpace = false;
 
@@ -3478,7 +3478,7 @@ public class PDFView extends RelativeLayout {
 
         private boolean readOnlyMode;
 
-        private int annotationRenderingArea;
+        private int annotationRenderingArea=1;
 
         private boolean singleZoom;
 

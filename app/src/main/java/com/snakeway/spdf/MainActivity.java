@@ -262,8 +262,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
                 ScreenTool.showSoftInput(MainActivity.this, false, editText);
             }
         });
-//        viewBinding.pdfView.setEnablePenAnnotationClickCheckOnViewMode(false);
-//        viewBinding.pdfView.setEnableTextAnnotationClickCheckOnViewMode(false);
+        viewBinding.pdfView.setEnablePenAnnotationClickCheckOnViewMode(false);
+        viewBinding.pdfView.setEnableTextAnnotationClickCheckOnViewMode(false);
         hideBottomUIMenu();
         viewBinding.pdfView.post(new Runnable() {
             @Override
@@ -786,6 +786,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
                 .setEditTextRemarkThemeColor(getResources().getColor(R.color.edit_text_remark_theme))
                 .setSingleZoom(true)
                 .setReadOnlyMode(false)
+                .setAnnotationRenderingArea(2)
                 .load();
     }
 
