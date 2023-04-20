@@ -347,6 +347,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
                         showSearchView(false);
                         break;
                     case R.id.buttonOpenOther:
+//                        Bitmap data = viewBinding.pdfView.getRenderingBitmap(0, 520);
+//                        viewBinding.imageViewPreview.setImageBitmap(data);
                         FileViewerActivity.openFileViewerActivity(MainActivity.this);
                         break;
                     case R.id.frameLayoutRemark:
@@ -405,13 +407,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
             @Override
             public void onClick(View v) {
                 Log.e("setOnPdfView", "annotation");
-            }
-        });
-        viewBinding.buttonOpenOther.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bitmap data = viewBinding.pdfView.getRenderingBitmap(0, 520);
-                viewBinding.imageViewPreview.setImageBitmap(data);
             }
         });
     }
