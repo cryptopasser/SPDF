@@ -1396,6 +1396,7 @@ public class PDFView extends RelativeLayout {
 
     private boolean processPenModeViewer(MotionEvent event, OnPdfViewProcessClickListener onPdfViewProcessClickListener) {
         if(!enablePenAnnotationClickCheckOnViewMode){
+            onPdfViewProcessClickListener.processClick(event, false);
             return false;
         }
         pdfViewTextPenAreaClickCheck(event, new OnPdfViewTextPenAreaClickListener() {
@@ -1464,6 +1465,7 @@ public class PDFView extends RelativeLayout {
 
     private boolean processTextModeViewer(MotionEvent event, OnPdfViewProcessClickListener onPdfViewProcessClickListener) {
         if(!enableTextAnnotationClickCheckOnViewMode){
+            onPdfViewProcessClickListener.processClick(event, false);
             return false;
         }
         pdfViewTextPenAreaClickCheck(event, new OnPdfViewTextPenAreaClickListener() {
