@@ -786,7 +786,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
                 .setEditTextRemarkThemeColor(getResources().getColor(R.color.edit_text_remark_theme))
                 .setSingleZoom(true)
                 .setReadOnlyMode(false)
-                .setAnnotationRenderingArea(2)
+                .setAnnotationRenderingArea(1)
                 .load();
     }
 
