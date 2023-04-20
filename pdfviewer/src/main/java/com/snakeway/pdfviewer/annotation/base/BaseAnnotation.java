@@ -43,6 +43,11 @@ public abstract class BaseAnnotation<T, Pen extends com.snakeway.pdfviewer.annot
         drawed = true;
     }
 
+    public void drawWithOptimize(Canvas canvas, float scale, int basePenWidth, PDFView pdfView) {
+        pen.drawWithOptimize(data, canvas, scale, basePenWidth, pdfView, page);
+        drawed = true;
+    }
+
     @Override
     public boolean equals(@Nullable Object obj) {
         if (this == obj) return true;

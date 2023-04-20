@@ -18,6 +18,10 @@ public interface Pen<T> extends Cloneable {
 
     void draw(T data, Canvas canvas, float scale, int basePenWidth, PDFView pdfView, int page);
 
+    void drawWithOptimize(T data, Canvas canvas, float scale, int basePenWidth, PDFView pdfView, int page);
+
+    void reset();
+
     PenType getPenType();
 
     void init();

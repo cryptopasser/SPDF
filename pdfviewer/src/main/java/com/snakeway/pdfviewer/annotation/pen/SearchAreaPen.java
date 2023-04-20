@@ -33,6 +33,12 @@ public class SearchAreaPen implements Pen.MarkPen {
     }
 
     @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
+
+    @Override
     public void draw(List<RectF> list, Canvas canvas, float scale, int basePenWidth, PDFView pdfView, int page) {
         if (list == null || list.size() == 0) {
             return;
@@ -42,6 +48,15 @@ public class SearchAreaPen implements Pen.MarkPen {
             canvas.drawRect(f, paint);
         }
     }
+
+    @Override
+    public void drawWithOptimize(List<RectF> data, Canvas canvas, float scale, int basePenWidth, PDFView pdfView, int page) {
+        this.draw(data,canvas,scale,basePenWidth,pdfView,page);
+    }
+
+    public void reset() {
+    }
+
 
     @Override
     public PenType getPenType() {

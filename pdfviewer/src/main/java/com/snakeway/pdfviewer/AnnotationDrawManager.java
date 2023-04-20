@@ -46,6 +46,10 @@ final class AnnotationDrawManager {
      */
     private Bitmap drawingBitmap;
     /**
+     * 绘制中已抬手部分画笔的画布
+     */
+    private Bitmap haveDrawingPenBitmap;
+    /**
      * 绘制中画笔的画布
      */
     private Bitmap drawingPenBitmap;
@@ -71,6 +75,10 @@ final class AnnotationDrawManager {
     }
 
     public void draw(Canvas canvas, int page) {
+        Long textPagesPtr = pdfView.pdfFile.pdfDocument.getTextPagesPtr(page);//因为刷新前后几页可以自定义,比如前后2页可能超过viewpage渲染,如果当前页还没有渲染则跳过批注绘制
+        if (textPagesPtr == null) {
+            return;
+        }
         //绘制需要的一些参数
         SizeF size = pdfView.pdfFile.getPageSize(page);
         float zoom = pdfView.getZoom();
@@ -93,17 +101,46 @@ final class AnnotationDrawManager {
         canvas.translate(localTranslationX, localTranslationY);
         //画 注释
         drawAnnotation(canvas, page, rect, rectF, scale);
-        //画 画笔区域
-        drawPenAnnotation(canvas, page, rect, rectF, scale);
-        //画 橡皮擦
-        drawEraser(canvas, page, rect, rectF, scale);
         //画 区域选择
         drawAreaAnnotation(canvas, page, rect, rectF, scale);
         //画 搜索区域
         drawSearchAreaAnnotation(canvas, page, rect, rectF, scale);
+
+        //画 正在绘制未保存画笔
+        //drawDrawingPenAnnotation(canvas, page, rect, rectF, scale);
+        //画 橡皮擦
+        drawEraser(canvas, page, rect, rectF, scale);
+
         // 移动到原来的位置
         canvas.translate(-localTranslationX, -localTranslationY);
     }
+
+    public void drawPenDrawing(Canvas canvas, int page,boolean isDrawing) {
+        //绘制需要的一些参数
+        SizeF size = pdfView.pdfFile.getPageSize(page);
+        float zoom = pdfView.getZoom();
+        Rect rect = new Rect(0, 0, (int) size.getWidth(), (int) size.getHeight());
+        RectF rectF = new RectF(0, 0, size.getWidth() * zoom, size.getHeight() * zoom);
+        Size pdfSize = pdfView.pdfFile.originalPageSizes.get(page);
+        float scale = pdfSize.getWidth() / size.getWidth();
+        //移动到正确位置
+        float localTranslationX;
+        float localTranslationY;
+        if (pdfView.isSwipeVertical()) {
+            localTranslationY = pdfView.pdfFile.getPageOffset(page, zoom);
+            float maxWidth = pdfView.pdfFile.getMaxPageWidth(pdfView.getCurrentPage());
+            localTranslationX = (maxWidth - size.getWidth()) * zoom / 2;
+        } else {
+            localTranslationX = pdfView.pdfFile.getPageOffset(page, zoom);
+            float maxHeight = pdfView.pdfFile.getMaxPageHeight(pdfView.getCurrentPage());
+            localTranslationY = (maxHeight - size.getHeight()) * zoom / 2;
+        }
+        canvas.translate(localTranslationX, localTranslationY);
+        //画 正在绘制未保存画笔
+        drawPenDrawingAnnotation(canvas, page, rect, rectF, scale,isDrawing);
+        canvas.translate(-localTranslationX, -localTranslationY);
+    }
+
 
     public boolean drawAnnotation(Canvas canvas,int targetWidth, int page) {
         Size pdfSize = pdfView.pdfFile.originalPageSizes.get(page);
@@ -118,30 +155,6 @@ final class AnnotationDrawManager {
             annotation.singleDraw(canvas, scale, basePenWidth, pdfView);
         }
         return true;
-    }
-
-
-    public void drawPen(Canvas canvas, int page) {
-        SizeF size = pdfView.pdfFile.getPageSize(page);
-        float zoom = pdfView.getZoom();
-        Rect rect = new Rect(0, 0, (int) size.getWidth(), (int) size.getHeight());
-        RectF rectF = new RectF(0, 0, size.getWidth() * zoom, size.getHeight() * zoom);
-        Size pdfSize = pdfView.pdfFile.originalPageSizes.get(page);
-        float scale = pdfSize.getWidth() / size.getWidth();
-        float localTranslationX;
-        float localTranslationY;
-        if (pdfView.isSwipeVertical()) {
-            localTranslationY = pdfView.pdfFile.getPageOffset(page, zoom);
-            float maxWidth = pdfView.pdfFile.getMaxPageWidth(pdfView.getCurrentPage());
-            localTranslationX = (maxWidth - size.getWidth()) * zoom / 2;
-        } else {
-            localTranslationX = pdfView.pdfFile.getPageOffset(page, zoom);
-            float maxHeight = pdfView.pdfFile.getMaxPageHeight(pdfView.getCurrentPage());
-            localTranslationY = (maxHeight - size.getHeight()) * zoom / 2;
-        }
-        canvas.translate(localTranslationX, localTranslationY);
-        drawPenAnnotation(canvas, page, rect, rectF, scale);
-        canvas.translate(-localTranslationX, -localTranslationY);
     }
 
     /**
@@ -183,19 +196,19 @@ final class AnnotationDrawManager {
         //没有需要绘制的注释
         boolean emptyAnnotation = annotations == null || annotations.size() == 0;
         //没有需要绘制的正在绘制的注释
-        boolean emptyDrawingAnnotaion = annotationManager.drawingAnnotation == null ||
-                annotationManager.drawingAnnotation.page != page ||
-                annotationManager.drawingAnnotation.data == null;
+        boolean emptyDrawingMarkAnnotation = annotationManager.drawingMarkAnnotation == null ||
+                annotationManager.drawingMarkAnnotation.page != page ||
+                annotationManager.drawingMarkAnnotation.data == null;
         //如果不需要绘制，跳过绘制
-        boolean needSkip = emptyAnnotation && emptyDrawingAnnotaion;
+        boolean needSkip = emptyAnnotation && emptyDrawingMarkAnnotation;
         if (needSkip) {
             return;
         }
         if (!emptyAnnotation) {
             drawDrawedAnnotation(canvas, page, pageSize, drawRegion, scale, annotations);
         }
-        if (!emptyDrawingAnnotaion) {
-            drawDrawingAnnotation(canvas, page, pageSize, drawRegion, scale, annotationManager.drawingAnnotation);
+        if (!emptyDrawingMarkAnnotation) {
+            drawDrawingMarkAnnotation(canvas, page, pageSize, drawRegion, scale, annotationManager.drawingMarkAnnotation);
         }
     }
 
@@ -205,45 +218,68 @@ final class AnnotationDrawManager {
         }
         for (BaseAnnotation annotation : annotations) {
             if (annotation.needInit && annotation instanceof MarkAnnotation) {
-                annotationManager.loadData((MarkAnnotation) annotation);
+                annotationManager.initAnnotationData((MarkAnnotation) annotation);
             }
         }
     }
 
 
     /**
-     * 画 画笔区域
+     * 正在绘制未保存画笔内容
      **/
-    private void drawPenAnnotation(Canvas canvas, int page, Rect pageSize, RectF drawRegion, float scale) {
-        if (annotationManager.drawingPenAnnotations.size() == 0 && annotationManager.drawingPenAnnotation == null) {
-            return;
-        }
-        if (drawingPenBitmap == null) {
-            drawingPenBitmap = Bitmap.createBitmap(pageSize.width(), pageSize.height(), Bitmap.Config.ARGB_8888);
-        } else {
-            if (drawingPenBitmap.getWidth() != pageSize.width() || drawingPenBitmap.getHeight() != pageSize.height()) {
-                drawingPenBitmap.recycle();
-                drawingPenBitmap = Bitmap.createBitmap(pageSize.width(), pageSize.height(), Bitmap.Config.ARGB_8888);
+    private void drawPenDrawingAnnotation(Canvas canvas, int page, Rect pageSize, RectF drawRegion, float scale,boolean isHaveDrawing) {
+        if(isHaveDrawing){
+            if (annotationManager.haveDrawingPenAnnotations.size() == 0) {
+                return;
             }
-        }
+            if (haveDrawingPenBitmap == null) {
+                haveDrawingPenBitmap = Bitmap.createBitmap(pageSize.width(), pageSize.height(), Bitmap.Config.ARGB_8888);
+            } else {
+                if (haveDrawingPenBitmap.getWidth() != pageSize.width() || haveDrawingPenBitmap.getHeight() != pageSize.height()) {
+                    haveDrawingPenBitmap.recycle();
+                    haveDrawingPenBitmap = Bitmap.createBitmap(pageSize.width(), pageSize.height(), Bitmap.Config.ARGB_8888);
+                }
+            }
+            Canvas penCanvas = new Canvas(haveDrawingPenBitmap);
+            Size pdfSize = pdfView.pdfFile.originalPageSizes.get(page);
+            int basePenWidth = Math.min(pdfSize.getHeight(), pdfSize.getWidth());
+            basePenWidth /= BASE_PEN_WIDTH_COEFFICIENT;
 
-        Canvas penCanvas = new Canvas(drawingPenBitmap);
-        penCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-        Size pdfSize = pdfView.pdfFile.originalPageSizes.get(page);
-        int basePenWidth = Math.min(pdfSize.getHeight(), pdfSize.getWidth());
-        basePenWidth /= BASE_PEN_WIDTH_COEFFICIENT;
-
-        for (PenAnnotation penAnnotation : annotationManager.drawingPenAnnotations) {
-            penAnnotation.draw(penCanvas, scale, basePenWidth, pdfView);
+            for (PenAnnotation penAnnotation : annotationManager.haveDrawingPenAnnotations) {
+                if (!penAnnotation.drawed) {
+                    penAnnotation.draw(penCanvas, scale, basePenWidth, pdfView);
+                }
+            }
+            canvas.drawBitmap(haveDrawingPenBitmap, pageSize, drawRegion, paint);
+        }else{
+            if (annotationManager.drawingPenAnnotation == null) {
+                return;
+            }
+            if (drawingPenBitmap == null) {
+                drawingPenBitmap = Bitmap.createBitmap(pageSize.width(), pageSize.height(), Bitmap.Config.ARGB_8888);
+            } else {
+                if (drawingPenBitmap.getWidth() != pageSize.width() || drawingPenBitmap.getHeight() != pageSize.height()) {
+                    drawingPenBitmap.recycle();
+                    drawingPenBitmap = Bitmap.createBitmap(pageSize.width(), pageSize.height(), Bitmap.Config.ARGB_8888);
+                }
+            }
+            Canvas penCanvas = new Canvas(drawingPenBitmap);
+            if(!pdfView.isDrawingPenOptimizeEnabled()){
+                penCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);//使用drawWithOptimize时候不要清空旧画布数据,通过pen的reset方法执行清理
+            }
+            Size pdfSize = pdfView.pdfFile.originalPageSizes.get(page);
+            int basePenWidth = Math.min(pdfSize.getHeight(), pdfSize.getWidth());
+            basePenWidth /= BASE_PEN_WIDTH_COEFFICIENT;
+            if (annotationManager.drawingPenAnnotation != null) {
+                if(pdfView.isDrawingPenOptimizeEnabled()){
+                    annotationManager.drawingPenAnnotation.drawWithOptimize(penCanvas, scale, basePenWidth, pdfView);
+                }else{
+                    annotationManager.drawingPenAnnotation.draw(penCanvas, scale, basePenWidth, pdfView);
+                }
+            }
+            canvas.drawBitmap(drawingPenBitmap, pageSize, drawRegion, paint);
         }
-        if (annotationManager.drawingPenAnnotation != null) {
-            annotationManager.drawingPenAnnotation.draw(penCanvas, scale, basePenWidth, pdfView);
-           // canvas.drawBitmap(drawingPenBitmap, pageSize, drawRegion, paint);
-        }
-        canvas.drawBitmap(drawingPenBitmap, pageSize, drawRegion, paint);
-
     }
-
     /**
      * 绘制完成编辑的注释
      */
@@ -353,7 +389,7 @@ final class AnnotationDrawManager {
     /**
      * 绘制正在编辑的注释
      */
-    private void drawDrawingAnnotation(Canvas canvas, int page, Rect pageSize, RectF drawRegion, float scale, BaseAnnotation drawingAnnotation) {
+    private void drawDrawingMarkAnnotation(Canvas canvas, int page, Rect pageSize, RectF drawRegion, float scale, BaseAnnotation drawingAnnotation) {
         //如果bitmap 为空创建，如果bitmap的尺寸不是需要的bitmap重新创建
         if (drawingBitmap == null) {
             drawingBitmap = Bitmap.createBitmap(pageSize.width(), pageSize.height(), Bitmap.Config.ARGB_8888);
@@ -471,5 +507,25 @@ final class AnnotationDrawManager {
         for (BaseAnnotation annotation : list) {
             annotation.drawed = false;
         }
+    }
+
+    public Bitmap getDrawingBitmap() {
+        return drawingBitmap;
+    }
+
+    public Bitmap getHaveDrawingPenBitmap() {
+        return haveDrawingPenBitmap;
+    }
+
+    public Bitmap getDrawingPenBitmap() {
+        return drawingPenBitmap;
+    }
+
+    public Bitmap getAreaBitmap() {
+        return areaBitmap;
+    }
+
+    public Bitmap getSearchAreaBitmap() {
+        return searchAreaBitmap;
     }
 }

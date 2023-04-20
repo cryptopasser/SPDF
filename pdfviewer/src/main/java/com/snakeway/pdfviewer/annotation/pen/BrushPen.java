@@ -42,16 +42,21 @@ public class BrushPen implements Pen.WritePen {
     }
 
     @Override
-    public void draw(List<SizeF> datas, Canvas canvas, float scale, int basePenWidth, PDFView pdfView, int page) {
-        if (datas == null) {
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
+    @Override
+    public void draw(List<SizeF> data, Canvas canvas, float scale, int basePenWidth, PDFView pdfView, int page) {
+        if (data == null) {
             return;
         }
-        if (datas.size() < MIN_DRAW_POINT_SIZE) {
+        if (data.size() < MIN_DRAW_POINT_SIZE) {
             return;
         }
         List<Point> points = new ArrayList<>();
-        for (SizeF data : datas) {
-            points.add(CoordinateUtils.toPdfPointCoordinateDesc(pdfView, page, data.getWidth(), data.getHeight()));
+        for (SizeF sizeF : data) {
+            points.add(CoordinateUtils.toPdfPointCoordinateDesc(pdfView, page, sizeF.getWidth(), sizeF.getHeight()));
         }
         //把List<Point> 转换为List<BezierPointF>
         float penWidth = basePenWidth * penWidthScale / scale;
@@ -62,6 +67,21 @@ public class BrushPen implements Pen.WritePen {
             drawNeetToDo(canvas, bezierPoints);
         }
     }
+
+    @Override
+    public void drawWithOptimize(List<SizeF> data, Canvas canvas, float scale, int basePenWidth, PDFView pdfView, int page) {
+        if (data == null) {
+            return;
+        }
+        if (data.size() < MIN_DRAW_POINT_SIZE) {
+            return;
+        }
+        this.draw(data,canvas,scale,basePenWidth,pdfView,page);
+    }
+
+    public void reset() {
+    }
+
 
     @Override
     public PenType getPenType() {
@@ -103,7 +123,10 @@ public class BrushPen implements Pen.WritePen {
             //精度不一样。Rect是使用int类型作为数值，RectF是使用float类型作为数值。
             //            Rect rect = new Rect();
             RectF oval = new RectF();
-            oval.set((float) (x - w / 4.0f), (float) (y - w / 2.0f), (float) (x + w / 4.0f), (float) (y + w / 2.0f));
+            oval.set((float) (x - w / 4.0f),
+                    (float) (y - w / 2.0f),
+                    (float) (x + w / 4.0f),
+                    (float) (y + w / 2.0f));
             // oval.set((float)(x+w/4.0f), (float)(y+w/4.0f), (float)(x-w/4.0f), (float)(y-w/4.0f));
             //最基本的实现，通过点控制线，绘制椭圆
             canvas.drawOval(oval, paint);
@@ -120,7 +143,7 @@ public class BrushPen implements Pen.WritePen {
         /**
          * 这个控制笔锋的控制值
          */
-        private static final float DIS_VEL_CAL_FACTOR = 0.03f;
+        public static final float DIS_VEL_CAL_FACTOR = 0.007f;
         /**
          * 绘制计算的次数，数值越小计算的次数越多，需要折中
          */
@@ -189,7 +212,6 @@ public class BrushPen implements Pen.WritePen {
                 mElement.width = (float) curWidth;
                 mBezier.init(mLastPoint, mElement);
             } else {
-
                 curWidth = calcNewWidth(curVel, mLastVel, FACTOR);
                 mLastVel = (float) curVel;
                 mElement.width = (float) curWidth;
@@ -326,10 +348,6 @@ public class BrushPen implements Pen.WritePen {
             mNextControl.set(x, y, width);
         }
 
-        /**
-         * @param t 孔子
-         * @return 点
-         */
         BezierPointF getPoint(double t) {
             float x = (float) getX(t);
             float y = (float) getY(t);

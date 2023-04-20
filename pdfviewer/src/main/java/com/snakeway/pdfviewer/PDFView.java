@@ -289,6 +289,10 @@ public class PDFView extends RelativeLayout {
 
     private boolean pageSnap = true;
 
+    private boolean enablePenAnnotationClickCheckOnViewMode = true;
+
+    private boolean enableTextAnnotationClickCheckOnViewMode = true;
+
     /**
      * Pdfium core for loading and rendering PDFs
      */
@@ -338,6 +342,8 @@ public class PDFView extends RelativeLayout {
      * Add dynamic spacing to fit each page separately on the screen.
      */
     private boolean autoSpacing = false;
+
+    private boolean drawingPenOptimize = false;
 
     /**
      * Fling a single page at a time
@@ -488,6 +494,9 @@ public class PDFView extends RelativeLayout {
 
     public CustomRenderingView customRenderingView;
 
+    public CustomPenDrawingView customPenHaveDrawingView;
+
+    public CustomPenDrawingView customPenDrawingView;
     public BitmapMemoryCacheHelper bitmapMemoryCacheHelper = new BitmapMemoryCacheHelper(8);
 
     private TextAnnotation editTextAnnotation;
@@ -512,7 +521,10 @@ public class PDFView extends RelativeLayout {
         if (isInEditMode()) {
             return;
         }
+
         initCustomRenderingView();
+        initCustomPenDrawingView();
+
         initTextRemarkView();
         initProgressBar();
         cacheManager = new CacheManager();
@@ -561,6 +573,14 @@ public class PDFView extends RelativeLayout {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.view_custom_rendering_root, this, true);
         customRenderingView = (CustomRenderingView) view.findViewById(R.id.customRenderingView);
         customRenderingView.initPdfView(this);
+    }
+
+    private void initCustomPenDrawingView() {
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.view_custom_pen_drawing, this, true);
+        customPenHaveDrawingView = (CustomPenDrawingView) view.findViewById(R.id.customPenHaveDrawingView);
+        customPenDrawingView = (CustomPenDrawingView) view.findViewById(R.id.customPenDrawingView);
+        customPenHaveDrawingView.initPdfView(this);
+        customPenDrawingView.initPdfView(this);
     }
 
     private void initTextRemarkView() {
@@ -1375,6 +1395,9 @@ public class PDFView extends RelativeLayout {
     }
 
     private boolean processPenModeViewer(MotionEvent event, OnPdfViewProcessClickListener onPdfViewProcessClickListener) {
+        if(!enablePenAnnotationClickCheckOnViewMode){
+            return false;
+        }
         pdfViewTextPenAreaClickCheck(event, new OnPdfViewTextPenAreaClickListener() {
             @Override
             public void onClick(MotionEvent event, int x, int y) {
@@ -1440,6 +1463,9 @@ public class PDFView extends RelativeLayout {
     }
 
     private boolean processTextModeViewer(MotionEvent event, OnPdfViewProcessClickListener onPdfViewProcessClickListener) {
+        if(!enableTextAnnotationClickCheckOnViewMode){
+            return false;
+        }
         pdfViewTextPenAreaClickCheck(event, new OnPdfViewTextPenAreaClickListener() {
             @Override
             public void onClick(MotionEvent event, int x, int y) {
@@ -1996,10 +2022,17 @@ public class PDFView extends RelativeLayout {
     void redraw() {
         invalidate();
         customRenderingView.invalidate();
+        redrawRenderingView();
+        redrawPenDrawingView();
     }
 
     void redrawRenderingView() {
         customRenderingView.invalidate();
+    }
+
+    void redrawPenDrawingView() {
+        customPenHaveDrawingView.invalidate();
+        customPenDrawingView.invalidate();
     }
 
     /**
@@ -2726,6 +2759,10 @@ public class PDFView extends RelativeLayout {
         return autoSpacing;
     }
 
+    public boolean isDrawingPenOptimizeEnabled() {
+        return drawingPenOptimize;
+    }
+
     public void setPageFling(boolean pageFling) {
         this.pageFling = pageFling;
     }
@@ -2740,6 +2777,10 @@ public class PDFView extends RelativeLayout {
 
     private void setAutoSpacing(boolean autoSpacing) {
         this.autoSpacing = autoSpacing;
+    }
+
+    private void setDrawingPenOptimize(boolean drawingPenOptimize) {
+        this.drawingPenOptimize = drawingPenOptimize;
     }
 
     private void setPageFitPolicy(FitPolicy pageFitPolicy) {
@@ -2975,6 +3016,13 @@ public class PDFView extends RelativeLayout {
             relativeLayoutTextRemarkView.setVisibility(GONE);
         }
     }
+    public void setAreaPen(@NonNull AreaPen pen) {
+        annotationManager.setAreaPen(pen);
+    }
+
+    public void setSearchAreaPen(@NonNull SearchAreaPen pen) {
+        annotationManager.setSearchAreaPen(pen);
+    }
 
     public void setEraserMode(@NonNull Eraser eraser) {
         setFunction(Function.ERASER);
@@ -2983,15 +3031,23 @@ public class PDFView extends RelativeLayout {
 
     public void setMarkMode(@NonNull Pen.MarkPen pen) {
         setFunction(Function.MARK);
-        annotationManager.setPen(pen);
+        annotationManager.setMarkPen(pen);
     }
 
-    public void setAreaPen(@NonNull AreaPen pen) {
-        annotationManager.setAreaPen(pen);
+    public boolean isEnablePenAnnotationClickCheckOnViewMode() {
+        return enablePenAnnotationClickCheckOnViewMode;
     }
 
-    public void setSearchAreaPen(@NonNull SearchAreaPen pen) {
-        annotationManager.setSearchAreaPen(pen);
+    public void setEnablePenAnnotationClickCheckOnViewMode(boolean enable) {
+        enablePenAnnotationClickCheckOnViewMode = enable;
+    }
+
+    public boolean isEnableTextAnnotationClickCheckOnViewMode() {
+        return enableTextAnnotationClickCheckOnViewMode;
+    }
+
+    public void setEnableTextAnnotationClickCheckOnViewMode(boolean enable) {
+        enableTextAnnotationClickCheckOnViewMode = enable;
     }
 
     public void dismissAreaSelect() {
@@ -3376,6 +3432,8 @@ public class PDFView extends RelativeLayout {
 
         private boolean autoSpacing = false;
 
+        private boolean drawingPenOptimize = false;
+
         private FitPolicy pageFitPolicy = FitPolicy.WIDTH;
 
         private boolean fitEachPage = false;
@@ -3538,6 +3596,11 @@ public class PDFView extends RelativeLayout {
             return this;
         }
 
+        public Configurator drawingPenOptimize(boolean drawingPenOptimize) {
+            this.drawingPenOptimize = drawingPenOptimize;
+            return this;
+        }
+
         public Configurator pageFitPolicy(FitPolicy pageFitPolicy) {
             this.pageFitPolicy = pageFitPolicy;
             return this;
@@ -3695,6 +3758,7 @@ public class PDFView extends RelativeLayout {
             PDFView.this.enableAntialiasing(antialiasing);
             PDFView.this.setSpacing(spacing);
             PDFView.this.setAutoSpacing(autoSpacing);
+            PDFView.this.setDrawingPenOptimize(drawingPenOptimize);
             PDFView.this.setPageFitPolicy(pageFitPolicy);
             PDFView.this.setFitEachPage(fitEachPage);
             PDFView.this.setPageSnap(pageSnap);

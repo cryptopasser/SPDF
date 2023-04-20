@@ -96,9 +96,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
     private final String PDF_NAME = "docx.pdf";
     private final String PDF_PASSWORD = "123456";
 
-    public static final String SAVE_ANNOTATION_KEY = "save_annotation_key";
-
-
     private View.OnClickListener onClickListener;
 
     private PDFView.Configurator configurator;
@@ -265,6 +262,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
                 ScreenTool.showSoftInput(MainActivity.this, false, editText);
             }
         });
+//        viewBinding.pdfView.setEnablePenAnnotationClickCheckOnViewMode(false);
+//        viewBinding.pdfView.setEnableTextAnnotationClickCheckOnViewMode(false);
         hideBottomUIMenu();
         viewBinding.pdfView.post(new Runnable() {
             @Override
@@ -639,7 +638,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
             }
             circleViews.add(circleView);
         }
-        pen = PenBuilder.colorPenBuilder().setColor(getResources().getColor(R.color.pen_color_1)).setPenWidthScale(0.5f).build();
+        pen = PenBuilder.colorPenBuilder().setColor(getResources().getColor(R.color.pen_color_1)).setPenWidthScale(2).build();
         textPen = PenBuilder.textPenBuilder().setColor(getResources().getColor(R.color.pen_color_1)).setFontSize(10).build();
     }
 
@@ -658,7 +657,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
         CircleView circleView = circleViews.get(index);
         int color = circleView.getBackgroundColor();
         if (!isTextRemark) {
-            pen = PenBuilder.colorPenBuilder().setColor(color).setPenWidthScale(0.5f).build();
+            pen = PenBuilder.colorPenBuilder().setColor(color).setPenWidthScale(2).build();
             viewBinding.pdfView.setPenMode(pen);
             selectPenIndex = index;
         } else {
@@ -771,6 +770,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
                 .enableAnnotationRendering(true)
                 .onLoad(this)
                 .autoSpacing(true)
+                .drawingPenOptimize(true)
 //                .scrollHandle(new DefaultScrollHandle(this))
 //                .spacing(10) // in dp
                 .onPageError(this)
@@ -1072,8 +1072,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        String result = GsonUtils.toJson(viewBinding.pdfView.getAllOptimizationAnnotation());
-        savedInstanceState.putString(SAVE_ANNOTATION_KEY, result);
     }
 
     @Override

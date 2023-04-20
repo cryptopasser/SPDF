@@ -50,10 +50,10 @@ final class AnnotationManager {
     //注释缓存
     SparseArray<List<BaseAnnotation>> annotations = new SparseArray<>();
 
-    final List<PenAnnotation> drawingPenAnnotations = new ArrayList<>();
+    final List<PenAnnotation> haveDrawingPenAnnotations = new ArrayList<>();
 
-    //绘制中的注释
-    BaseAnnotation drawingAnnotation;
+    //绘制中的标注
+    BaseAnnotation drawingMarkAnnotation;
     //画笔备注
     PenAnnotation drawingPenAnnotation;
     //区域选择提示
@@ -61,13 +61,18 @@ final class AnnotationManager {
     //搜索文字提示
     MarkAnnotation searchMarkAnnotation;
     //当前绘制的画笔
-    private Pen pen;
+    private Pen.WritePen pen;
+
+    //批注的画笔
+    private Pen.MarkPen markPen;
+
     //区域选择画笔
     private AreaPen areaPen;
     //搜索区域选中画笔
     private SearchAreaPen searchAreaPen;
     //区域选择画笔
     private TextPen textPen;
+
     //区域选择-画笔
     private HashMap<MarkAreaType, Pen.MarkPen> areaMarkPens = new HashMap<>();
     //橡皮擦
@@ -92,8 +97,8 @@ final class AnnotationManager {
     RectF startTargetRect;
     RectF endTargetRect;
 
-    float penTouchX=0;
-    float penTouchY=0;
+    float penTouchX = 0;
+    float penTouchY = 0;
 
     AnnotationManager(PDFView pdfView) {
         this.pdfView = pdfView;
@@ -103,8 +108,12 @@ final class AnnotationManager {
         this.annotationListener = annotationListener;
     }
 
-    void setPen(Pen pen) {
+    void setPen(Pen.WritePen pen) {
         this.pen = pen;
+    }
+
+    void setMarkPen(Pen.MarkPen markPen) {
+        this.markPen = markPen;
     }
 
     public void setTextPen(TextPen textPen) {
@@ -482,44 +491,44 @@ final class AnnotationManager {
         pdfView.redrawRenderingView();
     }
 
-    String textOutSideCropCheck(float x,float y,String text,float zoom){
-        if(text.length()==0){
+    String textOutSideCropCheck(float x, float y, String text, float zoom) {
+        if (text.length() == 0) {
             return null;
         }
-        Bitmap bitmap = pdfView.getTextRemarkBitmapCache("",text, textPen.getColor(), zoom,false);
+        Bitmap bitmap = pdfView.getTextRemarkBitmapCache("", text, textPen.getColor(), zoom, false);
         if (bitmap == null) {
             return null;
         }
-        int[] coordLeftTop = CoordinateUtils.getPdfCoordinate(pdfView,x, y);
+        int[] coordLeftTop = CoordinateUtils.getPdfCoordinate(pdfView, x, y);
         int[] coordRightBottom = CoordinateUtils.getPdfCoordinate(pdfView, x + bitmap.getWidth(), y + bitmap.getHeight());
         if (coordLeftTop == null || coordRightBottom == null) {
             return null;
         }
         if (coordLeftTop[0] != coordRightBottom[0]) {
-            if(text.length()>1){
-              text=textOutSideCropCheck(x,y,text.substring(0,text.length() - 1),zoom);
+            if (text.length() > 1) {
+                text = textOutSideCropCheck(x, y, text.substring(0, text.length() - 1), zoom);
             }
         }
         return text;
     }
 
-    void saveTextPenAnnotation(TextRemarkInfo textRemarkInfo,boolean outSideCrop) {
+    void saveTextPenAnnotation(TextRemarkInfo textRemarkInfo, boolean outSideCrop) {
         if (textPen == null) {
             textPen = PenBuilder.textPenBuilder().setColor(Color.parseColor("#66666666")).setFontSize(pdfView.getEditTextRemarkFontSize()).build();
         }
-        if(outSideCrop){
-           String text= textOutSideCropCheck(textRemarkInfo.getX(),textRemarkInfo.getY(),textRemarkInfo.getData(),textRemarkInfo.getZoom());
-           if(text==null){
-               return;
-           }
-           textRemarkInfo.setData(text);
+        if (outSideCrop) {
+            String text = textOutSideCropCheck(textRemarkInfo.getX(), textRemarkInfo.getY(), textRemarkInfo.getData(), textRemarkInfo.getZoom());
+            if (text == null) {
+                return;
+            }
+            textRemarkInfo.setData(text);
         }
-        Bitmap bitmap = pdfView.getTextRemarkBitmapCache(textRemarkInfo.getKey(),textRemarkInfo.getData(), textPen.getColor(), textRemarkInfo.getZoom(),true);
+        Bitmap bitmap = pdfView.getTextRemarkBitmapCache(textRemarkInfo.getKey(), textRemarkInfo.getData(), textPen.getColor(), textRemarkInfo.getZoom(), true);
         if (bitmap == null) {
             return;
         }
-        textRemarkInfo.setWidth(textRemarkInfo.getWidth());
-        textRemarkInfo.setHeight(textRemarkInfo.getHeight());
+        textRemarkInfo.setWidth(bitmap.getWidth());
+        textRemarkInfo.setHeight(bitmap.getHeight());
         int[] coordLeftTop = CoordinateUtils.getPdfCoordinate(pdfView, textRemarkInfo.getX(), textRemarkInfo.getY());
         int[] coordRightBottom = CoordinateUtils.getPdfCoordinate(pdfView, textRemarkInfo.getX() + bitmap.getWidth(), textRemarkInfo.getY() + bitmap.getHeight());
         if (coordLeftTop == null || coordRightBottom == null) {
@@ -551,27 +560,30 @@ final class AnnotationManager {
      * 保存画笔绘制内容
      */
     void savePenDrawing() {
-        if (drawingPenAnnotations.size() == 0) {
+        if (haveDrawingPenAnnotations.size() == 0) {
             return;
         }
-        for (PenAnnotation penAnnotation : drawingPenAnnotations) {
+        for (PenAnnotation penAnnotation : haveDrawingPenAnnotations) {
             if (penAnnotation.data.size() >= 1) {
                 penAnnotation.drawed = false;
                 addTheAnnotation(penAnnotation, true);
             }
         }
-        drawingPenAnnotations.clear();
+        haveDrawingPenAnnotations.clear();
         drawingPenAnnotation = null;
+        clearDrawingPenBitmap(0);
         pdfView.redrawRenderingView();
+        pdfView.redrawPenDrawingView();
     }
 
     /**
      * 清理画笔绘制内容
      */
     void cancelPenDrawing() {
-        drawingPenAnnotations.clear();
+        haveDrawingPenAnnotations.clear();
         drawingPenAnnotation = null;
-        pdfView.redrawRenderingView();
+        clearDrawingPenBitmap(0);
+        pdfView.redrawPenDrawingView();
     }
 
     /**
@@ -582,9 +594,11 @@ final class AnnotationManager {
         for (BaseAnnotation baseAnnotation : pageAnnotations) {
             removeTheAnnotation(baseAnnotation, true);
         }
-        drawingPenAnnotations.clear();
+        haveDrawingPenAnnotations.clear();
         drawingPenAnnotation = null;
+        clearDrawingPenBitmap(0);
         pdfView.redrawRenderingView();
+        pdfView.redrawPenDrawingView();
     }
 
     /**
@@ -639,9 +653,9 @@ final class AnnotationManager {
     /**
      * 搜索区域提示
      */
-    boolean drawSearchArea(SearchTextInfo searchTextInfo) {
+    void drawSearchArea(SearchTextInfo searchTextInfo) {
         if (searchTextInfo == null || searchTextInfo.getData().size() == 0) {
-            return false;
+            return;
         }
         if (searchAreaPen == null) {
             searchAreaPen = PenBuilder.searchAreaPenBuilder().setColor(Color.parseColor("#66666666")).build();
@@ -652,7 +666,6 @@ final class AnnotationManager {
         searchMarkAnnotation.updateRects(searchTextInfo.getData());
         searchMarkAnnotation.drawed = false;
         pdfView.redrawRenderingView();
-        return true;
     }
 
     /**
@@ -804,7 +817,9 @@ final class AnnotationManager {
         if (event.getPointerId(event.getActionIndex()) != 0) {
             return false;
         }
-
+        if (pen==null) {
+            return false;
+        }
         int action = event.getActionMasked();
         float x = event.getX();
         float y = event.getY();
@@ -819,11 +834,8 @@ final class AnnotationManager {
             if (!inPage) {
                 return false;
             }
-            if (pen instanceof Pen.WritePen) {
-                this.drawingPenAnnotation = new PenAnnotation(coord[0], size, (Pen.WritePen) pen);
-            } else {
-                return false;
-            }
+            pen.reset();
+            this.drawingPenAnnotation = new PenAnnotation(coord[0], size, pen);
             ((PenAnnotation) drawingPenAnnotation).data.add(CoordinateUtils.toPdfPointCoordinate(pdfView, coord[0], coord[1], coord[2]));
         } else if (action == MotionEvent.ACTION_MOVE) {
             float dx = Math.abs(x - penTouchX);
@@ -831,30 +843,34 @@ final class AnnotationManager {
             if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
                 if (drawingPenAnnotation != null) {
                     PenAnnotation penAnnotation = (PenAnnotation) drawingPenAnnotation;
+                    penAnnotation.drawed=false;
                     if (drawingPenAnnotation.page == coord[0] && inPage) {
                         penAnnotation.data.add(CoordinateUtils.toPdfPointCoordinate(pdfView, coord[0], coord[1], coord[2]));
                     } else {
                         if (penAnnotation.data.size() > 1) {
+                            clearDrawingPenBitmap(2);
                             addToDrawingPenAnnotations(drawingPenAnnotation);
                         }
                         drawingPenAnnotation = null;
                     }
-                    pdfView.redrawRenderingView();
+                    pdfView.redrawPenDrawingView();
                 }
-                penTouchX=x;
-                penTouchY=y;
+                penTouchX = x;
+                penTouchY = y;
             }
         } else if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_POINTER_UP) {
             if (drawingPenAnnotation != null) {
                 PenAnnotation penAnnotation = (PenAnnotation) drawingPenAnnotation;
+                penAnnotation.drawed=false;
                 if (drawingPenAnnotation.page == coord[0] && inPage) {
                     penAnnotation.data.add(CoordinateUtils.toPdfPointCoordinate(pdfView, coord[0], coord[1], coord[2]));
                 }
                 if (penAnnotation.data.size() > 1) {
-                    addToDrawingPenAnnotations(drawingPenAnnotation);
+                    clearDrawingPenBitmap(2);
+                    addToDrawingPenAnnotations(drawingPenAnnotation);//需要确保添加之前调用了penAnnotation.drawed=false才会更新已绘制部分画布;
                 }
                 drawingPenAnnotation = null;
-                pdfView.redrawRenderingView();
+                pdfView.redrawPenDrawingView();
             }
         }
         return true;
@@ -907,6 +923,9 @@ final class AnnotationManager {
         if (event.getPointerId(event.getActionIndex()) != 0) {
             return false;
         }
+        if (markPen==null) {
+            return false;
+        }
         int action = event.getActionMasked();
         if (action != MotionEvent.ACTION_DOWN && action != MotionEvent.ACTION_MOVE &&
                 action != MotionEvent.ACTION_CANCEL && action != MotionEvent.ACTION_UP
@@ -937,18 +956,14 @@ final class AnnotationManager {
             if (textIndex == -1) {
                 return false;
             }
-            if (pen instanceof Pen.MarkPen) {
-                this.drawingAnnotation = new MarkAnnotation(coord[0], size, (Pen.MarkPen) pen, MarkAreaType.EXTRA, textIndex, textIndex, pdfView.pdfiumCore.getTextRect(pagePtr, textIndex));
-            } else {
-                return false;
-            }
+            this.drawingMarkAnnotation = new MarkAnnotation(coord[0], size, markPen, MarkAreaType.EXTRA, textIndex, textIndex, pdfView.pdfiumCore.getTextRect(pagePtr, textIndex));
         } else if (action == MotionEvent.ACTION_MOVE) {
-            if (drawingAnnotation != null) {
-                if (drawingAnnotation.page == coord[0] && inPage) {
+            if (drawingMarkAnnotation != null) {
+                if (drawingMarkAnnotation.page == coord[0] && inPage) {
                     if (textIndex == -1) {
                         return true;
                     } else {
-                        int start = ((MarkAnnotation) drawingAnnotation).startIndex;
+                        int start = ((MarkAnnotation) drawingMarkAnnotation).startIndex;
                         int count = start - textIndex;
                         //是否反序
                         boolean desc = count > 0;
@@ -961,22 +976,22 @@ final class AnnotationManager {
                         if (desc) {
                             Collections.reverse(rects);
                         }
-                        ((MarkAnnotation) drawingAnnotation).update(textIndex, rects);
+                        ((MarkAnnotation) drawingMarkAnnotation).update(textIndex, rects);
                     }
                 } else {
-                    if (((MarkAnnotation) drawingAnnotation).data.size() >= 1) {
-                        drawingAnnotation.drawed = false;
-                        addTheAnnotation(drawingAnnotation, true);
+                    if (((MarkAnnotation) drawingMarkAnnotation).data.size() >= 1) {
+                        drawingMarkAnnotation.drawed = false;
+                        addTheAnnotation(drawingMarkAnnotation, true);
                     }
-                    drawingAnnotation = null;
+                    drawingMarkAnnotation = null;
                 }
                 pdfView.redrawRenderingView();
             }
         } else {
-            if (drawingAnnotation != null) {
-                if (drawingAnnotation.page == coord[0] && inPage && textIndex != -1) {
-                    int start = ((MarkAnnotation) drawingAnnotation).startIndex;
-                    int count = ((MarkAnnotation) drawingAnnotation).startIndex - textIndex;
+            if (drawingMarkAnnotation != null) {
+                if (drawingMarkAnnotation.page == coord[0] && inPage && textIndex != -1) {
+                    int start = ((MarkAnnotation) drawingMarkAnnotation).startIndex;
+                    int count = ((MarkAnnotation) drawingMarkAnnotation).startIndex - textIndex;
                     boolean desc = count > 0;
                     count = Math.abs(count);
                     ArrayList<RectF> rectFS = new ArrayList<>();
@@ -986,21 +1001,25 @@ final class AnnotationManager {
                     if (desc) {
                         Collections.reverse(rectFS);
                     }
-                    ((MarkAnnotation) drawingAnnotation).update(textIndex, rectFS);
+                    ((MarkAnnotation) drawingMarkAnnotation).update(textIndex, rectFS);
                 }
-                if (((MarkAnnotation) drawingAnnotation).data.size() >= 1) {
-                    drawingAnnotation.drawed = false;
-                    addTheAnnotation(drawingAnnotation, true);
+                if (((MarkAnnotation) drawingMarkAnnotation).data.size() >= 1) {
+                    drawingMarkAnnotation.drawed = false;
+                    addTheAnnotation(drawingMarkAnnotation, true);
                 }
-                drawingAnnotation = null;
+                drawingMarkAnnotation = null;
                 pdfView.redrawRenderingView();
             }
         }
         return true;
     }
 
-    public void loadData(MarkAnnotation markAnnotation) {
+    public void initAnnotationData(MarkAnnotation markAnnotation) {
         if (markAnnotation == null || (markAnnotation.startIndex == 0 && markAnnotation.endIndex == 0)) {
+            return;
+        }
+        Long textPagesPtr = pdfView.pdfFile.pdfDocument.getTextPagesPtr(markAnnotation.page);//因为会刷新前后几页,如果当前页还没有渲染
+        if (textPagesPtr == null) {
             return;
         }
         int start = markAnnotation.startIndex;
@@ -1009,19 +1028,21 @@ final class AnnotationManager {
         count = Math.abs(count);
         ArrayList<RectF> rects = new ArrayList<>();
         for (int i = 0; i <= count; i++) {
-            rects.add(pdfView.pdfiumCore.getTextRect(pdfView.pdfFile.pdfDocument.getTextPagesPtr(markAnnotation.page), start + (desc ? -1 * i : i)));
+            rects.add(pdfView.pdfiumCore.getTextRect(textPagesPtr, start + (desc ? -1 * i : i)));
         }
         if (desc) {
             Collections.reverse(rects);
         }
         markAnnotation.updateRects(rects);
+        markAnnotation.drawed=false;
+        markAnnotation.needInit=false;
     }
 
     /**
      * 添加到画笔缓存
      */
     private void addToDrawingPenAnnotations(PenAnnotation annotation) {
-        drawingPenAnnotations.add(annotation);
+        haveDrawingPenAnnotations.add(annotation);
     }
 
     /**
@@ -1068,7 +1089,7 @@ final class AnnotationManager {
         }
     }
 
-    public void resetAnnotationDraw(@Nullable BaseAnnotation annotation){
+    public void resetAnnotationDraw(@Nullable BaseAnnotation annotation) {
         Bitmap bitmap = pdfView.annotationDrawManager.cache.get(annotation.page);
         if (bitmap != null && !bitmap.isRecycled()) {
             Canvas canvas = new Canvas(bitmap);
@@ -1076,6 +1097,24 @@ final class AnnotationManager {
         }
         for (BaseAnnotation annotation1 : annotations.get(annotation.page)) {
             annotation1.drawed = false;
+        }
+    }
+
+    //type==0清空所有,type==1清空haveDrawingBitmap画布,type==2清空drawingBitmap画布
+    public void clearDrawingPenBitmap(int type) {
+        if(type==0||type==1){
+            Bitmap haveDrawingBitmap = pdfView.annotationDrawManager.getHaveDrawingPenBitmap();
+            if (haveDrawingBitmap != null && !haveDrawingBitmap.isRecycled()) {
+                Canvas canvas = new Canvas(haveDrawingBitmap);
+                canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);//清空绘画的注释
+            }
+        }
+        if(type==0||type==2) {
+            Bitmap drawingBitmap = pdfView.annotationDrawManager.getDrawingPenBitmap();
+            if (drawingBitmap != null && !drawingBitmap.isRecycled()) {
+                Canvas canvas = new Canvas(drawingBitmap);
+                canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);//清空绘画的注释
+            }
         }
     }
 
@@ -1140,6 +1179,20 @@ final class AnnotationManager {
         return false;
     }
 
+    float[] getPositionInfo(float x, float y) {
+        float[] result = new float[4];
+        int[] coord = CoordinateUtils.getPdfCoordinate(pdfView, x, y);
+        if (coord == null) {
+            return null;
+        }
+        Size size = CoordinateUtils.getPdfPageSize(pdfView, coord[0]);
+        result[0] = coord[1];
+        result[1] = coord[2];
+        result[2] = size.getWidth();
+        result[3] = size.getHeight();
+        return result;
+    }
+
     List<PenAnnotation> getSelectPenAnnotations(int x, int y, boolean onlyTop) {
         List<PenAnnotation> selectPenAnnotations = new ArrayList<>();
         int[] coord = CoordinateUtils.getPdfCoordinate(pdfView, x, y);
@@ -1201,6 +1254,66 @@ final class AnnotationManager {
         return selectTextAnnotations;
     }
 
+    public BaseAnnotation getAnnotationById(String id) {
+        List<BaseAnnotation> baseAnnotations = getAllAnnotation();
+        BaseAnnotation theBaseAnnotation = null;
+        for (BaseAnnotation baseAnnotation : baseAnnotations) {
+            if (baseAnnotation.id.equals(id)) {
+                theBaseAnnotation = baseAnnotation;
+                break;
+            }
+        }
+        return theBaseAnnotation;
+    }
+
+    public BaseAnnotation removeAnnotationById(String id, boolean needNotify) {
+        List<BaseAnnotation> baseAnnotations = getAllAnnotation();
+        BaseAnnotation theBaseAnnotation = null;
+        for (BaseAnnotation baseAnnotation : baseAnnotations) {
+            if (baseAnnotation.id.equals(id)) {
+                theBaseAnnotation = baseAnnotation;
+                break;
+            }
+        }
+        if (theBaseAnnotation != null) {
+            removeTheAnnotation(theBaseAnnotation, needNotify);
+            pdfView.redrawRenderingView();
+        }
+        return theBaseAnnotation;
+    }
+
+    public BaseAnnotation removeLastAnnotation(int page, boolean needNotify) {
+        List<BaseAnnotation> list = annotations.get(page);
+        BaseAnnotation baseAnnotation = null;
+        if (list != null && list.size() > 0) {
+            baseAnnotation = list.get(list.size() - 1);
+            removeTheAnnotation(baseAnnotation, needNotify);
+        }
+        pdfView.redrawRenderingView();
+        return baseAnnotation;
+    }
+
+    public void addLastAnnotation(BaseAnnotation baseAnnotation, boolean needNotify) {
+        addTheAnnotation(baseAnnotation, needNotify);
+        pdfView.redrawRenderingView();
+    }
+
+    /**
+     * 移除正在绘制的批注
+     */
+    public BaseAnnotation removeLastDrawingPenAnnotations() {
+        if (haveDrawingPenAnnotations.size() == 0) {
+            return null;
+        }
+        BaseAnnotation baseAnnotation = haveDrawingPenAnnotations.remove(haveDrawingPenAnnotations.size() - 1);
+        clearDrawingPenBitmap(0);
+        for (PenAnnotation penAnnotation : haveDrawingPenAnnotations) {
+            penAnnotation.drawed=false;
+        }
+        pdfView.redrawPenDrawingView();
+        return baseAnnotation;
+    }
+
 
     public void removeAnnotations(List<BaseAnnotation> data, boolean needNotify) {
         for (BaseAnnotation baseAnnotation : data) {
@@ -1257,34 +1370,6 @@ final class AnnotationManager {
         if (annotationListener != null) {
             annotationListener.onAnnotationAllRemove();
         }
-    }
-
-    public BaseAnnotation removeLastAnnotation(int page, boolean needNotify) {
-        List<BaseAnnotation> list = annotations.get(page);
-        BaseAnnotation baseAnnotation = null;
-        if (list != null && list.size() > 0) {
-            baseAnnotation = list.get(list.size() - 1);
-            removeTheAnnotation(baseAnnotation, needNotify);
-        }
-        pdfView.redrawRenderingView();
-        return baseAnnotation;
-    }
-
-    public void addLastAnnotation(BaseAnnotation baseAnnotation, boolean needNotify) {
-        addTheAnnotation(baseAnnotation, needNotify);
-        pdfView.redrawRenderingView();
-    }
-
-    /**
-     * 移除正在绘制的批注
-     */
-    public BaseAnnotation removeLastDrawingPenAnnotations() {
-        if(drawingPenAnnotations.size()==0){
-            return null;
-        }
-        BaseAnnotation baseAnnotation=drawingPenAnnotations.remove(drawingPenAnnotations.size() -1);
-        pdfView.redrawRenderingView();
-        return baseAnnotation;
     }
 
 }

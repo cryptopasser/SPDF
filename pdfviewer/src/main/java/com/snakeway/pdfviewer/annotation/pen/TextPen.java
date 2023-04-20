@@ -12,6 +12,8 @@ import com.snakeway.pdfviewer.CoordinateUtils;
 import com.snakeway.pdfviewer.PDFView;
 import com.snakeway.pdfviewer.model.TextRemarkInfo;
 
+import java.util.List;
+
 /**
  * @author snakeway
  */
@@ -50,6 +52,12 @@ public class TextPen implements Pen.TextPen {
     }
 
     @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
+
+    @Override
     public void draw(TextRemarkInfo data, Canvas canvas, float scale, int basePenWidth, PDFView pdfView, int page) {
         Bitmap bitmap = pdfView.getTextRemarkBitmapCache(data.getKey(),data.getData(), color, data.getZoom(),true);
         if (bitmap == null) {
@@ -69,6 +77,15 @@ public class TextPen implements Pen.TextPen {
         Rect src = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
         canvas.drawBitmap(bitmap, src, resultRectF, paint);
     }
+
+    @Override
+    public void drawWithOptimize(TextRemarkInfo data, Canvas canvas, float scale, int basePenWidth, PDFView pdfView, int page) {
+        this.draw(data,canvas,scale,basePenWidth,pdfView,page);
+    }
+
+    public void reset() {
+    }
+
 
     @Override
     public PenType getPenType() {
