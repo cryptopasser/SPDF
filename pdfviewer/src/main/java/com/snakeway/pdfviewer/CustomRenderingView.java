@@ -16,10 +16,9 @@ import java.util.List;
 
 
 public class CustomRenderingView extends RelativeLayout {
-    public final  static int RENDERING_AREA=2;//渲染区间,当前页的前后页数
+    public final static int RENDERING_AREA = 2;//渲染区间,当前页的前后页数
 
     PDFView pdfView;
-    int lastUpdatePage=-1;
 
     public CustomRenderingView(Context context, AttributeSet set) {
         super(context, set);
@@ -68,20 +67,16 @@ public class CustomRenderingView extends RelativeLayout {
 //        onDrawAnnotationPagesNums.clear();
 //        canvas.translate(-currentXOffset, -currentYOffset);
         List<Integer> onDrawAnnotationPages = new ArrayList<>();
-        if(pdfView.getCurrentPage()!=lastUpdatePage) {
-            int startPage = pdfView.getCurrentPage() - RENDERING_AREA;
-            int endPage = pdfView.getCurrentPage() + RENDERING_AREA;
-            if (startPage < 0) {
-                startPage = 0;
-            }
-            if (endPage > pdfView.getPageCount() - 1) {
-                endPage = pdfView.getPageCount() - 1;
-            }
-            for (int i = startPage; i < endPage; i++) {
-                onDrawAnnotationPages.add(i);
-            }
-        }else{
-            onDrawAnnotationPages.add(pdfView.getCurrentPage());
+        int startPage = pdfView.getCurrentPage() - RENDERING_AREA;
+        int endPage = pdfView.getCurrentPage() + RENDERING_AREA;
+        if (startPage < 0) {
+            startPage = 0;
+        }
+        if (endPage > pdfView.getPageCount() - 1) {
+            endPage = pdfView.getPageCount() - 1;
+        }
+        for (int i = startPage; i < endPage; i++) {
+            onDrawAnnotationPages.add(i);
         }
         for (Integer page : onDrawAnnotationPages) {
             if (Math.abs(page - pdfView.getCurrentPage()) <= pdfView.getAnnotationRenderingArea()) {
@@ -89,17 +84,16 @@ public class CustomRenderingView extends RelativeLayout {
             }
         }
         canvas.translate(-currentXOffset, -currentYOffset);
-        lastUpdatePage=pdfView.getCurrentPage();
     }
 
-    public Bitmap getRenderingBitmap(int page,int targetWidth){
+    public Bitmap getRenderingBitmap(int page, int targetWidth) {
         Size pdfSize = pdfView.pdfFile.originalPageSizes.get(page);
-        float ratio=(float)pdfSize.getWidth()/ targetWidth;
-        int height = (int) ((float)pdfSize.getHeight()/ratio);
+        float ratio = (float) pdfSize.getWidth() / targetWidth;
+        int height = (int) ((float) pdfSize.getHeight() / ratio);
         Bitmap bitmap = Bitmap.createBitmap(targetWidth, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         canvas.drawColor(Color.TRANSPARENT);
-        if(!pdfView.annotationDrawManager.drawAnnotation(canvas, targetWidth, page)) {
+        if (!pdfView.annotationDrawManager.drawAnnotation(canvas, targetWidth, page)) {
             return null;
         }
         return bitmap;
