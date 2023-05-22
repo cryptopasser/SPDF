@@ -155,6 +155,8 @@ public class PDFView extends RelativeLayout {
     private float midZoom = DEFAULT_MID_SCALE;
     private float maxZoom = DEFAULT_MAX_SCALE;
 
+    private float defaultZoom = 1f;
+
     private final String START_ZOOM_ANIMATION = "startZoomAnimation";
 
     /**
@@ -215,7 +217,7 @@ public class PDFView extends RelativeLayout {
     /**
      * The zoom level, always >= 1
      */
-    private float zoom = 1f;
+    private float zoom = defaultZoom;
 
     /**
      * True if the PDFView has been recycled
@@ -1039,7 +1041,7 @@ public class PDFView extends RelativeLayout {
         scrollHandle = null;
         isScrollHandleInit = false;
         currentXOffset = currentYOffset = 0;
-        zoom = 1f;
+        zoom = defaultZoom;
         recycled = true;
         callbacks = new Callbacks();
         state = State.DEFAULT;
@@ -2625,7 +2627,7 @@ public class PDFView extends RelativeLayout {
     }
 
     public void resetZoom() {
-        zoomTo(minZoom);
+        zoomTo(defaultZoom);
     }
 
     public void resetZoomWithAnimation() {
@@ -2699,6 +2701,14 @@ public class PDFView extends RelativeLayout {
 
     public void setMaxZoom(float maxZoom) {
         this.maxZoom = maxZoom;
+    }
+
+    public float getDefaultZoom() {
+        return defaultZoom ;
+    }
+
+    public void setDefaultZoomZoom(float defaultZoom) {
+        this.defaultZoom = defaultZoom;
     }
 
     public void useBestQuality(boolean bestQuality) {
@@ -3800,7 +3810,6 @@ public class PDFView extends RelativeLayout {
 
     public interface OnPdfViewPenAreaClickListener {
         void onClick(MotionEvent event, int x, int y);
-
         void onLongClick(MotionEvent event, int x, int y);
     }
 
