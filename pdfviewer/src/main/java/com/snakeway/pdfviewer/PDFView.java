@@ -2707,7 +2707,7 @@ public class PDFView extends RelativeLayout {
         return defaultZoom ;
     }
 
-    public void setDefaultZoomZoom(float defaultZoom) {
+    public void setDefaultZoom(float defaultZoom) {
         this.defaultZoom = defaultZoom;
     }
 
