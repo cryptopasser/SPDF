@@ -899,13 +899,11 @@ final class AnnotationManager {
             }
             eraserPage = coord[0];
             eraser.move(coord[1], coord[2]);
-            removeTheAnnotation(eraser.erase(annotations.get(eraserPage), scale, pdfView.getZoom(), pdfView), true);
-            pdfView.redrawRenderingView();
+            eraseAnnotation(scale);
         } else if (action == MotionEvent.ACTION_MOVE) {
             if (eraserPage == coord[0]) {
                 eraser.move(coord[1], coord[2]);
-                removeTheAnnotation(eraser.erase(annotations.get(eraserPage), scale, pdfView.getZoom(), pdfView), true);
-                pdfView.redrawRenderingView();
+                eraseAnnotation(scale);
             } else {
                 eraserPage = -1;
             }
@@ -914,6 +912,26 @@ final class AnnotationManager {
             pdfView.redrawRenderingView();
         }
         return true;
+    }
+
+    private void eraseAnnotation(float scale){
+        List<BaseAnnotation> theHaveDrawingPenAnnotations = new ArrayList<>();
+        for (int i = 0; i < haveDrawingPenAnnotations.size(); i++) {
+            theHaveDrawingPenAnnotations.add(haveDrawingPenAnnotations.get(i));
+        }
+        //remove have drawing annotations
+        BaseAnnotation needRemoveBaseAnnotation=eraser.erase(theHaveDrawingPenAnnotations, scale, pdfView.getZoom(), pdfView);
+        if(needRemoveBaseAnnotation!=null){
+            haveDrawingPenAnnotations.remove(needRemoveBaseAnnotation);
+            clearDrawingPenBitmap(0);
+            for (PenAnnotation penAnnotation : haveDrawingPenAnnotations) {
+                penAnnotation.drawed=false;
+            }
+            pdfView.redrawPenDrawingView();
+        }else{
+            removeTheAnnotation(eraser.erase(annotations.get(eraserPage), scale, pdfView.getZoom(), pdfView), true);
+            pdfView.redrawRenderingView();
+        }
     }
 
     /**
