@@ -721,8 +721,10 @@ public class PDFView extends RelativeLayout {
         }
         if (editTextRemarkThemeColor != 0) {
             textViewTextRemarkCancelTop.setTextColor(editTextRemarkThemeColor);
+            textViewTextRemarkDeleteTop.setTextColor(editTextRemarkThemeColor);
             textViewTextRemarkSaveTop.setTextColor(editTextRemarkThemeColor);
             textViewTextRemarkCancelBottom.setTextColor(editTextRemarkThemeColor);
+            textViewTextRemarkDeleteBottom.setTextColor(editTextRemarkThemeColor);
             textViewTextRemarkSaveBottom.setTextColor(editTextRemarkThemeColor);
         }
     }
