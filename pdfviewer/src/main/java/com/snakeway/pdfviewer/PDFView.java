@@ -3323,6 +3323,15 @@ public class PDFView extends RelativeLayout {
         return annotationBeans;
     }
 
+    public List<AnnotationBean> getCurrentPageAllAnnotation(MarkAreaType markAreaType, int page) {
+        List<BaseAnnotation> datas = annotationManager.getCurrentPageAllAnnotation(markAreaType,page);
+        List<AnnotationBean> annotationBeans = new ArrayList<>();
+        for (BaseAnnotation data : datas) {
+            annotationBeans.add(new AnnotationBean(data, false));
+        }
+        return annotationBeans;
+    }
+
     public List<AnnotationBean> getAllOptimizationAnnotation() {
         List<BaseAnnotation> datas = annotationManager.getAllAnnotation();
         List<AnnotationBean> annotationBeans = new ArrayList<>();
