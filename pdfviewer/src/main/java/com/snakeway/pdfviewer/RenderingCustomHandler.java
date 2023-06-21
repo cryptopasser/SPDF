@@ -39,10 +39,18 @@ public class RenderingCustomHandler extends Handler {
     @Override
     public void handleMessage(Message message) {
         RenderingCustomTask task = (RenderingCustomTask) message.obj;
-        final OnRenderingCustomListener onWhiteSpaceInfoListener = task.onRenderingCustomListener;
+        final OnRenderingCustomListener onRenderingCustomListener = task.onRenderingCustomListener;
         try {
             requestCount++;
             if (!running) {
+                pdfView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (onRenderingCustomListener != null) {
+                            onRenderingCustomListener.onError("OnRenderingCustomListener is not running");
+                        }
+                    }
+                });
                 return;
             }
             final List<RenderedCustomInfo> renderedCustomInfos = proceed(task, onWhiteSpaceInfoListener);

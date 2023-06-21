@@ -43,6 +43,14 @@ class WhiteSpaceInfoHandler extends Handler {
         try {
             requestCount++;
             if (!running) {
+                pdfView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (onWhiteSpaceInfoListener != null) {
+                            onWhiteSpaceInfoListener.onError("OnWhiteSpaceInfoListener is not running");
+                        }
+                    }
+                });
                 return;
             }
             final List<WhiteSpaceInfo> whiteSpaceInfos = proceed(task, onWhiteSpaceInfoListener);
