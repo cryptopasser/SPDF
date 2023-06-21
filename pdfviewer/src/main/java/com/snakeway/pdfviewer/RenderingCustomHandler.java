@@ -53,12 +53,12 @@ public class RenderingCustomHandler extends Handler {
                 });
                 return;
             }
-            final List<RenderedCustomInfo> renderedCustomInfos = proceed(task, onWhiteSpaceInfoListener);
+            final List<RenderedCustomInfo> renderedCustomInfos = proceed(task, onRenderingCustomListener);
             pdfView.post(new Runnable() {
                 @Override
                 public void run() {
-                    if (onWhiteSpaceInfoListener != null) {
-                        onWhiteSpaceInfoListener.onSuccess(renderedCustomInfos);
+                    if (onRenderingCustomListener != null) {
+                        onRenderingCustomListener.onSuccess(renderedCustomInfos);
                     }
                 }
             });
@@ -66,8 +66,8 @@ public class RenderingCustomHandler extends Handler {
             pdfView.post(new Runnable() {
                 @Override
                 public void run() {
-                    if (onWhiteSpaceInfoListener != null) {
-                        onWhiteSpaceInfoListener.onError(e.getMessage());
+                    if (onRenderingCustomListener != null) {
+                        onRenderingCustomListener.onError(e.getMessage());
                     }
                 }
             });
