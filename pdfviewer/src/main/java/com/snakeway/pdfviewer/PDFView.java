@@ -2425,6 +2425,9 @@ public class PDFView extends RelativeLayout {
     }
 
     private boolean isZoomNear(WhiteSpaceInfo whiteSpaceInfo) {
+        if(whiteSpaceInfo==null){
+            return false;
+        }
         return whiteSpaceInfo.getScale() < zoom * 1.01 && whiteSpaceInfo.getScale() > zoom * 0.99;
     }
 

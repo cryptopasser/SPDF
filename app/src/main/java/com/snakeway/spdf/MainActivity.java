@@ -93,7 +93,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
     public static final String FILE_PATH_KEY = "file_path_key";
     public static final String FILE_PASSWORD_KEY = "file_password_key";
 
-    private final String PDF_NAME = "docx.pdf";
+    private final String PDF_NAME = "test2.pdf";
     private final String PDF_PASSWORD = "123456";
 
     private View.OnClickListener onClickListener;
