@@ -189,6 +189,7 @@ class PagesLoader {
             // ---------------------------------------
             float secondaryOffset = pdfView.pdfFile.getSecondaryPageOffset(page, pdfView.getZoom());
             float pageOffset=pdfView.pdfFile.getPageOffset(range.page, pdfView.getZoom());
+
             // calculate the row,col of the point in the leftTop and rightBottom
             if (pdfView.isSwipeVertical()) {
                 range.leftTop.row = MathUtils.floor(MathUtils.min(pageFirstYOffset - pageOffset, 0) / rowHeight);
