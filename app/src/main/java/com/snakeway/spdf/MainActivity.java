@@ -757,7 +757,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
         configurator = viewBinding.pdfView.fromAsset(assetFileName);
         configurator.password(password)
                 .defaultPage(pageNumber)
-                .swipeHorizontal(true)
+                .swipeHorizontal(false)
                 .nightMode(false)
                 .pageFling(false)
                 .pageSnap(true)
