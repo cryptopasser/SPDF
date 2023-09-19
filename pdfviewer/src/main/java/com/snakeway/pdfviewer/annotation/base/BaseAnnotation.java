@@ -24,7 +24,7 @@ public abstract class BaseAnnotation<T, Pen extends com.snakeway.pdfviewer.annot
     public Pen pen;
     public T data;
     public AnnotationType annotationType;
-    public Size pageSize;
+    public transient Size pageSize;
 
     public BaseAnnotation(@NonNull AnnotationType annotationType, @IntRange(from = 0) int page, Size pageSize, @NonNull Pen pen) {
         this.id = UUID.randomUUID().toString();
