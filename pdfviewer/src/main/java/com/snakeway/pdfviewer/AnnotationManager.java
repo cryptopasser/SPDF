@@ -470,7 +470,7 @@ final class AnnotationManager {
             areaDownX = downX;
             areaDownY = downY;
             downTargetTextInfo = targetTextInfo;
-            areaMarkAnnotation = new MarkAnnotation(downTargetTextInfo.getPage(), downTargetTextInfo.getPageSize(), areaPen, MarkAreaType.AREACHOOSE, downTargetTextInfo.getTextIndex(), downTargetTextInfo.getTextIndex(), pdfView.pdfiumCore.getTextRect(downTargetTextInfo.getPagePtr(), downTargetTextInfo.getTextIndex()));
+            areaMarkAnnotation = new MarkAnnotation(downTargetTextInfo.getPage(), downTargetTextInfo.getPageSize(),pdfView.getDpi(), areaPen, MarkAreaType.AREACHOOSE, downTargetTextInfo.getTextIndex(), downTargetTextInfo.getTextIndex(), pdfView.pdfiumCore.getTextRect(downTargetTextInfo.getPagePtr(), downTargetTextInfo.getTextIndex()));
         }
         return true;
     }
@@ -549,7 +549,7 @@ final class AnnotationManager {
         textRemarkInfo.setRightBottomPdfSize(rightBottomPdfSize);
         textRemarkInfo.setScale(scale);
 
-        TextAnnotation textAnnotation = new TextAnnotation(textRemarkInfo.getPage(), size, textPen);
+        TextAnnotation textAnnotation = new TextAnnotation(textRemarkInfo.getPage(), size,pdfView.getDpi(), textPen);
         textAnnotation.data = textRemarkInfo;
         textAnnotation.drawed = false;
         addTheAnnotation(textAnnotation, true);
@@ -640,7 +640,7 @@ final class AnnotationManager {
             Log.e(TAG, "don't have mark pen");
             return false;
         }
-        MarkAnnotation markAnnotation = new MarkAnnotation(areaMarkAnnotation.page, areaMarkAnnotation.pageSize, markPen, markAreaType, areaMarkAnnotation.startIndex, areaMarkAnnotation.startIndex, pdfView.pdfiumCore.getTextRect(downTargetTextInfo.getPagePtr(), downTargetTextInfo.getTextIndex()));
+        MarkAnnotation markAnnotation = new MarkAnnotation(areaMarkAnnotation.page, areaMarkAnnotation.pageSize,pdfView.getDpi(), markPen, markAreaType, areaMarkAnnotation.startIndex, areaMarkAnnotation.startIndex, pdfView.pdfiumCore.getTextRect(downTargetTextInfo.getPagePtr(), downTargetTextInfo.getTextIndex()));
         markAnnotation.update(areaMarkAnnotation.endIndex, areaRects);
         if (markAnnotation.data.size() >= 1) {
             markAnnotation.drawed = false;
@@ -662,7 +662,7 @@ final class AnnotationManager {
         }
         int page = searchTextInfo.getPage();
         Size size = CoordinateUtils.getPdfPageSize(pdfView, page);
-        searchMarkAnnotation = new MarkAnnotation(page, size, searchAreaPen, MarkAreaType.AREACHOOSE, searchTextInfo.getStart(), searchTextInfo.getEnd(), new RectF());
+        searchMarkAnnotation = new MarkAnnotation(page, size,pdfView.getDpi(), searchAreaPen, MarkAreaType.AREACHOOSE, searchTextInfo.getStart(), searchTextInfo.getEnd(), new RectF());
         searchMarkAnnotation.updateRects(searchTextInfo.getData());
         searchMarkAnnotation.drawed = false;
         pdfView.redrawRenderingView();
@@ -835,7 +835,7 @@ final class AnnotationManager {
                 return false;
             }
             pen.reset();
-            this.drawingPenAnnotation = new PenAnnotation(coord[0], size, pen);
+            this.drawingPenAnnotation = new PenAnnotation(coord[0], size, pdfView.getDpi(), pen);
             ((PenAnnotation) drawingPenAnnotation).data.add(CoordinateUtils.toPdfPointCoordinate(pdfView, coord[0], coord[1], coord[2]));
         } else if (action == MotionEvent.ACTION_MOVE) {
             float dx = Math.abs(x - penTouchX);
@@ -974,7 +974,7 @@ final class AnnotationManager {
             if (textIndex == -1) {
                 return false;
             }
-            this.drawingMarkAnnotation = new MarkAnnotation(coord[0], size, markPen, MarkAreaType.EXTRA, textIndex, textIndex, pdfView.pdfiumCore.getTextRect(pagePtr, textIndex));
+            this.drawingMarkAnnotation = new MarkAnnotation(coord[0], size,pdfView.getDpi(), markPen, MarkAreaType.EXTRA, textIndex, textIndex, pdfView.pdfiumCore.getTextRect(pagePtr, textIndex));
         } else if (action == MotionEvent.ACTION_MOVE) {
             if (drawingMarkAnnotation != null) {
                 if (drawingMarkAnnotation.page == coord[0] && inPage) {

@@ -2413,6 +2413,13 @@ public class PDFView extends RelativeLayout {
         return false;
     }
 
+    public float getDpi(){
+        if(pdfFile==null){
+            return 1;
+        }
+        return pdfFile.getDpi();
+    }
+
     /**
      * Move relatively to the current position.
      *

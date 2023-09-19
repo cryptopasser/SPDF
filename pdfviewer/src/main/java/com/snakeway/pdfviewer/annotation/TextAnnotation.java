@@ -20,8 +20,8 @@ public final class TextAnnotation extends BaseAnnotation<TextRemarkInfo, Pen.Tex
     private transient RectF areaRect;
     private transient boolean needHidden;
 
-    public TextAnnotation(int page, Size pageSize, Pen.TextPen pen) {
-        super(AnnotationType.TEXT, page, pageSize, pen);
+    public TextAnnotation(int page, Size pageSize,float dpi, Pen.TextPen pen) {
+        super(AnnotationType.TEXT, page, pageSize,dpi, pen);
     }
 
     @Override

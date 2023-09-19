@@ -313,6 +313,13 @@ class PdfFile {
                 bounds.left, bounds.top, bounds.width(), bounds.height(), annotationRendering);
     }
 
+    public float getDpi() {
+        if (pdfiumCore == null) {
+            return 1;
+        }
+        return pdfiumCore.mCurrentDpi;
+    }
+
     public PdfDocument.Meta getMetaData() {
         if (pdfDocument == null) {
             return null;

@@ -24,14 +24,16 @@ public abstract class BaseAnnotation<T, Pen extends com.snakeway.pdfviewer.annot
     public Pen pen;
     public T data;
     public AnnotationType annotationType;
-    public transient Size pageSize;
+    public Size pageSize;
+    public float dpi;
 
-    public BaseAnnotation(@NonNull AnnotationType annotationType, @IntRange(from = 0) int page, Size pageSize, @NonNull Pen pen) {
+    public BaseAnnotation(@NonNull AnnotationType annotationType, @IntRange(from = 0) int page, Size pageSize,float dpi, @NonNull Pen pen) {
         this.id = UUID.randomUUID().toString();
         this.annotationType = annotationType;
         this.page = page;
         this.pen = pen;
         this.pageSize = pageSize;
+        this.dpi = dpi;
     }
 
     public void singleDraw(Canvas canvas, float scale, int basePenWidth, PDFView pdfView) {

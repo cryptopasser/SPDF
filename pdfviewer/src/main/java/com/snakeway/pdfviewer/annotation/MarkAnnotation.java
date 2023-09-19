@@ -22,8 +22,8 @@ public final class MarkAnnotation extends BaseAnnotation<List<RectF>, Pen.MarkPe
     public int startIndex;
     public int endIndex;
 
-    public MarkAnnotation(int page, Size pageSize, Pen.MarkPen pen, @Nullable MarkAreaType markAreaType, int startIndex, int endIndex, RectF rectF) {
-        super(AnnotationType.MARK, page, pageSize, pen);
+    public MarkAnnotation(int page, Size pageSize,float dpi, Pen.MarkPen pen, @Nullable MarkAreaType markAreaType, int startIndex, int endIndex, RectF rectF) {
+        super(AnnotationType.MARK, page, pageSize,dpi, pen);
         data = new ArrayList<>();
         this.markAreaType = markAreaType;
         this.startIndex = startIndex;

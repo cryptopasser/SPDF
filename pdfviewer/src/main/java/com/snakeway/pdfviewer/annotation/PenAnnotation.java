@@ -22,8 +22,8 @@ public final class PenAnnotation extends BaseAnnotation<List<SizeF>, Pen.WritePe
     private transient RectF areaRect;
     private transient Rect cancelAreaRect;
 
-    public PenAnnotation(int page, Size pageSize, Pen.WritePen pen) {
-        super(AnnotationType.PEN, page, pageSize, pen);
+    public PenAnnotation(int page, Size pageSize,float dpi, Pen.WritePen pen) {
+        super(AnnotationType.PEN, page, pageSize,dpi, pen);
         data = new ArrayList<>();
     }
 
