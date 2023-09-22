@@ -2,6 +2,7 @@ package com.snakeway.pdfviewer;
 
 import android.graphics.Point;
 import android.graphics.RectF;
+import android.util.DisplayMetrics;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -13,7 +14,7 @@ import com.snakeway.pdflibrary.util.SizeF;
  * @author snakeway
  */
 public class CoordinateUtils {
-    private static final float SIZE = 72.0F;
+    private static final float SIZE = 72.0F;//SIZE = DisplayMetrics.DENSITY_MEDIUM;//160对应dpi的1倍倍率,即pdf原始尺寸
 
     /**
      * 计算当前view点所在的pdf页面对应坐标,数组宽度3,返回所在页,x和y坐标
