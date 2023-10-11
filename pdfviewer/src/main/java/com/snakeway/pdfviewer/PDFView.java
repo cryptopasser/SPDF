@@ -100,7 +100,6 @@ import com.snakeway.pdfviewer.source.FileSource;
 import com.snakeway.pdfviewer.source.InputStreamSource;
 import com.snakeway.pdfviewer.source.UriSource;
 import com.snakeway.pdfviewer.util.Base64Util;
-import com.snakeway.pdfviewer.util.BitmapMemoryCacheHelper;
 import com.snakeway.pdfviewer.util.BitmapUtil;
 import com.snakeway.pdfviewer.util.Constants;
 import com.snakeway.pdfviewer.util.EditTextUtil;
@@ -499,7 +498,6 @@ public class PDFView extends RelativeLayout {
     public CustomPenDrawingView customPenHaveDrawingView;
 
     public CustomPenDrawingView customPenDrawingView;
-    public BitmapMemoryCacheHelper bitmapMemoryCacheHelper = new BitmapMemoryCacheHelper(8);
 
     private TextAnnotation editTextAnnotation;
 
@@ -731,7 +729,7 @@ public class PDFView extends RelativeLayout {
 
     public Bitmap getTextRemarkBitmapCache(String key, String data, int color, float zoom, boolean needCache) {
         if (needCache) {
-            Bitmap bitmap = bitmapMemoryCacheHelper.getBitmap(key);
+            Bitmap bitmap = cacheManager.getBitmapMemoryCacheHelper().getBitmap(key);
             if (bitmap != null) {
                 return bitmap;
             }
@@ -752,7 +750,7 @@ public class PDFView extends RelativeLayout {
             return null;
         }
         if (needCache) {
-            bitmapMemoryCacheHelper.putBitmap(key, viewBitmap);
+            cacheManager.getBitmapMemoryCacheHelper().putBitmap(key, viewBitmap);
         }
         return viewBitmap;
     }

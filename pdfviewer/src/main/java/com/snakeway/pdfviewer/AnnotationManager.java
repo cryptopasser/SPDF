@@ -1094,7 +1094,7 @@ final class AnnotationManager {
             return;
         }
         list.remove(annotation);
-        Bitmap bitmap = pdfView.annotationDrawManager.cache.get(annotation.page);
+        Bitmap bitmap = pdfView.annotationDrawManager.getAnnotationCacheBitmap(annotation.page);
         if (bitmap != null && !bitmap.isRecycled()) {
             Canvas canvas = new Canvas(bitmap);
             canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);//清空绘画的注释
@@ -1108,7 +1108,7 @@ final class AnnotationManager {
     }
 
     public void resetAnnotationDraw(@Nullable BaseAnnotation annotation) {
-        Bitmap bitmap = pdfView.annotationDrawManager.cache.get(annotation.page);
+        Bitmap bitmap = pdfView.annotationDrawManager.getAnnotationCacheBitmap(annotation.page);
         if (bitmap != null && !bitmap.isRecycled()) {
             Canvas canvas = new Canvas(bitmap);
             canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);//清空绘画的注释
@@ -1358,7 +1358,7 @@ final class AnnotationManager {
             return;
         }
         list.clear();
-        Bitmap bm = pdfView.annotationDrawManager.cache.get(page);
+        Bitmap bm = pdfView.annotationDrawManager.getAnnotationCacheBitmap(page);
         if (bm == null || bm.isRecycled()) {
             return;
         }
@@ -1375,14 +1375,9 @@ final class AnnotationManager {
      */
     synchronized void removeAnnotationAll() {
         annotations.clear();
-        int size = pdfView.annotationDrawManager.cache.size();
-        for (int i = 0; i < size; i++) {
-            int key = pdfView.annotationDrawManager.cache.keyAt(i);
-            Bitmap bm = pdfView.annotationDrawManager.cache.get(key);
-            if (bm != null) {
-                bm.recycle();
-                bm = null;
-            }
+        int pageCount = pdfView.getPageCount();
+        for (int i = 0; i < pageCount; i++) {
+            pdfView.annotationDrawManager.clearAnnotationCacheBitmap(i);
         }
         pdfView.redrawRenderingView();
         if (annotationListener != null) {

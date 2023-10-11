@@ -38,10 +38,6 @@ final class AnnotationDrawManager {
     private PDFView pdfView;
     private AnnotationManager annotationManager;
     /**
-     * bitmap缓存
-     */
-    SparseArray<Bitmap> cache = new SparseArray<>();
-    /**
      * 绘制中注释的画布
      */
     private Bitmap drawingBitmap;
@@ -284,7 +280,7 @@ final class AnnotationDrawManager {
      * 绘制完成编辑的注释
      */
     private void drawDrawedAnnotation(Canvas canvas, int page, Rect pageSize, RectF drawRegion, float scale, List<BaseAnnotation> annotations) {
-        Bitmap bm = cache.get(page);
+        Bitmap bm =getAnnotationCacheBitmap(page);
         if (bm == null) {
             bm = Bitmap.createBitmap(pageSize.width(), pageSize.height(), Bitmap.Config.ARGB_8888);
         } else {
@@ -294,7 +290,6 @@ final class AnnotationDrawManager {
                 setRecycleAnnotationPageUnDraw(page);
             }
         }
-        cache.put(page, bm);
         //需要绘画页面pdf解析尺寸
         Size pdfSize = pdfView.pdfFile.originalPageSizes.get(page);
         int basePenWidth = Math.min(pdfSize.getHeight(), pdfSize.getWidth()); //基础画笔线框 最小宽/高 除以 100
@@ -318,6 +313,7 @@ final class AnnotationDrawManager {
         }
         //绘制在大的画布上
         canvas.drawBitmap(bm, pageSize, drawRegion, paint);
+        putAnnotationCacheBitmap(page, bm);
         drawPenCancel(canvas, page, scale, annotations, pdfSize.getWidth(), pdfSize.getHeight());
     }
 
@@ -480,19 +476,12 @@ final class AnnotationDrawManager {
      * @param pages 不用回收的页
      */
     void recycle(List<Integer> pages) {
-        List<Integer> recyclePage = new ArrayList<>();
-        for (int i = 0; i < cache.size(); i++) {
-            if (!pages.contains(cache.keyAt(i))) {
-                recyclePage.add(cache.keyAt(i));
+        for (Integer page : pages) {
+            Bitmap bm = getAnnotationCacheBitmap(page);
+            if (bm != null) {
+                clearAnnotationCacheBitmap(page);
+                setRecycleAnnotationPageUnDraw(page);
             }
-        }
-        for (Integer page : recyclePage) {
-            Bitmap bm = cache.get(page);
-            if (bm != null && !bm.isRecycled()) {
-                bm.recycle();
-            }
-            cache.remove(page);
-            setRecycleAnnotationPageUnDraw(page);
         }
     }
 
@@ -528,4 +517,15 @@ final class AnnotationDrawManager {
     public Bitmap getSearchAreaBitmap() {
         return searchAreaBitmap;
     }
+
+    public void putAnnotationCacheBitmap(int page,Bitmap bitmap) {
+       pdfView.cacheManager.getBitmapMemoryCacheHelper().putBitmap(CacheManager.ANNOTATION_CACHE_TAG+page,bitmap);
+    }
+    public Bitmap getAnnotationCacheBitmap(int page) {
+        return  pdfView.cacheManager.getBitmapMemoryCacheHelper().getBitmap(CacheManager.ANNOTATION_CACHE_TAG+page);
+    }
+    public void clearAnnotationCacheBitmap(int page) {
+        pdfView.cacheManager.getBitmapMemoryCacheHelper().clearMemory(CacheManager.ANNOTATION_CACHE_TAG+page);
+    }
+
 }

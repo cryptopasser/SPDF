@@ -5,6 +5,7 @@ import android.graphics.RectF;
 import androidx.annotation.Nullable;
 
 import com.snakeway.pdfviewer.model.PagePart;
+import com.snakeway.pdfviewer.util.BitmapMemoryCacheHelper;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,6 +17,9 @@ import static com.snakeway.pdfviewer.util.Constants.Cache.CACHE_SIZE;
 import static com.snakeway.pdfviewer.util.Constants.Cache.THUMBNAILS_CACHE_SIZE;
 
 class CacheManager {
+    public static final String ANNOTATION_CACHE_TAG = "annotation_cache_";
+
+    private BitmapMemoryCacheHelper bitmapMemoryCacheHelper = new BitmapMemoryCacheHelper(10);
 
     private final PriorityQueue<PagePart> passiveCache;
 
@@ -163,6 +167,10 @@ class CacheManager {
             }
             thumbnails.clear();
         }
+    }
+
+    public BitmapMemoryCacheHelper getBitmapMemoryCacheHelper() {
+        return bitmapMemoryCacheHelper;
     }
 
     class PagePartComparator implements Comparator<PagePart> {
