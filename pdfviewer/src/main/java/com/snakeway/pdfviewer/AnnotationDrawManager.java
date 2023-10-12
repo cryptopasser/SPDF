@@ -288,6 +288,7 @@ final class AnnotationDrawManager {
      * 绘制完成编辑的注释
      */
     private void drawDrawedAnnotation(Canvas canvas, int page, Rect pageSize, RectF drawRegion, float scale, List<BaseAnnotation> annotations) {
+        boolean isAnnotationBitmapChange=false;
         Bitmap bm =getAnnotationCacheBitmap(page);
         if (bm == null) {
             if(drawedPageCache.get(page)!=null){//lrucache缓存的图片可能被回收了,导致原本缓存不存在了,这时候需要重新绘制
@@ -295,11 +296,13 @@ final class AnnotationDrawManager {
                 drawedPageCache.remove(page);
             }
             bm = Bitmap.createBitmap(pageSize.width(), pageSize.height(), Bitmap.Config.ARGB_8888);
+            isAnnotationBitmapChange=true;
         } else {
             if (bm.getWidth() != pageSize.width() || bm.getHeight() != pageSize.height()) {
                 bm.recycle();
                 bm = Bitmap.createBitmap(pageSize.width(), pageSize.height(), Bitmap.Config.ARGB_8888);
                 setRecycleAnnotationPageUnDraw(page);
+                isAnnotationBitmapChange=true;
             }
         }
         //需要绘画页面pdf解析尺寸
@@ -314,19 +317,23 @@ final class AnnotationDrawManager {
                     if (!textAnnotation.isNeedHidden()){
                         if (!annotation.drawed) {
                             annotation.draw(pageCanvas, scale, basePenWidth, pdfView);
+                            isAnnotationBitmapChange=true;
                         }
                     }
                 }else {
                     if (!annotation.drawed) {
                         annotation.draw(pageCanvas, scale, basePenWidth, pdfView);
+                        isAnnotationBitmapChange=true;
                     }
                 }
             }
         }
         //绘制在大的画布上
         canvas.drawBitmap(bm, pageSize, drawRegion, paint);
-        String cacheBitmapKey=putAnnotationCacheBitmap(page, bm);
-        drawedPageCache.put(page, cacheBitmapKey);
+        if(isAnnotationBitmapChange) {
+            String cacheBitmapKey = putAnnotationCacheBitmap(page, bm);
+            drawedPageCache.put(page, cacheBitmapKey);
+        }
         drawPenCancel(canvas, page, scale, annotations, pdfSize.getWidth(), pdfSize.getHeight());
     }
 
