@@ -3359,18 +3359,12 @@ public class PDFView extends RelativeLayout {
         return annotationBean;
     }
 
-    /**
-     * 从缓存删除一页的注释
-     */
     public void removeAnnotation(@IntRange(from = 0) int page) {
-        annotationManager.removeAnnotation(page);
+        annotationManager.removeAnnotationAndRefresh(page);
     }
 
-    /**
-     * 从缓存删除所有注释
-     */
     public void removeAnnotationAll() {
-        annotationManager.removeAnnotationAll();
+        annotationManager.removeAnnotationAllAndRefresh();
     }
 
     public void setAnnotationListener(AnnotationListener annotationListener) {

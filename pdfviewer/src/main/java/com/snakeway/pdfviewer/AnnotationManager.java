@@ -1083,7 +1083,7 @@ final class AnnotationManager {
     }
 
     /**
-     * 从缓存删除
+     * 从缓存删除不调用刷新
      */
     private void removeTheAnnotation(@Nullable BaseAnnotation annotation, boolean needNotify) {
         if (annotation == null) {
@@ -1099,9 +1099,10 @@ final class AnnotationManager {
             Canvas canvas = new Canvas(bitmap);
             canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);//清空绘画的注释
         }
-        for (BaseAnnotation annotation1 : annotations.get(annotation.page)) {
-            annotation1.drawed = false;
-        }
+//        for (BaseAnnotation annotation1 : annotations.get(annotation.page)) {
+//            annotation1.drawed = false;
+//        }
+        pdfView.annotationDrawManager.recycleAndSetUnDrawAnnotationCacheBitmap(annotation.page);
         if (annotationListener != null && needNotify) {
             annotationListener.onAnnotationRemove(annotation);
         }
@@ -1113,9 +1114,10 @@ final class AnnotationManager {
             Canvas canvas = new Canvas(bitmap);
             canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);//清空绘画的注释
         }
-        for (BaseAnnotation annotation1 : annotations.get(annotation.page)) {
-            annotation1.drawed = false;
-        }
+//        for (BaseAnnotation annotation1 : annotations.get(annotation.page)) {
+//            annotation1.drawed = false;
+//        }
+        pdfView.annotationDrawManager.recycleAndSetUnDrawAnnotationCacheBitmap(annotation.page);
     }
 
     //type==0清空所有,type==1清空haveDrawingBitmap画布,type==2清空drawingBitmap画布
@@ -1352,7 +1354,7 @@ final class AnnotationManager {
     /**
      * 从缓存删除一页的注释
      */
-    synchronized void removeAnnotation(@IntRange(from = 0) int page) {
+    synchronized void removeAnnotationAndRefresh(@IntRange(from = 0) int page) {
         List<BaseAnnotation> list = annotations.get(page);
         if (list == null || list.size() == 0) {
             return;
@@ -1365,6 +1367,7 @@ final class AnnotationManager {
         Canvas canvas = new Canvas(bm);
         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
         pdfView.redrawRenderingView();
+        pdfView.annotationDrawManager.recycleAndSetUnDrawAnnotationCacheBitmap(page);
         if (annotationListener != null) {
             annotationListener.onAnnotationPageRemove(page);
         }
@@ -1373,12 +1376,9 @@ final class AnnotationManager {
     /**
      * 从缓存删除所有注释
      */
-    synchronized void removeAnnotationAll() {
+    synchronized void removeAnnotationAllAndRefresh() {
         annotations.clear();
-        int pageCount = pdfView.getPageCount();
-        for (int i = 0; i < pageCount; i++) {
-            pdfView.annotationDrawManager.clearAnnotationCacheBitmap(i);
-        }
+        pdfView.annotationDrawManager.recycle(pdfView.annotationDrawManager.getDrawedPageCachePages());
         pdfView.redrawRenderingView();
         if (annotationListener != null) {
             annotationListener.onAnnotationAllRemove();

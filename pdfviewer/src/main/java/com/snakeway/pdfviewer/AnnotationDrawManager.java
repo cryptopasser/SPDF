@@ -19,10 +19,15 @@ import com.snakeway.pdfviewer.annotation.MarkAnnotation;
 import com.snakeway.pdfviewer.annotation.PenAnnotation;
 import com.snakeway.pdfviewer.annotation.TextAnnotation;
 import com.snakeway.pdfviewer.annotation.base.BaseAnnotation;
+import com.snakeway.pdfviewer.annotation.base.MarkAreaType;
+import com.snakeway.pdfviewer.annotation.pen.Pen;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author snakeway
@@ -41,6 +46,9 @@ final class AnnotationDrawManager {
      * 绘制中注释的画布
      */
     private Bitmap drawingBitmap;
+
+    private  HashMap<Integer,String> drawedPageCache = new HashMap<Integer,String>();
+
     /**
      * 绘制中已抬手部分画笔的画布
      */
@@ -282,6 +290,10 @@ final class AnnotationDrawManager {
     private void drawDrawedAnnotation(Canvas canvas, int page, Rect pageSize, RectF drawRegion, float scale, List<BaseAnnotation> annotations) {
         Bitmap bm =getAnnotationCacheBitmap(page);
         if (bm == null) {
+            if(drawedPageCache.get(page)!=null){//lrucache缓存的图片可能被回收了,导致原本缓存不存在了,这时候需要重新绘制
+                setRecycleAnnotationPageUnDraw(page);
+                drawedPageCache.remove(page);
+            }
             bm = Bitmap.createBitmap(pageSize.width(), pageSize.height(), Bitmap.Config.ARGB_8888);
         } else {
             if (bm.getWidth() != pageSize.width() || bm.getHeight() != pageSize.height()) {
@@ -313,7 +325,8 @@ final class AnnotationDrawManager {
         }
         //绘制在大的画布上
         canvas.drawBitmap(bm, pageSize, drawRegion, paint);
-        putAnnotationCacheBitmap(page, bm);
+        String cacheBitmapKey=putAnnotationCacheBitmap(page, bm);
+        drawedPageCache.put(page, cacheBitmapKey);
         drawPenCancel(canvas, page, scale, annotations, pdfSize.getWidth(), pdfSize.getHeight());
     }
 
@@ -479,10 +492,15 @@ final class AnnotationDrawManager {
         for (Integer page : pages) {
             Bitmap bm = getAnnotationCacheBitmap(page);
             if (bm != null) {
-                clearAnnotationCacheBitmap(page);
-                setRecycleAnnotationPageUnDraw(page);
+                recycleAndSetUnDrawAnnotationCacheBitmap(page);
             }
         }
+    }
+
+    void recycleAndSetUnDrawAnnotationCacheBitmap(int page){
+        clearAnnotationCacheBitmap(page);
+        setRecycleAnnotationPageUnDraw(page);
+        drawedPageCache.remove(page);
     }
 
     /**
@@ -518,8 +536,14 @@ final class AnnotationDrawManager {
         return searchAreaBitmap;
     }
 
-    public void putAnnotationCacheBitmap(int page,Bitmap bitmap) {
-       pdfView.cacheManager.getBitmapMemoryCacheHelper().putBitmap(CacheManager.ANNOTATION_CACHE_TAG+page,bitmap);
+    public List<Integer> getDrawedPageCachePages() {
+        return Arrays.asList(drawedPageCache.keySet().toArray(new Integer[drawedPageCache.size()]));
+    }
+
+    public String putAnnotationCacheBitmap(int page,Bitmap bitmap) {
+        String key=CacheManager.ANNOTATION_CACHE_TAG+page;
+        pdfView.cacheManager.getBitmapMemoryCacheHelper().putBitmap(key,bitmap);
+        return key;
     }
     public Bitmap getAnnotationCacheBitmap(int page) {
         return  pdfView.cacheManager.getBitmapMemoryCacheHelper().getBitmap(CacheManager.ANNOTATION_CACHE_TAG+page);
