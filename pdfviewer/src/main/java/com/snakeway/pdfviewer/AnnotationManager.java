@@ -1366,11 +1366,11 @@ final class AnnotationManager {
         }
         Canvas canvas = new Canvas(bm);
         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-        pdfView.redrawRenderingView();
         pdfView.annotationDrawManager.recycleAndSetUnDrawAnnotationCacheBitmap(page);
         if (annotationListener != null) {
             annotationListener.onAnnotationPageRemove(page);
         }
+        pdfView.redrawRenderingView();
     }
 
     /**
@@ -1379,10 +1379,10 @@ final class AnnotationManager {
     synchronized void removeAnnotationAllAndRefresh() {
         annotations.clear();
         pdfView.annotationDrawManager.recycle(pdfView.annotationDrawManager.getDrawedPageCachePages());
-        pdfView.redrawRenderingView();
         if (annotationListener != null) {
             annotationListener.onAnnotationAllRemove();
         }
+        pdfView.redrawRenderingView();
     }
 
 }
