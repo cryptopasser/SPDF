@@ -40,14 +40,14 @@ final class AnnotationDrawManager {
      */
     private static final int BASE_PEN_WIDTH_COEFFICIENT = 100;
 
+    private final HashMap<Integer,String> drawedPageCache = new HashMap<Integer,String>();
+
     private PDFView pdfView;
     private AnnotationManager annotationManager;
     /**
      * 绘制中注释的画布
      */
     private Bitmap drawingBitmap;
-
-    private  HashMap<Integer,String> drawedPageCache = new HashMap<Integer,String>();
 
     /**
      * 绘制中已抬手部分画笔的画布
@@ -482,27 +482,6 @@ final class AnnotationDrawManager {
         canvas.drawBitmap(searchAreaBitmap, pageSize, drawRegion, paint);
     }
 
-
-    /**
-     * 不需要绘制的bitmap给予释放
-     *
-     * @param pages 不用回收的页
-     */
-    void recycle(List<Integer> pages) {
-        for (Integer page : pages) {
-            Bitmap bm = getAnnotationCacheBitmap(page);
-            if (bm != null) {
-                recycleAndSetUnDrawAnnotationCacheBitmap(page);
-            }
-        }
-    }
-
-    void recycleAndSetUnDrawAnnotationCacheBitmap(int page){
-        clearAnnotationCacheBitmap(page);
-        setRecycleAnnotationPageUnDraw(page);
-        drawedPageCache.remove(page);
-    }
-
     /**
      * 设置被回收的页码的注释为未绘制状态
      */
@@ -515,6 +494,27 @@ final class AnnotationDrawManager {
             annotation.drawed = false;
         }
     }
+
+    /**
+     * 不需要绘制的bitmap给予释放
+     *
+     * @param pages 不用回收的页
+     */
+    public  void recycle(List<Integer> pages) {
+        for (Integer page : pages) {
+            Bitmap bm = getAnnotationCacheBitmap(page);
+            if (bm != null) {
+                recycleAndSetUnDrawAnnotationCacheBitmap(page);
+            }
+        }
+    }
+
+    public  void recycleAndSetUnDrawAnnotationCacheBitmap(int page){
+        clearAnnotationCacheBitmap(page);
+        setRecycleAnnotationPageUnDraw(page);
+        drawedPageCache.remove(page);
+    }
+
 
     public Bitmap getDrawingBitmap() {
         return drawingBitmap;

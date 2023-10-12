@@ -19,7 +19,7 @@ import static com.snakeway.pdfviewer.util.Constants.Cache.THUMBNAILS_CACHE_SIZE;
 class CacheManager {
     public static final String ANNOTATION_CACHE_TAG = "annotation_cache_";
 
-    private BitmapMemoryCacheHelper bitmapMemoryCacheHelper = new BitmapMemoryCacheHelper(10);
+    private final BitmapMemoryCacheHelper bitmapMemoryCacheHelper = new BitmapMemoryCacheHelper(10);
 
     private final PriorityQueue<PagePart> passiveCache;
 
