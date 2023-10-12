@@ -38,7 +38,7 @@ final class AnnotationDrawManager {
     /**
      * 基础画笔线框系数
      */
-    private static final int BASE_PEN_WIDTH_COEFFICIENT = CoordinateUtils.DPI_SIZE;
+    private static final int BASE_PEN_WIDTH_COEFFICIENT = 100;
 
     private final HashMap<Integer,String> drawedPageCache = new HashMap<Integer,String>();
 
