@@ -14,7 +14,7 @@ import com.snakeway.pdflibrary.util.SizeF;
  * @author snakeway
  */
 public class CoordinateUtils {
-    public static final int DPI_SIZE = 72;//SIZE = DisplayMetrics.DENSITY_MEDIUM;//160对应dpi的1倍倍率,即pdf原始尺寸
+    private static final float SIZE = 72.0F;//c++的FPDFText_GetFontSize代码设置的字体尺寸的dpi为72,需要统一
 
     /**
      * 计算当前view点所在的pdf页面对应坐标,数组宽度3,返回所在页,x和y坐标
@@ -94,7 +94,7 @@ public class CoordinateUtils {
      */
     public static SizeF toPdfPointCoordinate(PDFView pdfView, int page, int x, int y) {
         y = pdfView.pdfFile.originalPageSizes.get(page).getHeight() - y;
-        return new SizeF(x * DPI_SIZE / pdfView.pdfiumCore.mCurrentDpi, y * DPI_SIZE / pdfView.pdfiumCore.mCurrentDpi);
+        return new SizeF(x * SIZE / pdfView.pdfiumCore.mCurrentDpi, y * SIZE / pdfView.pdfiumCore.mCurrentDpi);
     }
 
     /**
@@ -102,9 +102,9 @@ public class CoordinateUtils {
      */
     public static Point toPdfPointCoordinateDesc(PDFView pdfView, int page, float x, float y) {
         x *= pdfView.pdfiumCore.mCurrentDpi;
-        x /= DPI_SIZE;
+        x /= SIZE;
         y *= pdfView.pdfiumCore.mCurrentDpi;
-        y /= DPI_SIZE;
+        y /= SIZE;
         y = pdfView.pdfFile.originalPageSizes.get(page).getHeight() - y;
         return new Point((int) x, (int) y);
     }
