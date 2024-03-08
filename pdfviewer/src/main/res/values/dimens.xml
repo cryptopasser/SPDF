@@ -10,8 +10,6 @@
     <dimen name="view_pdf_text_remark_border_background_dash_gap">6dp</dimen>
     <dimen name="view_pdf_text_remark_border_background_dash_width">4dp</dimen>
 
-    <dimen name="operating_view_margin">3dp</dimen>
-
-
+    <dimen name="operating_view_margin">10dp</dimen>
 
 </resources>
