@@ -424,6 +424,8 @@ public class PDFView extends RelativeLayout {
 
     private boolean autoFillWhiteSpace = false;
 
+    private boolean writePenCheck = false;
+
     private boolean supportCustomRendering = false;
 
     private boolean loadAfterCheckWhiteSpace = false;
@@ -2904,6 +2906,14 @@ public class PDFView extends RelativeLayout {
         this.autoFillWhiteSpace = autoFillWhiteSpace;
     }
 
+    public boolean isWritePenCheck() {
+        return writePenCheck;
+    }
+
+    public void setWritePenCheck(boolean writePenCheck) {
+        this.writePenCheck = writePenCheck;
+    }
+
     public boolean isSupportCustomRendering() {
         return supportCustomRendering;
     }
@@ -3471,6 +3481,8 @@ public class PDFView extends RelativeLayout {
 
         private boolean autoFillWhiteSpace = false;
 
+        private boolean writePenCheck = false;
+
         private boolean loadAfterCheckWhiteSpace = false;
 
         private boolean touchWithoutSpace = false;
@@ -3656,6 +3668,11 @@ public class PDFView extends RelativeLayout {
             return this;
         }
 
+        public Configurator setWritePenCheck(boolean writePenCheck) {
+            this.writePenCheck = writePenCheck;
+            return this;
+        }
+
         public Configurator setSupportCustomRendering(boolean supportCustomRendering) {
             this.supportCustomRendering = supportCustomRendering;
             return this;
@@ -3789,6 +3806,7 @@ public class PDFView extends RelativeLayout {
             PDFView.this.setPageSnap(pageSnap);
             PDFView.this.setPageFling(pageFling);
             PDFView.this.setAutoFillWhiteSpace(autoFillWhiteSpace);
+            PDFView.this.setWritePenCheck(writePenCheck);
             PDFView.this.setSupportCustomRendering(supportCustomRendering);
             PDFView.this.setLoadAfterCheckWhiteSpace(loadAfterCheckWhiteSpace);
             PDFView.this.setTouchWithoutSpace(touchWithoutSpace);

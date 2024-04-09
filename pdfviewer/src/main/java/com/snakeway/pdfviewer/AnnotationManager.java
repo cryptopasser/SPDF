@@ -164,6 +164,10 @@ final class AnnotationManager {
      */
     boolean onTouch(MotionEvent event) {
         if (pdfView.getFunction() == PDFView.Function.PEN) {
+            int toolType=event.getToolType(0);
+            if(pdfView.isWritePenCheck()&&toolType!= MotionEvent.TOOL_TYPE_STYLUS){
+                return false;
+            }
             return onPenTouch(event);
         } else if (pdfView.getFunction() == PDFView.Function.ERASER) {
             return onEraserTouch(event);
