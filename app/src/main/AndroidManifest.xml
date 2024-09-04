@@ -60,28 +60,10 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".FileViewerActivity"
-            android:theme="@style/AppThemeDarkActionBar" />
-
-        <activity
-            android:name="com.snakeway.fileviewer.ofd.OFDWebViewActivity"
-            android:theme="@style/AppThemeDarkActionBar" />
-
-        <activity
-            android:name="com.snakeway.fileviewer.tbs.TBSFileViewerActivity"
-            android:theme="@style/AppThemeDarkActionBar" />
 
         <activity
             android:name=".ThumbnailActivity"
             android:theme="@style/AppThemeNoActionBar" />
-
-
-        <service
-            android:name="com.tencent.smtt.export.external.DexClassLoaderProviderService"
-            android:label="dexopt"
-            android:process=":dexopt" />
-
 
     </application>
 
