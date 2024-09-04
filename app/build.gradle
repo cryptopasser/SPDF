@@ -51,15 +51,13 @@ dependencies {
 
     implementation 'androidx.recyclerview:recyclerview:1.2.0'
 
-//    implementation 'com.github.cryptopasser:spdf:1.0.9'
+//    implementation 'com.github.cryptopasser:spdf:1.8.1'
 
     implementation project(":pdfviewer")
     implementation project(":pdflibrary")
-    implementation project(":fileviewer")
 
-    implementation 'com.blankj:utilcodex:1.25.9'
+    implementation 'com.blankj:utilcodex:1.30.0'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'pub.devrel:easypermissions:3.0.0'
     implementation 'com.google.android.material:material:1.1.0'
-    implementation 'com.buyi.huxq17:serviceagency:1.1.0'
 }

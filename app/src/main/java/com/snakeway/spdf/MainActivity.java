@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.Service;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Build;
@@ -36,8 +35,6 @@ import com.blankj.utilcode.util.CacheDiskUtils;
 import com.blankj.utilcode.util.GsonUtils;
 import com.blankj.utilcode.util.ObjectUtils;
 import com.google.gson.reflect.TypeToken;
-import com.snakeway.floatball.menu.MenuItem;
-import com.snakeway.floatball.utils.BackGroudSeletor;
 import com.snakeway.pdflibrary.PdfDocument;
 import com.snakeway.pdfviewer.PDFView;
 import com.snakeway.pdfviewer.annotation.AnnotationBean;
@@ -75,11 +72,6 @@ import com.snakeway.spdf.views.StatusView;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import pub.devrel.easypermissions.AppSettingsDialog;
-import pub.devrel.easypermissions.EasyPermissions;
-import pub.devrel.easypermissions.PermissionRequest;
-
 import static com.snakeway.spdf.ThumbnailActivity.RESULT_PAGE_KEY;
 
 /**
@@ -160,8 +152,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
                 relativeLayoutToolbarLayoutParams.topMargin = statusBarHeight;
             }
         }
-
-        initFloatBallControl();
 
         viewBinding.layoutSearch.relativeLayoutSearch.setVisibility(View.GONE);
 
@@ -280,40 +270,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
 
     @Override
     public void initOther() {
-        requestPermissions();
-    }
 
-    private void initFloatBallControl() {
-        List<MenuItem> menuItems = new ArrayList<>();
-        MenuItem menuItemEmpty = new MenuItem(null) {
-            @Override
-            public void action() {
-                viewBinding.floatBallControlView.getFloatBallManager().closeMenu();
-            }
-        };
-        menuItems.add(menuItemEmpty);
-        menuItems.add(new MenuItem(BackGroudSeletor.getdrawble("icon_menu_1", this)) {
-            @Override
-            public void action() {
-                showBookmarks();
-                viewBinding.floatBallControlView.getFloatBallManager().closeMenu();
-            }
-        });
-        menuItems.add(new MenuItem(BackGroudSeletor.getdrawble("icon_menu_2", this)) {
-            @Override
-            public void action() {
-                showReadMode();
-                viewBinding.floatBallControlView.getFloatBallManager().closeMenu();
-            }
-        });
-        menuItems.add(new MenuItem(BackGroudSeletor.getdrawble("icon_menu_3", this)) {
-            @Override
-            public void action() {
-                viewBinding.floatBallControlView.getFloatBallManager().closeMenu();
-            }
-        });
-        menuItems.add(menuItemEmpty);
-        viewBinding.floatBallControlView.init(menuItems);
     }
 
     private void hideBottomUIMenu() {
@@ -349,7 +306,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
                     case R.id.buttonOpenOther:
 //                        Bitmap data = viewBinding.pdfView.getRenderingBitmap(0, 520);
 //                        viewBinding.imageViewPreview.setImageBitmap(data);
-                        FileViewerActivity.openFileViewerActivity(MainActivity.this);
                         break;
                     case R.id.frameLayoutRemark:
                         dismissPopupWindowOperating();
@@ -717,18 +673,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
         showRemarkView(false, false);
     }
 
-
-    private void requestPermissions() {
-        if (!EasyPermissions.hasPermissions(this, TheApplication.BASE_X5_PERMISSIONS)) {
-            EasyPermissions.requestPermissions(
-                    new PermissionRequest.Builder(this, TheApplication.REQUEST_X5_PERMISSIONS, TheApplication.BASE_X5_PERMISSIONS)
-                            .setRationale(getString(R.string.permission_request_rationale))
-                            .setPositiveButtonText(getString(R.string.permission_request_ok))
-                            .setNegativeButtonText(getString(R.string.permission_request_cancel))
-                            .build());
-        }
-    }
-
     private int[] getPopupWindowShowPosition(RectF startRect, RectF endRect, float translateX, float translateY, float targetViewSize) {
         int[] location = new int[2];
         viewBinding.pdfView.getLocationInWindow(location);
@@ -948,38 +892,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements O
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, new EasyPermissions.PermissionCallbacks() {
-            @Override
-            public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-            }
-
-            @Override
-            public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
-                switch (requestCode) {
-                    case TheApplication.REQUEST_X5_PERMISSIONS:
-                        if (perms.size() == TheApplication.BASE_X5_PERMISSIONS.length) {
-                            TheApplication theApplication = TheApplication.getTheApplication();
-                            if (theApplication.isNeedInitX5()) {
-                                theApplication.initX5Web();
-                            }
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            @Override
-            public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
-                if (EasyPermissions.somePermissionPermanentlyDenied(MainActivity.this, perms)) {
-                    showAppSettingDialog();
-                }
-            }
-        });
-    }
-
-    private void showAppSettingDialog() {
-        new AppSettingsDialog.Builder(MainActivity.this).setRationale(getString(R.string.permission_request_open_setting_tips)).build().show();
     }
 
     private void showSaveDialog() {

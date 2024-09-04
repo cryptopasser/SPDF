@@ -1,6 +1,5 @@
 include ':treeview'
 include ':floatball'
-include ':fileviewer'
 include ':pdfviewer'
 include ':pdflibrary'
 include ':app'

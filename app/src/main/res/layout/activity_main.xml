@@ -116,10 +116,5 @@
 
     </FrameLayout>
 
-    <com.snakeway.spdf.views.FloatBallControlView
-        android:id="@+id/floatBallControlView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
 
 </RelativeLayout>
