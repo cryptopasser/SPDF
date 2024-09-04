@@ -51,7 +51,7 @@ dependencies {
 
     implementation 'androidx.recyclerview:recyclerview:1.2.0'
 
-//    implementation 'com.github.cryptopasser:spdf:1.8.1'
+//    implementation 'com.github.cryptopasser:spdf:1.8.2'
 
     implementation project(":pdfviewer")
     implementation project(":pdflibrary")
